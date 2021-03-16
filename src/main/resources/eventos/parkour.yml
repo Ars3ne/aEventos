@@ -1,0 +1,76 @@
+Evento:
+  # Configurações do evento.
+  Title: "Parkour" # O nome do evento. Será usado na placeholder @name.
+  Type: "sign" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: false # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Return on damage: true # Caso esteja ativado, o jogador voltará a entrada ou ao checkpoint ao tomar dano de queda.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &6[Parkour]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  Sign: # Estilo da placa de vitória. Você terá que trocar-la toda vez que fizer uma modificação aqui.
+    - "&b&l[Parkour]"
+    - "&3Clique aqui"
+    - "&3para ganhar o"
+    - "&3evento."
+  Checkpoint: # Estilo da placa de checkpoint. Você terá que trocar-la toda vez que fizer uma modificação aqui.
+    - "&a&l[Checkpoint]"
+    - "&2Clique aqui"
+    - "&2para salvar o"
+    - "&2checkpoint."
+  Checkpoint saved: "&3[@name] &bCheckpoint salvo com sucesso!"
+  Checkpoint back: "&3[@name] &bVocê voltou ao checkpoint."
+  Back: "&3[@name] &bVocê voltou ao início."
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_parkour" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_parkour}
+    Style: "&6[Parkour] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup parkour
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []

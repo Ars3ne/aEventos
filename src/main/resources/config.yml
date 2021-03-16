@@ -1,0 +1,90 @@
+#
+#             ______               _
+#            |  ____|             | |
+#        __ _| |____   _____ _ __ | |_ ___  ___
+#       / _` |  __\ \ / / _ \ '_ \| __/ _ \/ __|
+#      | (_| | |___\ V /  __/ | | | || (_) \__ \
+#       \__,_|______\_/ \___|_| |_|\__\___/|___/
+#		      Versão 1.0 - Desenvolvido por Ars3ne
+#
+
+# Conexão MySQL. Caso esteja desativado, será usado SQLite.
+MySQL:
+  Enabled: false
+  Host: "localhost"
+  Username: "root"
+  Password: "pass"
+  Database: "aeventos"
+  Port: 3306
+
+# Lista de comandos permitidos nos eventos. Todos os outros serão bloqueados.
+Allowed commands:
+  - "/g"
+  - "/l"
+  - "/tell"
+  - "/evento"
+
+# AutoStarter. Aqui você configurará quando o evento irá se iniciar automáticamente. O tempo de início é baseado no tempo do servidor.
+AutoStart:
+  Enabled: true
+  Times:
+    # Formato: (dia)-<nome do arquivo de configuração do evento>-<horario>
+    # O dia é opicional, porém o nome do arquivo de configuraão e o horário são obrigatórios. O nome do dia deve estar em inglês.
+    # Caso o dia não esteja presente, o evento aconteçerá todos os dias no horário especificado.
+
+    - "parkour-20:30"
+    - "sunday-campominado-18:00"
+
+Messages:
+  No event: "&3[Evento] &bNão está ocorrendo nenhum evento no momento!"
+  No spectator: "&3[Evento] &bNão é possível assistir esse evento."
+  Closed: "&3[Evento] &bO evento está fechado! Para assistir, digite &f/evento assistir"
+  Already joined: "&3[Evento] &bVocê já está no evento!"
+  Already spectator: "&3[Evento] &bVocê já está no modo espectador!"
+  Not joined: "&3[Evento] &bVocê não está participando desse evento!"
+  Empty inventory: "&3[Evento] &bVocê precisa estar com o inventário vazio para participar!"
+  Blocked command: "&3[Evento] &bVocê não pode usar esse comando durante o evento!"
+  Joined: "&3[Evento] &f@player &bentrou no evento!"
+  Leave: "&3[Evento] &f@player &bsaiu do evento!"
+  Died: "&3[Evento] &f@player &bmorreu! &f@players &bjogadores restantes."
+  Eliminated: "&3[Evento] &bVocê foi eliminado."
+  Disconnected: "&3[Evento] &f@player &bdesconectou! &f@players &bjogadores restantes."
+  Not allowed: "&3[Evento] &bVocê não tem permissão para participar desse evento."
+  No permission: "&3[Evento] &bVocê não tem permissão para fazer isso."
+  Console: "&3[Evento] &bApenas jogadores podem usar este comando."
+  Already happening: "&3[Evento] &bJá está aconteçendo um evento no momento."
+  Invalid event: "&3[Evento] &bO evento fornecido é inválido."
+  Missing arguments: "&3[Evento] &bUso correto: &f/evento @args"
+  Reloaded: "&3[Evento] &bConfigurações recarregadas com sucesso!"
+  Unknown command: "&3[Evento] &bComando desconhecido. Digite &f/evento &bpara ver a lista de comandos."
+  Saved: "&3[Evento] &bPosição &f@pos&bdefinida com sucesso!"
+  Exit setup: "&3[Evento] &bVocê saiu das configurações do evento &f@name&b."
+  Not configurated: "&3[Evento] &bEste evento não está configurado. Utilize o comando &f/evento setup @name"
+  Error: "&3[Evento] &bOcorreu um erro ao salvar a posição."
+  Give axe: "&3[Evento] &bClique com o botão esquerdo para definir a pos1, e com o direito para definir a pos2."
+  Not needed: "&3[Evento] &bVocê não precisa do machado para definir posições nesse evento."
+  Unknown argument: "&3[Evento] &bArgumento inválido. Digite &f/evento setup&b para ver a lista de argumentos."
+  Default:
+    - "&3[Evento] &bLista de Comandos:"
+    - "&b/evento &f- Entrar no evento"
+    - "&b/evento assistir &f- Entrar no camarote"
+    - "&b/evento sair &f- Sair do evento"
+  DefaultAdmin:
+    - "&3[Evento] &bLista de Comandos:"
+    - "&b/evento &f- Entrar no evento"
+    - "&b/evento assistir &f- Entrar no camarote do evento"
+    - "&b/evento sair &f- Sair do evento"
+    - "&c/evento iniciar <evento> &4- Inicia um evento"
+    - "&c/evento parar &4- Cancela o evento atual"
+    - "&c/evento setup <evento> &4- Configura um evento"
+    - "&c/evento reload &4- Recarregue as configurações"
+  Setup:
+    - "&4[Evento] &cVocê está configurando o evento &f@name&c. Utilize os comandos abaixo:"
+    - "&c/evento setup entrada &4- Defina o local de entrada"
+    - "&c/evento setup espera &4- Defina o local de espera"
+    - "&c/evento setup saida &4- Defina o local de saida"
+    - "&c/evento setup camarote &4- Defina o local do camarote"
+    - "&c/evento setup pos &4- Obtenha um machado para definir as posições."
+    - "&c/evento setup pos1 &4- Defina a primeira posição."
+    - "&c/evento setup pos2 &4- Defina a segunda posição."
+    - "&c/evento setup sair &4- Saia das configurações do evento &f@name&c."

@@ -1,0 +1,72 @@
+Evento:
+  # Configurações do evento.
+  Title: "Killer" # O nome do evento. Será usado na placeholder @name.
+  Type: "killer" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: false # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Time: 30 # Tempo em segundos antes do PvP ser ativado.
+  Pickup time: 20 # Tempo em segundos que o vencedor terá para pegar os drops.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &5[Killer]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  Enabling:
+    - "&3[@name] &bO PvP será ativado em &f@time &bsegundos!"
+  Enabled:
+    - ""
+    - "&3[@name] &bO PvP foi ativado. Boa sorte á todos!"
+    - ""
+  Pickup:
+    - "&3[@name] &bVocẽ tem &f@time &bsegundos para pegar os drops."
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_killer" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_killer}
+    Style: "&5[Killer] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup killer
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []

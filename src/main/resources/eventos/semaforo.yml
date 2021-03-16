@@ -1,0 +1,86 @@
+Evento:
+  # Configurações do evento.
+  Title: "Semáforo" # O nome do evento. Será usado na placeholder @name.
+  Type: "semaforo" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: true # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Show on hotbar: true # Caso esteja ativado, serão colocados blocos com a cor na hotbar. Só funcionará se "Empty Inventory" estiver ativado.
+  Green: 8 # Tempo em segundos que a cor verde ficará ativa.
+  Yellow: 3 # Tempo em segundos que a cor amarela ficará ativa.
+  Red: 5 # Tempo em segundos que a cor vermelha ficará ativa.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &c[Semáforo]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  Green:
+    - ""
+    - "&3[@name] &a&lVÁ!"
+    - ""
+  Yellow:
+    - ""
+    - "&3[@name] &e&lATENÇÃO!"
+    - ""
+  Red:
+    - ""
+    - "&3[@name] &c&lPARE!"
+    - ""
+  Sign: # Estilo da placa de vitória. Você terá que trocar-la toda vez que fizer uma modificação aqui.
+    - "&4&l[Semáforo]"
+    - "&cClique aqui"
+    - "&cpara ganhar o"
+    - "&cevento."
+  Green item: "&a&lVÁ!" # O nome do item na hotbar da cor verde.
+  Yellow item: "&e&lATENÇÃO!" # O nome do item na hotbar da cor amarela.
+  Red item: "&c&lPARE!" # O nome do item na hotbar da cor vermelha.
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_semaforo" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_semaforo}
+    Style: "&c[Semáforo] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup semaforo
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []

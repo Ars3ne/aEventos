@@ -1,0 +1,63 @@
+Evento:
+  # Configurações do evento.
+  Title: "Astronauta" # O nome do evento. Será usado na placeholder @name.
+  Type: "fall" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: true # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Time: 15 # A duração em segundos do evento. É recomendado colocar o tempo da queda mais alguns segundos adicionais.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &b[Astronauta]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_astronauta" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_astronauta}
+    Style: "&b[Astronauta] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup astronauta
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []

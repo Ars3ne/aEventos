@@ -1,0 +1,99 @@
+Evento:
+  # Configurações do evento.
+  Title: "Fight" # O nome do evento. Será usado na placeholder @name.
+  Type: "fight" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: true # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Time: 5 # Tempo em segundos de intervalo entre as lutas.
+  Fight time: 180 # Tempo máximo em segundos que uma luta pode ter.
+
+Items:
+  # FORMATO: ID-QUANTIDADE.
+  # Itens para todas as lutas, exceto a final.
+  Normal:
+    Armor:
+      Helmet: null
+      Chestplate: null
+      Legging: null
+      Boots: null
+    Inventory:
+      - "268-1"
+  # Itens para a última luta.
+  Last fight:
+    Armor:
+      Helmet: "306-1"
+      Chestplate: "307-1"
+      Legging: "308-1"
+      Boots: "309-1"
+    Inventory:
+      - "267-1"
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f12,345.67 &b+ &5[Fight]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  Next fight:
+    - ""
+    - "&3[@name] &bIniciando próxima luta em &f@time &bsegundos."
+    - ""
+  Fight:
+    - ""
+    - "&3[@name] &f@player1 &bVS &f@player2&b!"
+    - ""
+  Fight winner:
+    - "&3[@name] &f@winner &bvenceu a luta!"
+  Fight no winner:
+    - "&3[@name] &bEmpate!"
+
+# Recompensas. Elas serão dadas ao(s) vencedor(es).
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_fight" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_fight}
+    Style: "&5[Fight] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no(s) vencedor(es).
+    - "give @winner diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup fight
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []
+  Pos1: []
+  Pos2: []

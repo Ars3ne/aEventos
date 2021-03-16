@@ -1,0 +1,102 @@
+/*
+ *
+ * This file is part of aEventos, licensed under the MIT License.
+ *
+ * Copyright (c) Ars3ne
+ * Copyright (c) contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+package com.ars3ne.eventos.api;
+
+public enum EventoType {
+    SIGN,
+    CAMPO_MINADO,
+    SPLEEF,
+    SEMAFORO,
+    BATATA_QUENTE,
+    FROG,
+    FIGHT,
+    KILLER,
+    SUMO,
+    FALL,
+    PAINTBALL,
+    NONE;
+
+    public static EventoType getEventoType(String type) {
+        switch (type) {
+            case "sign":
+                return EventoType.SIGN;
+            case "campominado":
+                return EventoType.CAMPO_MINADO;
+            case "spleef":
+                return EventoType.SPLEEF;
+            case "semaforo":
+                return EventoType.SEMAFORO;
+            case "batataquente":
+                return EventoType.BATATA_QUENTE;
+            case "frog":
+                return EventoType.FROG;
+            case "fight":
+                return EventoType.FIGHT;
+            case "killer":
+                return EventoType.KILLER;
+            case "sumo":
+                return EventoType.SUMO;
+            case "fall":
+                return EventoType.FALL;
+            case "paintball":
+                return EventoType.PAINTBALL;
+            default:
+                return EventoType.NONE;
+        }
+    }
+
+    public static String getString(EventoType type) {
+        switch (type) {
+            case SIGN:
+                return "sign";
+            case CAMPO_MINADO:
+                return "campominado";
+            case SPLEEF:
+                return "spleef";
+            case SEMAFORO:
+                return "semaforo";
+            case BATATA_QUENTE:
+                return "batataquente";
+            case FROG:
+                return "frog";
+            case FIGHT:
+                return "fight";
+            case KILLER:
+                return "killer";
+            case SUMO:
+                return "sumo";
+            case FALL:
+                return "fall";
+            case PAINTBALL:
+                return "paintball";
+            default:
+                return "none";
+        }
+    }
+
+}
