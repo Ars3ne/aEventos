@@ -48,6 +48,7 @@ public class FrogListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
 
+        if(evento == null) return;
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
         // Se o jogador entrou na água, então o elimine.
@@ -69,12 +70,14 @@ public class FrogListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

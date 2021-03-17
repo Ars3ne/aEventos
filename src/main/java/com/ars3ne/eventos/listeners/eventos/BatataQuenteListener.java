@@ -45,6 +45,7 @@ public class BatataQuenteListener implements Listener {
     @EventHandler
     public void onPotatoHit(EntityDamageByEntityEvent e) {
 
+        if(evento == null) return;
         if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
         Player damaged = (Player) e.getEntity();
         Player damager = (Player) e.getDamager();
@@ -63,12 +64,14 @@ public class BatataQuenteListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
@@ -76,6 +79,7 @@ public class BatataQuenteListener implements Listener {
     @SuppressWarnings("SuspiciousMethodCalls")
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getWhoClicked())) return;
         e.setCancelled(true);
     }

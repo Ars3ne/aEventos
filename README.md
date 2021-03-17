@@ -1,7 +1,5 @@
 # aEventos
 
-------
-
 O ``aEventos`` é um plugin para servidores de Minecraft que traz vários eventos automáticos de forma fácil e rápida. O plugin foi testado apenas na 1.8.X, porém deve funcionar completamente até a 1.12.X. A maioria dos eventos deve funcionar nas versões mais atuais.
 
 ------
@@ -12,6 +10,7 @@ O plugin conta atualmente com ``11`` eventos, que são:
 * Campo Minado
 * Spleef
 * Semáforo
+* Batata Quente
 * Frog
 * Fight
 * Killer
@@ -19,7 +18,6 @@ O plugin conta atualmente com ``11`` eventos, que são:
 * Fall (Caso você ainda esteja vivo depois de X segundos do início do evento, você ganha. Pode ser usado para fazer um evento Astronauta, por exemplo.)
 * Paintball
 
-------
 
 ## Comandos:
 |Comando         |Descrição                      |Permissão                    |
@@ -33,7 +31,6 @@ O plugin conta atualmente com ``11`` eventos, que são:
 |/evento setup sair|Saia da configuração do evento especificado.|`aeventos.admin`			   |
 |/evento reload|Recarrega as configurações do plugin.	     |`aeventos.admin`			   |
 
-------
 
 ## Configurações:
 

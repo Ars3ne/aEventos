@@ -57,6 +57,7 @@ public class SignListener implements Listener {
     public void onInteract(PlayerInteractEvent e) {
 
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
 
         final Block block = e.getClickedBlock();
@@ -103,6 +104,8 @@ public class SignListener implements Listener {
         // Se a entidade não for um jogador, não for dano de queda, ou o mesmo não está no evento, retorne.
         if(e.getEntityType() != EntityType.PLAYER) return;
         Player p = (Player) e.getEntity();
+
+        if(evento == null) return;
         if (!evento.getPlayers().contains(p)) return;
         if(evento.notReturnOnDamage()) return;
 
@@ -134,12 +137,14 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

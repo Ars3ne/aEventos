@@ -45,6 +45,7 @@ public class CampoMinadoListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
 
+        if(evento == null) return;
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
         if(e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.STATIONARY_WATER) {
@@ -61,12 +62,14 @@ public class CampoMinadoListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

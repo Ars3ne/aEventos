@@ -45,6 +45,8 @@ public class FightListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageByEntityEvent e) {
 
+        if(evento == null) return;
+
         // Se a entidade não for um player, retorne.
         if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
 
@@ -59,6 +61,7 @@ public class FightListener implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
 
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
         if((evento.getFighter1() != e.getEntity() && evento.getFighter1() != e.getEntity().getKiller()) && (evento.getFighter2() != e.getEntity() && evento.getFighter2() != e.getEntity().getKiller())) return;
 
@@ -70,12 +73,14 @@ public class FightListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

@@ -44,6 +44,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class Spleef extends Evento {
@@ -199,15 +200,16 @@ public class Spleef extends Evento {
 
         if(!isHappening()) return;
         long time = System.currentTimeMillis();
+        Iterator<Player> iter = listener.getLastMove().keySet().iterator();
 
-        for(Player p: listener.getLastMove().keySet()) {
+        while(iter.hasNext()) {
 
+            Player p = iter.next();
             if(!listener.getLastMove().containsKey(p)) continue;
             if(!getPlayers().contains(p)) {
                 listener.getLastMove().remove(p);
                 continue;
             }
-
 
             // Se o jogador está parado a mais tempo do que o limite, elimine-o do evento.
             if(time >= (listener.getLastMove().get(p) + (inactive_time * 1000L))) {

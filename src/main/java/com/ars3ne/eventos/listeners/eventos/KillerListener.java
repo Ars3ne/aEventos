@@ -44,6 +44,8 @@ public class KillerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageByEntityEvent e) {
 
+        if(evento == null) return;
+
         // Se a entidade não for um player, retorne.
         if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
 
@@ -58,6 +60,7 @@ public class KillerListener implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
 
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
         // Remova o jogador do evento.
         e.getEntity().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));

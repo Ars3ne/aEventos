@@ -50,6 +50,7 @@ public class SpleefListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBreak(BlockBreakEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         if(e.getBlock().getType() != Material.SNOW_BLOCK) e.setCancelled(true);
         if(evento.canNotBreakBlocks()) e.setCancelled(true);
@@ -80,6 +81,7 @@ public class SpleefListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

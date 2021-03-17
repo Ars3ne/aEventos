@@ -44,6 +44,7 @@ public class PaintballListener implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
 
+        if(evento == null) return;
         if(!(e.getEntity() instanceof Player)) return;
         if(!(e.getDamager() instanceof Arrow)) return;
 
@@ -68,12 +69,14 @@ public class PaintballListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

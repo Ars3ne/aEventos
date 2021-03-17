@@ -43,6 +43,7 @@ public class FallListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
+        if(evento == null) return;
         if(!evento.getPlayers().contains(e.getEntity())) return;
         e.getEntity().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
         evento.remove(e.getEntity());
@@ -52,12 +53,14 @@ public class FallListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }

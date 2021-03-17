@@ -52,6 +52,7 @@ public class SemaforoListener implements Listener {
     public void onInteract(PlayerInteractEvent e) {
 
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
 
         // Se o bloco for uma placa, então verifique se é a placa de vitória.
@@ -78,6 +79,7 @@ public class SemaforoListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
 
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         if(evento.canWalk()) return;
 
@@ -94,12 +96,14 @@ public class SemaforoListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
     }
@@ -107,6 +111,7 @@ public class SemaforoListener implements Listener {
     @SuppressWarnings("SuspiciousMethodCalls")
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        if(evento == null) return;
         if (!evento.getPlayers().contains(e.getWhoClicked())) return;
         e.setCancelled(true);
     }
