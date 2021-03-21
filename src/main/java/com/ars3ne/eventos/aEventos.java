@@ -31,11 +31,9 @@ import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.commands.EventoCommand;
 import com.ars3ne.eventos.hooks.LegendChatHook;
 import com.ars3ne.eventos.listeners.EventoListener;
-import com.ars3ne.eventos.manager.AutoStarter;
-import com.ars3ne.eventos.manager.ConnectionManager;
-import com.ars3ne.eventos.manager.EventosManager;
+import com.ars3ne.eventos.manager.*;
 import com.ars3ne.eventos.utils.ConfigFile;
-import com.ars3ne.eventos.manager.TagManager;
+import com.ars3ne.eventos.utils.ConfigUpdater;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -43,11 +41,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 
 public class aEventos extends JavaPlugin {
 
     private static final ConnectionManager connection = new ConnectionManager();
     private static final EventosManager manager = new EventosManager();
+    private static final EventosChatManager chat_manager = new EventosChatManager();
     private static final TagManager tag_manager = new TagManager();
     private final AutoStarter autostart = new AutoStarter();
 
@@ -61,6 +62,10 @@ public class aEventos extends JavaPlugin {
 
         setupConfig();
         if(connection.setup()) {
+
+            if(getConfig().getBoolean("UpdateChecker")) {
+                UpdateChecker.verify();
+            }
 
             setupListener();
             tag_manager.setup();
@@ -83,6 +88,11 @@ public class aEventos extends JavaPlugin {
             manager.startEvento(EventoType.NONE, null);
         }
 
+        if(chat_manager.getEvento() != null) {
+            chat_manager.getEvento().stop();
+            chat_manager.startEvento(EventoType.NONE, null);
+        }
+
         removeListeners();
         autostart.stop();
         connection.close();
@@ -94,7 +104,10 @@ public class aEventos extends JavaPlugin {
 
         // Se a config.yml não existe, então crie as configurações padrões dos eventos.
         File settings = new File(aEventos.getInstance().getDataFolder() + "/config.yml");
+
         if(!settings.exists()) {
+
+            // Presencial
             ConfigFile.create("parkour");
             ConfigFile.create("campominado");
             ConfigFile.create("spleef");
@@ -107,9 +120,22 @@ public class aEventos extends JavaPlugin {
             ConfigFile.create("sumo");
             ConfigFile.create("astronauta");
             ConfigFile.create("paintball");
+
+            // Chat
+            ConfigFile.create("votacao");
+
         }
 
         this.saveDefaultConfig();
+
+        // Tenta atualizar o arquivo de configuração.
+        try {
+            ConfigUpdater.update(this, "config.yml", settings, Collections.singletonList("none"));
+        } catch (IOException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível atualizar o arquivo de configuração.");
+            e.printStackTrace();
+        }
+
     }
 
     private void setupListener() {
@@ -149,6 +175,10 @@ public class aEventos extends JavaPlugin {
 
     public static EventosManager getEventoManager() {
         return manager;
+    }
+
+    public static EventosChatManager getEventoChatManager() {
+        return chat_manager;
     }
 
     public SimpleClans getSimpleClans() {

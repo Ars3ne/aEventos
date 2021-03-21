@@ -5,7 +5,7 @@
 #       / _` |  __\ \ / / _ \ '_ \| __/ _ \/ __|
 #      | (_| | |___\ V /  __/ | | | || (_) \__ \
 #       \__,_|______\_/ \___|_| |_|\__\___/|___/
-#		      Versão 1.0 - Desenvolvido por Ars3ne
+#		 Versão ${project.version} - Desenvolvido por Ars3ne
 #
 
 # Conexão MySQL. Caso esteja desativado, será usado SQLite.
@@ -17,7 +17,7 @@ MySQL:
   Database: "aeventos"
   Port: 3306
 
-# Lista de comandos permitidos nos eventos. Todos os outros serão bloqueados.
+# Lista de comandos permitidos nos eventos. Todos os outros serão bloqueados. Jogadores com a permissão "aeventos.admin" não são afetados.
 Allowed commands:
   - "/g"
   - "/l"
@@ -28,12 +28,15 @@ Allowed commands:
 AutoStart:
   Enabled: true
   Times:
-    # Formato: (dia)-<nome do arquivo de configuração do evento>-<horario>
-    # O dia é opicional, porém o nome do arquivo de configuraão e o horário são obrigatórios. O nome do dia deve estar em inglês.
-    # Caso o dia não esteja presente, o evento aconteçerá todos os dias no horário especificado.
+    # Formato: (dia)-<nome do arquivo de configuração do evento>-<horário>
+    # O dia é opicional, porém o nome do arquivo de configuração e o horário são obrigatórios. O nome do dia deve estar em inglês.
+    # Caso o dia não esteja presente, o evento acontecerá todos os dias no horário especificado.
 
     - "parkour-20:30"
     - "sunday-campominado-18:00"
+
+# O plugin deve procurar por novas versões automaticamente?
+UpdateChecker: true
 
 Messages:
   No event: "&3[Evento] &bNão está ocorrendo nenhum evento no momento!"
@@ -52,17 +55,20 @@ Messages:
   Not allowed: "&3[Evento] &bVocê não tem permissão para participar desse evento."
   No permission: "&3[Evento] &bVocê não tem permissão para fazer isso."
   Console: "&3[Evento] &bApenas jogadores podem usar este comando."
-  Already happening: "&3[Evento] &bJá está aconteçendo um evento no momento."
+  Already happening: "&3[Evento] &bJá está acontecendo um evento no momento."
   Invalid event: "&3[Evento] &bO evento fornecido é inválido."
   Missing arguments: "&3[Evento] &bUso correto: &f/evento @args"
   Reloaded: "&3[Evento] &bConfigurações recarregadas com sucesso!"
   Unknown command: "&3[Evento] &bComando desconhecido. Digite &f/evento &bpara ver a lista de comandos."
+  Configuration already exists: "&3[Evento] &bEste arquivo de configuração já existe!"
+  Configuration created: "&3[Evento] &bArquivo de configuração &f@file &bcriado com sucesso!"
   Saved: "&3[Evento] &bPosição &f@pos&bdefinida com sucesso!"
   Exit setup: "&3[Evento] &bVocê saiu das configurações do evento &f@name&b."
   Not configurated: "&3[Evento] &bEste evento não está configurado. Utilize o comando &f/evento setup @name"
   Error: "&3[Evento] &bOcorreu um erro ao salvar a posição."
   Give axe: "&3[Evento] &bClique com o botão esquerdo para definir a pos1, e com o direito para definir a pos2."
   Not needed: "&3[Evento] &bVocê não precisa do machado para definir posições nesse evento."
+  Not enough alternatives: "&3[Evento] &bO número mínimo de alternativas é maior que o número total de alternativas possíveis."
   Unknown argument: "&3[Evento] &bArgumento inválido. Digite &f/evento setup&b para ver a lista de argumentos."
   Default:
     - "&3[Evento] &bLista de Comandos:"
@@ -77,6 +83,7 @@ Messages:
     - "&c/evento iniciar <evento> &4- Inicia um evento"
     - "&c/evento parar &4- Cancela o evento atual"
     - "&c/evento setup <evento> &4- Configura um evento"
+    - "&c/evento criarconfig <evento> &4- Crie um arquivo de configuração de exemplo."
     - "&c/evento reload &4- Recarregue as configurações"
   Setup:
     - "&4[Evento] &cVocê está configurando o evento &f@name&c. Utilize os comandos abaixo:"

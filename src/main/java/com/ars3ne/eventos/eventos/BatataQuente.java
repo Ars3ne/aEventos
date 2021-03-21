@@ -96,6 +96,7 @@ public class BatataQuente extends Evento {
 
         // Limpe o inventário de todos os jogadores do evento.
         for(Player p: getPlayers()) {
+            p.getInventory().setHelmet(null);
             p.getInventory().clear();
         }
 

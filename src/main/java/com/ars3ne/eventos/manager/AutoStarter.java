@@ -53,7 +53,7 @@ public class AutoStarter {
             int day = cal.get(Calendar.DAY_OF_WEEK);
 
             // Se estiver um evento aconteçendo no momento, retorne.
-            if(aEventos.getEventoManager().getEvento() != null) return;
+            if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) return;
 
             // Obtenha todas as strings da configuração e a separe.
             for (String s: aEventos.getInstance().getConfig().getStringList("AutoStart.Times")) {
@@ -74,7 +74,13 @@ public class AutoStarter {
 
                         // Inicie o evento.
                         config = ConfigFile.get(separated[1]);
-                        aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+
+                        if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
+                            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+                        }else {
+                            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+                        }
+
                     }
 
                 }else if(separated.length == 2){
@@ -88,10 +94,15 @@ public class AutoStarter {
                             return;
                         }
 
-
                         // Inicie o evento.
                         config = ConfigFile.get(separated[0]);
-                        aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+
+                        if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
+                            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+                        }else {
+                            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+                        }
+
                     }
                 }
             }

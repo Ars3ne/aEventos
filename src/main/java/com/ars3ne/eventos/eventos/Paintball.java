@@ -43,6 +43,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Paintball extends Evento {
@@ -203,10 +204,6 @@ public class Paintball extends Evento {
 
         // Obtenha todos os jogadores restantes e os entregue as recompensas.
         for(Player p: getPlayers()) {
-            p.getInventory().setHelmet(null);
-            p.getInventory().setChestplate(null);
-            p.getInventory().setLeggings(null);
-            p.getInventory().setBoots(null);
             // Execute os comandos de vitória
             List<String> commands = this.config.getStringList("Rewards.Commands");
             for(String s : commands) {
@@ -252,8 +249,18 @@ public class Paintball extends Evento {
     @Override
     public void stop() {
 
+        // Remova a armadura dos jogadores.
+        for(Player p: getPlayers()) {
+            p.getInventory().setHelmet(null);
+            p.getInventory().setChestplate(null);
+            p.getInventory().setLeggings(null);
+            p.getInventory().setBoots(null);
+        }
+
         // Desative o friendly-fire dos jogadores.
-        for(ClanPlayer p: clans) {
+        Iterator<ClanPlayer> iter = clans.iterator();
+        while(iter.hasNext()) {
+            ClanPlayer p = iter.next();
             p.setFriendlyFire(false);
             clans.remove(p);
         }

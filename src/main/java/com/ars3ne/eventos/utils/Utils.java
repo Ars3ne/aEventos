@@ -33,6 +33,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class Utils {
 
     private static final BlockFace[] axis = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
@@ -57,6 +62,14 @@ public class Utils {
     public static BlockFace yawToFace(float yaw, boolean useSubCardinalDirections) {
         if (useSubCardinalDirections) return radial[Math.round(yaw / 45f) & 0x7].getOppositeFace();
         return axis[Math.round(yaw / 90f) & 0x3].getOppositeFace();
+    }
+
+    public static <Integer, String> Set<Integer> getKeysByValue(Map<Integer, String> map, String value) {
+        return map.entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), value))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 
 }

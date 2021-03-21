@@ -130,6 +130,14 @@ public class Fight extends Evento {
     @Override
     public void stop() {
 
+        // Remova a armadura dos jogadores.
+        for(Player p: getPlayers()) {
+            p.getInventory().setHelmet(null);
+            p.getInventory().setChestplate(null);
+            p.getInventory().setLeggings(null);
+            p.getInventory().setBoots(null);
+        }
+
         // Desative o friendly-fire dos jogadores.
         for(ClanPlayer p: clans) {
             p.setFriendlyFire(false);

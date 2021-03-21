@@ -2,8 +2,6 @@
 
 O ``aEventos`` é um plugin para servidores de Minecraft que traz vários eventos automáticos de forma fácil e rápida. O plugin foi testado apenas na 1.8.X, porém deve funcionar completamente até a 1.12.X. A maioria dos eventos deve funcionar nas versões mais atuais.
 
-------
-
 ## Eventos:
 O plugin conta atualmente com ``11`` eventos, que são:
 * Sign (Você ganha o evento ao clicar na placa. Com uma configuração, também pode ser usado para Parkour.)
@@ -26,9 +24,10 @@ O plugin conta atualmente com ``11`` eventos, que são:
 |/evento sair    |Sai do evento atual.|Nenhuma.       |
 |/evento (camarote/assistir) |Assista o evento atual, caso o mesmo permita.	     |`aeventos.spectator`			   |
 |/evento iniciar [evento]|Inicia o evento especificado, caso não esteja aconteçendo outro no momento.|`aeventos.admin`			   |
-|/evento (cancelar/parar)|Cancela o evento atual.|`aeventos.admin`			   |
+|/evento (cancelar/parar)|Cancela o evento atual.|`aeventos.admin`	
 |/evento setup [evento] |Inicia a configuração do evento especificado.|`aeventos.admin`			   |
 |/evento setup sair|Saia da configuração do evento especificado.|`aeventos.admin`			   |
+|/evento criarconfig [evento] |Cria um arquivo de configuração de exemplo do evento.|`aeventos.admin`			   |
 |/evento reload|Recarrega as configurações do plugin.	     |`aeventos.admin`			   |
 
 
@@ -125,3 +124,8 @@ Caso o evento seja de eliminação (Campo Minado, Spleef, Frog, Sumo), o jogador
 Depois de definir-las, digite ``/evento setup sair`` para salvar as alterações. Após colocar as placas, teste o evento o iniciando com o comando ``/evento iniciar parkour``. 
 
 Caso queira criar um novo evento desse tipo, basta copiar o arquivo de configuração com um outro nome e repitir esse processo.
+
+## Créditos:
+
+- [tristiisch74](https://www.spigotmc.org/members/tristiisch74.149406/) por criar a base da classe [Cuboid](https://www.spigotmc.org/threads/region-cuboid.329859/).
+- [tchristofferson](https://github.com/tchristofferson) por criar a classe [ConfigUpdater](https://github.com/tchristofferson/Config-Updater).

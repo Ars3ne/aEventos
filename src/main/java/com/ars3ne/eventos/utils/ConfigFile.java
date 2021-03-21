@@ -28,10 +28,8 @@
 package com.ars3ne.eventos.utils;
 
 import com.ars3ne.eventos.aEventos;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,16 +42,19 @@ public class ConfigFile {
 
     public static void create(String name) {
         File config_file = new File(aEventos.getInstance().getDataFolder() + "/eventos/", name + ".yml");
-        if (!config_file.exists()) {
-            aEventos.getInstance().saveResource("eventos/" + name + ".yml", false);
-        }
 
-        FileConfiguration config = new YamlConfiguration();
-        try {
-            config.load(config_file);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        if (config_file.exists()) return;
+
+        aEventos.getInstance().saveResource("eventos/" + name + ".yml", false);
+
+            /*FileConfiguration config = new YamlConfiguration();
+            try {
+                config.load(config_file);
+            } catch (IOException | InvalidConfigurationException e) {
+                e.printStackTrace();
+            }*/
+
+
     }
 
     public static YamlConfiguration get(String name) {
@@ -72,7 +73,6 @@ public class ConfigFile {
     }
 
     public static void save(YamlConfiguration config) throws IOException {
-
         String filename = config.getString("filename");
         File file = new File(aEventos.getInstance().getDataFolder() + "/eventos/", filename);
         config.set("filename", null);

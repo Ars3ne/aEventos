@@ -206,19 +206,27 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Se não está acontecendo um evento, mande um erro.
-                    if(aEventos.getEventoManager().getEvento() == null) {
+                    if(aEventos.getEventoManager().getEvento() == null && aEventos.getEventoChatManager().getEvento() == null) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§"));
                         return true;
                     }
 
                     // Mande a mensagem de cancelamento e pare o evento.
-                    YamlConfiguration config = aEventos.getEventoManager().getEvento().getConfig();
+                    YamlConfiguration config;
+
+                    if(aEventos.getEventoManager().getEvento() != null) {
+                        config = aEventos.getEventoManager().getEvento().getConfig();
+                        aEventos.getEventoManager().getEvento().stop();
+                    }else {
+                        config = aEventos.getEventoChatManager().getEvento().getConfig();
+                        aEventos.getEventoChatManager().getEvento().stop();
+                    }
+
                     List<String> broadcast_messages = config.getStringList("Messages.Cancelled");
                     for(String s : broadcast_messages) {
                         aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
                     }
 
-                    aEventos.getEventoManager().getEvento().stop();
                     return true;
 
                 }
@@ -255,24 +263,60 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Se já está acontecendo um evento, mande um erro.
-                    if(aEventos.getEventoManager().getEvento() != null) {
+                    if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Already happening").replace("&", "§"));
                         return true;
                     }
 
                     // Tente obter o evento para ser iniciado. Se for inválido, mande um erro.
-                    boolean config_exists = ConfigFile.exists(args[1].toLowerCase());
-                    if(!config_exists) {
+                    if(!ConfigFile.exists(args[1].toLowerCase())) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                         return true;
                     }
 
                     // Inicie o evento.
                     YamlConfiguration config = ConfigFile.get(args[1].toLowerCase());
-                    boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
-                    if(!started) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§").replace("@name", args[1].toLowerCase()));
+
+                    if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
+                        aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
+                    }else {
+                        boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
+                        if(!started) {
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§").replace("@name", args[1].toLowerCase()));
+                        }
                     }
+
+                    return true;
+
+                }else if(args[0].equalsIgnoreCase("criarconfig")) {
+
+                    // Se o usuário não tem a permissão, mande um erro.
+                    if(!sender.hasPermission("aeventos.admin")) {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        return true;
+                    }
+
+                    // Se existe apenas um argumento, mande um erro.
+                    if(args.length == 1) {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "criarconfig <evento>"));
+                        return true;
+                    }
+
+                    // Se a resource não existir, mande um erro.
+                    if(aEventos.getInstance().getResource("eventos/" + args[1].toLowerCase() + ".yml") == null) {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
+                        return true;
+                    }
+
+                    // Se o arquivo de configuração já existir, mande um erro.
+                    if(ConfigFile.exists(args[1].toLowerCase())) {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration already exists").replace("&", "§"));
+                        return true;
+                    }
+
+                    // Crie o arquivo de configuração.
+                    ConfigFile.create(args[1].toLowerCase());
+                    sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration created").replace("&", "§").replace("@file", args[1].toLowerCase() + ".yml"));
                     return true;
 
                 }else if(args[0].equalsIgnoreCase("setup")) {
@@ -486,8 +530,7 @@ public class EventoCommand implements CommandExecutor {
 
                     }else {
                         // Se não, tente achar o evento e adicione o usuário á lista. Se for inválido, mande um erro.
-                        boolean config_exists = ConfigFile.exists(args[1].toLowerCase());
-                        if(!config_exists) {
+                        if(!ConfigFile.exists(args[1].toLowerCase())) {
                             sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                             return true;
                         }
@@ -504,8 +547,29 @@ public class EventoCommand implements CommandExecutor {
                         return true;
                     }
                 }
+
                 else {
-                    sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Unknown command").replace("&", "§"));
+
+                    if(aEventos.getEventoChatManager().getEvento() != null) {
+
+                        if (!(sender instanceof Player)) {
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§"));
+                            return true;
+                        }
+
+                        Player p = (Player) sender;
+
+                        // Se o jogador não tem a permissão para participar do evento, retorne um erro.
+                        if(!p.hasPermission(aEventos.getEventoChatManager().getEvento().getPermission())) {
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§"));
+                            return true;
+                        }
+
+                        aEventos.getEventoChatManager().getEvento().parseCommand(p, args);
+
+                    }else {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Unknown command").replace("&", "§"));
+                    }
                     return true;
                 }
 
