@@ -1,28 +1,18 @@
 Evento:
   # Configurações do evento.
-  Title: "Spleef" # O nome do evento. Será usado na placeholder @name.
-  Type: "spleef" # O tipo do evento. Não modifique!
+  Title: "Anvil" # O nome do evento. Será usado na placeholder @name.
+  Type: "anvil" # O tipo do evento. Não modifique!
   Calls: 5 # Quantas chamadas o evento terá.
   Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
   Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
   Spectator mode: true # Este evento possui camarote?
-  Empty inventory: true # Esse evento requer que você esteja com o inventário vazio?
+  Empty inventory: false # Esse evento requer que você esteja com o inventário vazio?
   Permission: "aeventos.evento" # A permissão necessária para participar do evento.
   Count participation: true # Esse evento contará participação?
   Count victory: true # Esse evento contará vitória?
-  Delay: 5 # O tempo em segundos de delay antes do início da quebra de blocos.
-  Kick: true # Caso esteja ativado, jogadores que estiverem parados por X segundos serão expulsos do evento.
-  Kick time: 20 # O tempo limite para ficar parado em segundos.
-
-# Os itens que serão dados para os jogadores no início do evento.
-Items:
-  # Lista de materiais:
-  # 1.8.X - 1.12.X: https://www.digminecraft.com/lists/item_id_list_pc_1_12.php
-  # 1.13.X em diante: https://www.digminecraft.com/lists/item_id_list_pc.php
-  # FORMATO: <material>-(data)-<quantidade>
-  # O campo data é opicional, porém o material e a quantidade são obrigatórios.
-  - "STONE_SPADE-1"
-  - "SNOW_BALL-15"
+  Height: 20 # As bigornas devem ser invocadas de quantos blocos de altura?
+  Time: 10 # Tempo antes das bigornas começarem a cair.
+  Delay: 2 # Tempo de delay para cair uma bigorna.
 
 # Mensagens
 Messages:
@@ -30,7 +20,7 @@ Messages:
     - ""
     - "&3[@name] &bIniciando evento &f@name"
     - "&3[@name] &bPara participar, digite &f/evento"
-    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &3[Spleef]"
+    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &8[Anvil]"
     - "&3[@name] &bJogadores no evento: &f@players"
     - "&3[@name] &bChamadas restantes: &f@broadcasts"
     - ""
@@ -57,23 +47,19 @@ Messages:
     - ""
     - "&3[@name] &bO evento foi cancelado manualmente."
     - ""
-  Enabling breaking:
-    - "&3[@name] &bAtivando quebra de blocos em &f@time&b segundos..."
-  Breaking allowed:
-    - "&3[@name] &bAgora vocês podem quebrar blocos!"
-  Kick: "&3[@name] &bComo você está parado, você será eliminado do evento em &f@time &bsegundos."
+  Starting:
+    - "&3[@name] &bAs bigornas começarão a cair em &f@time &bsegundos."
 
 # Recompensas. Elas serão dadas ao vencedor.
 Rewards:
   Tag: # Tag do LegendChat.
     Enabled: true # Ativar a tag do evento?
-    Name: "aeventos_spleef" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_spleef}
-    Style: "&3[Spleef] " # A aparência da tag.
+    Name: "aeventos_anvil" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_anvil}
+    Style: "&8[Anvil] " # A aparência da tag.
   Commands: # Lista de comandos que serão executados no vencedor.
     - "give @winner diamond 1"
 
-
-# Localizações. Você configurará essa seção usando o comando /evento setup spleef
+# Localizações. Você configurará essa seção usando o comando /evento setup anvil
 Locations:
   Lobby: []
   Entrance: []

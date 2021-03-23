@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.FrogListener;
 import com.ars3ne.eventos.utils.Cuboid;
+import com.ars3ne.eventos.utils.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -91,7 +92,7 @@ public class Frog extends Evento {
 
             if(block.getType() != Material.AIR
                     && block.getType() != Material.SNOW_BLOCK
-                    && !(block.getType() == Material.WOOL && block.getData() == (byte) 14)) {
+                    && !(block.getType() == XMaterial.RED_WOOL.parseMaterial() && block.getData() == XMaterial.RED_WOOL.getData())) {
 
                 current_blocks.put(block, block.getType());
                 if(!remeaning_materials.contains(block.getType())) remeaning_materials.add(block.getType());
@@ -199,8 +200,8 @@ public class Frog extends Evento {
             // Se tiver apenas um tipo de bloco, coloque a lã vermelha em um bloco deletado aleatório.
             List<Block> deleted_blocks_array = new ArrayList<>(deleted_blocks.keySet());
             wool_block = deleted_blocks_array.get(random.nextInt(deleted_blocks_array.size()));
-            wool_block.setType(Material.WOOL);
-            wool_block.setData((byte) 14);
+            wool_block.setType(XMaterial.RED_WOOL.parseMaterial());
+            wool_block.setData(XMaterial.RED_WOOL.getData());
             listener.setWool();
 
             // Troque os outros blocos deletados por neve.

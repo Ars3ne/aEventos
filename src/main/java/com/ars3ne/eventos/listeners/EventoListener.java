@@ -73,14 +73,18 @@ public class EventoListener implements Listener {
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
 
-        if(aEventos.getEventoManager().getEvento() == null) return;
+        if(aEventos.getEventoManager().getEvento() == null && aEventos.getEventoChatManager().getEvento() == null) return;
 
-        // Se o usuário estava no evento, remova-o.
-        if(aEventos.getEventoManager().getEvento().getPlayers().contains(e.getPlayer())) {
-            aEventos.getEventoManager().getEvento().leave(e.getPlayer());
-        }else if(aEventos.getEventoManager().getEvento().getSpectators().contains(e.getPlayer())) {
-            // Se o usuário estava no modo espectador, remova-o.
-            aEventos.getEventoManager().getEvento().remove(e.getPlayer());
+        if(aEventos.getEventoChatManager().getEvento() != null) {
+            aEventos.getEventoChatManager().getEvento().leave(e.getPlayer());
+        }else {
+            // Se o usuário estava no evento, remova-o.
+            if(aEventos.getEventoManager().getEvento().getPlayers().contains(e.getPlayer())) {
+                aEventos.getEventoManager().getEvento().leave(e.getPlayer());
+            }else if(aEventos.getEventoManager().getEvento().getSpectators().contains(e.getPlayer())) {
+                // Se o usuário estava no modo espectador, remova-o.
+                aEventos.getEventoManager().getEvento().remove(e.getPlayer());
+            }
         }
 
     }
@@ -128,7 +132,7 @@ public class EventoListener implements Listener {
         if(!setup.containsKey(e.getPlayer())) return;
         if(!setup.get(e.getPlayer()).isSet("Locations.Pos1")) return;
 
-        if(e.getItem() == null || e.getItem().getType() != Material.STONE_AXE) return;
+        if(e.getItem() == null || (e.getItem().getType() != Material.STONE_AXE && e.getItem().getType() != Material.STONE_HOE)) return;
         if(e.getItem().getItemMeta().getDisplayName() == null) return;
 
         if(e.getItem().getItemMeta().getDisplayName().equals("§6Machado de Posições")) {
@@ -176,6 +180,53 @@ public class EventoListener implements Listener {
 
             }
         }
+
+        if(e.getItem().getItemMeta().getDisplayName().equals("§6Enxada de Posições")) {
+
+            YamlConfiguration settings = setup.get(e.getPlayer());
+
+            // Se for um click com o machado de posições, então obtenha a posição dos blocos e detecte o click.
+            e.setCancelled(true);
+
+            if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
+
+                settings.set("Locations.Pos3.world", e.getPlayer().getWorld().getName());
+                settings.set("Locations.Pos3.x", e.getClickedBlock().getX());
+                settings.set("Locations.Pos3.y", e.getClickedBlock().getY());
+                settings.set("Locations.Pos3.z", e.getClickedBlock().getZ());
+
+                try {
+                    ConfigFile.save(settings);
+                    setup.replace(e.getPlayer(), settings);
+                } catch (IOException ex) {
+                    e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                    ex.printStackTrace();
+                }
+
+                e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 "));
+
+            }
+
+            if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+
+                settings.set("Locations.Pos4.world", e.getPlayer().getWorld().getName());
+                settings.set("Locations.Pos4.x", e.getClickedBlock().getX());
+                settings.set("Locations.Pos4.y", e.getClickedBlock().getY());
+                settings.set("Locations.Pos4.z", e.getClickedBlock().getZ());
+
+                try {
+                    ConfigFile.save(settings);
+                    setup.replace(e.getPlayer(), settings);
+                } catch (IOException ex) {
+                    e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                    ex.printStackTrace();
+                }
+
+                e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
+
+            }
+        }
+
     }
 
 }

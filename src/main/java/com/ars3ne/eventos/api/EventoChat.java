@@ -34,6 +34,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventoChat implements EventoInterface{
@@ -52,12 +53,15 @@ public class EventoChat implements EventoInterface{
         type = EventoType.getEventoType(config.getString("Evento.Type"));
         this.permission = config.getString("Evento.Permission");
 
-        if (type == EventoType.VOTACAO) {
-            this.count_participation = false;
-            this.count_win = false;
-        } else {
-            this.count_participation = config.getBoolean("Evento.Count participation");
-            this.count_win = config.getBoolean("Evento.Count victory");
+        switch(type) {
+            case VOTACAO:
+                this.count_participation = false;
+                this.count_win = false;
+                break;
+            default:
+                this.count_participation = config.getBoolean("Evento.Count participation");
+                this.count_win = config.getBoolean("Evento.Count victory");
+                break;
         }
 
     }
@@ -90,7 +94,6 @@ public class EventoChat implements EventoInterface{
                     List<String> broadcast_messages = config.getStringList("Messages.Broadcast");
                     for(String s : broadcast_messages) {
                         parseMessage(s, calls);
-                        //aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")));
                     }
 
                     calls--;
@@ -98,6 +101,9 @@ public class EventoChat implements EventoInterface{
 
                     cancel();
                     start();
+
+                    EventoStartedEvent start = new EventoStartedEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
+                    Bukkit.getPluginManager().callEvent(start);
 
                 }
             }
@@ -116,10 +122,9 @@ public class EventoChat implements EventoInterface{
 
         if(!this.count_win) return;
 
-        /*List<String> winners = new ArrayList<>();
+        List<String> winners = new ArrayList<>();
         winners.add(p.getUniqueId().toString());
-        this.win.add(p);
-        
+
         aEventos.getConnectionManager().insertUser(p.getUniqueId());
         aEventos.getConnectionManager().addWin(config.getString("filename").substring(0, config.getString("filename").length() - 4), p.getUniqueId());
 
@@ -129,7 +134,6 @@ public class EventoChat implements EventoInterface{
 
         PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(win);
-        */
 
     }
 

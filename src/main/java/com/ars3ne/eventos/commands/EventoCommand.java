@@ -278,7 +278,10 @@ public class EventoCommand implements CommandExecutor {
                     YamlConfiguration config = ConfigFile.get(args[1].toLowerCase());
 
                     if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
-                        aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
+                        boolean started = aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
+                        if(!started) {
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing dependency").replace("&", "§").replace("@dependency", "Vault"));
+                        }
                     }else {
                         boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
                         if(!started) {
@@ -314,8 +317,10 @@ public class EventoCommand implements CommandExecutor {
                         return true;
                     }
 
-                    // Crie o arquivo de configuração.
+                    // Crie o arquivo de configuração e atualize as tags.
                     ConfigFile.create(args[1].toLowerCase());
+                    aEventos.updateTags();
+
                     sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration created").replace("&", "§").replace("@file", args[1].toLowerCase() + ".yml"));
                     return true;
 
@@ -459,6 +464,21 @@ public class EventoCommand implements CommandExecutor {
                             axe.setItemMeta(meta);
                             p.getInventory().addItem(axe);
 
+                            if(setup.get(p).isSet("Locations.Pos3")) {
+                                // De uma enxada para o jogador definir as posições.
+                                ItemStack hoe = new ItemStack(Material.STONE_HOE, 1);
+                                ItemMeta meta2 = hoe.getItemMeta();
+
+                                meta2.setDisplayName("§6Enxada de Posições");
+                                ArrayList<String> lore2 = new ArrayList<>();
+                                lore2.add("§7* Clique esquerdo para definir a terceira posição.");
+                                lore2.add("§7* Clique direito para definir a quarta posição.");
+                                meta2.setLore(lore2);
+
+                                hoe.setItemMeta(meta2);
+                                p.getInventory().addItem(hoe);
+                            }
+
                             sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Give axe").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
                             return true;
 
@@ -512,6 +532,58 @@ public class EventoCommand implements CommandExecutor {
                             }
 
                             sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos2 "));
+                            return true;
+
+                        }
+
+                        else if(args[1].equalsIgnoreCase("pos3")) {
+
+                            // Se o evento não possui as configurações de pos, retorne um erro.
+                            if(!setup.get(p).isSet("Locations.Pos3")) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                return true;
+                            }
+
+                            settings.set("Locations.Pos3.world", p.getLocation().getWorld().getName());
+                            settings.set("Locations.Pos3.x", p.getLocation().getX());
+                            settings.set("Locations.Pos3.y", p.getLocation().getY());
+                            settings.set("Locations.Pos3.z", p.getLocation().getZ());
+
+                            try {
+                                ConfigFile.save(settings);
+                                setup.replace(p, settings);
+                            } catch (IOException e) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                e.printStackTrace();
+                            }
+
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 "));
+                            return true;
+
+                        }
+
+                        else if(args[1].equalsIgnoreCase("pos4")) {
+
+                            // Se o evento não possui as configurações de pos, retorne um erro.
+                            if(!setup.get(p).isSet("Locations.Pos3")) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                return true;
+                            }
+
+                            settings.set("Locations.Pos4.world", p.getLocation().getWorld().getName());
+                            settings.set("Locations.Pos4.x", p.getLocation().getX());
+                            settings.set("Locations.Pos4.y", p.getLocation().getY());
+                            settings.set("Locations.Pos4.z", p.getLocation().getZ());
+
+                            try {
+                                ConfigFile.save(settings);
+                                setup.replace(p, settings);
+                            } catch (IOException e) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                e.printStackTrace();
+                            }
+
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
                             return true;
 
                         }

@@ -28,48 +28,49 @@
 package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
-import com.ars3ne.eventos.eventos.Fight;
+import com.ars3ne.eventos.api.events.PlayerLoseEvent;
+import com.ars3ne.eventos.eventos.Anvil;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
-public class FightListener implements Listener {
+public class AnvilListener implements Listener {
 
-    private Fight evento;
+    private Anvil evento;
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onDamage(EntityDamageByEntityEvent e) {
-
-        if(evento == null) return;
-
-        // Se a entidade não for um player, retorne.
-        if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
-
-        Player damaged = (Player) e.getEntity();
-        Player damager = (Player) e.getDamager();
-
-        if(!evento.getPlayers().contains(damaged) || !evento.getPlayers().contains(damager)) return;
-        if((evento.getFighter1() != damaged && evento.getFighter1() != damager) && (evento.getFighter2() != damaged && evento.getFighter2() != damager)) e.setCancelled(true);
-
-    }
-
-    @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
+    @EventHandler(priority = EventPriority.LOW)
+    public void onEntityChangeBlockEvent(EntityChangeBlockEvent e) {
 
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
-        if((evento.getFighter1() != e.getEntity() && evento.getFighter1() != e.getEntity().getKiller()) && (evento.getFighter2() != e.getEntity() && evento.getFighter2() != e.getEntity().getKiller())) return;
+        if(e.getEntityType() != EntityType.FALLING_BLOCK) return;
 
-        // Limpe os drops e defina o jogador como o perdedor.
-        e.getDrops().clear();
-        evento.setFightLoser(e.getEntity().getPlayer(), false);
+        FallingBlock fb = (FallingBlock) e.getEntity();
+        if(fb.getMaterial() != Material.ANVIL) return;
+        if(!evento.getAnvils().contains(e.getBlock())) return;
+
+        fb.setDropItem(false);
+        if(e.getBlock().getType() != Material.ANVIL) e.getBlock().setType(Material.ANVIL);
+
+        for(Player p: evento.getPlayers()) {
+
+            // Se o jogador estiver no mesmo bloco da bigorna, então o elimine.
+            if(Math.round(p.getLocation().getX()) != e.getBlock().getX() || Math.round(p.getLocation().getY()) != e.getBlock().getY() || Math.round(p.getLocation().getZ()) != e.getBlock().getZ() ) continue;
+            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+            evento.remove(p);
+            PlayerLoseEvent lose = new PlayerLoseEvent(p, evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
+            Bukkit.getPluginManager().callEvent(lose);
+
+        }
+
     }
-
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
@@ -86,7 +87,7 @@ public class FightListener implements Listener {
     }
 
     public void setEvento() {
-        evento = (Fight) aEventos.getEventoManager().getEvento();
+        evento = (Anvil) aEventos.getEventoManager().getEvento();
     }
 
 }

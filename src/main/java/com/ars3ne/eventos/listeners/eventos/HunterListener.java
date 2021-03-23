@@ -28,48 +28,46 @@
 package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
-import com.ars3ne.eventos.eventos.Fight;
+import com.ars3ne.eventos.eventos.Hunter;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
-public class FightListener implements Listener {
+public class HunterListener implements Listener {
 
-    private Fight evento;
+    Hunter evento;
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
 
         if(evento == null) return;
+        if(!(e.getEntity() instanceof Player)) return;
+        if(!(e.getDamager() instanceof Arrow)) return;
 
-        // Se a entidade não for um player, retorne.
-        if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
+        Player p = (Player) e.getEntity();
+        Arrow arrow = (Arrow) e.getDamager();
+        Player shooter = (Player) arrow.getShooter();
 
-        Player damaged = (Player) e.getEntity();
-        Player damager = (Player) e.getDamager();
+        if(!evento.getPlayers().contains(p) || !evento.getPlayers().contains(shooter)) return;
 
-        if(!evento.getPlayers().contains(damaged) || !evento.getPlayers().contains(damager)) return;
-        if((evento.getFighter1() != damaged && evento.getFighter1() != damager) && (evento.getFighter2() != damaged && evento.getFighter2() != damager)) e.setCancelled(true);
+        if(!evento.isPvPEnabled()) {
+            e.setCancelled(true);
+            return;
+        }
+
+        if(evento.getCaptured().contains(p)) return;
+
+        if((evento.getBlueTeam().containsKey(p) && evento.getBlueTeam().containsKey(shooter))
+                || (evento.getRedTeam().containsKey(p) && evento.getRedTeam().containsKey(shooter))) return;
+
+
+        evento.eliminate(p, shooter);
 
     }
-
-    @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-
-        if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
-        if((evento.getFighter1() != e.getEntity() && evento.getFighter1() != e.getEntity().getKiller()) && (evento.getFighter2() != e.getEntity() && evento.getFighter2() != e.getEntity().getKiller())) return;
-
-        // Limpe os drops e defina o jogador como o perdedor.
-        e.getDrops().clear();
-        evento.setFightLoser(e.getEntity().getPlayer(), false);
-    }
-
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
@@ -86,7 +84,6 @@ public class FightListener implements Listener {
     }
 
     public void setEvento() {
-        evento = (Fight) aEventos.getEventoManager().getEvento();
+        evento = (Hunter) aEventos.getEventoManager().getEvento();
     }
-
 }

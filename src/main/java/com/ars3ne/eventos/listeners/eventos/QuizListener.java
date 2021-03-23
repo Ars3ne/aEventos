@@ -28,48 +28,38 @@
 package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
-import com.ars3ne.eventos.eventos.Fight;
-import org.bukkit.entity.Player;
+import com.ars3ne.eventos.api.events.PlayerLoseEvent;
+import com.ars3ne.eventos.eventos.Quiz;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
-public class FightListener implements Listener {
+public class QuizListener implements Listener {
 
-    private Fight evento;
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onDamage(EntityDamageByEntityEvent e) {
-
-        if(evento == null) return;
-
-        // Se a entidade não for um player, retorne.
-        if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
-
-        Player damaged = (Player) e.getEntity();
-        Player damager = (Player) e.getDamager();
-
-        if(!evento.getPlayers().contains(damaged) || !evento.getPlayers().contains(damager)) return;
-        if((evento.getFighter1() != damaged && evento.getFighter1() != damager) && (evento.getFighter2() != damaged && evento.getFighter2() != damager)) e.setCancelled(true);
-
-    }
+    Quiz evento;
 
     @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
+    public void onMove(PlayerMoveEvent e) {
 
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
-        if((evento.getFighter1() != e.getEntity() && evento.getFighter1() != e.getEntity().getKiller()) && (evento.getFighter2() != e.getEntity() && evento.getFighter2() != e.getEntity().getKiller())) return;
+        if(!evento.getPlayers().contains(e.getPlayer())) return;
 
-        // Limpe os drops e defina o jogador como o perdedor.
-        e.getDrops().clear();
-        evento.setFightLoser(e.getEntity().getPlayer(), false);
+        if(e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.STATIONARY_WATER) {
+
+            // Se o jogador entrou na água, então o elimine.
+            e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+            evento.remove(e.getPlayer());
+            PlayerLoseEvent lose = new PlayerLoseEvent(e.getPlayer(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
+            Bukkit.getPluginManager().callEvent(lose);
+
+        }
+
     }
-
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
@@ -86,7 +76,7 @@ public class FightListener implements Listener {
     }
 
     public void setEvento() {
-        evento = (Fight) aEventos.getEventoManager().getEvento();
+        evento = (Quiz) aEventos.getEventoManager().getEvento();
     }
 
 }

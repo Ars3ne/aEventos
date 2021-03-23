@@ -27,6 +27,7 @@
 
 package com.ars3ne.eventos.manager;
 
+import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.eventos.chat.*;
@@ -43,10 +44,17 @@ public class EventosChatManager {
             return false;
         }
 
+        if(!verify(config)) return false;
 
         switch(type) {
             case VOTACAO:
                 this.evento = new Votacao(config);
+                break;
+            case LOTERIA:
+                this.evento = new Loteria(config);
+                break;
+            case BOLAO:
+                this.evento = new Bolao(config);
                 break;
         }
 
@@ -55,6 +63,16 @@ public class EventosChatManager {
 
     }
 
+    private boolean verify(YamlConfiguration config) {
+
+        switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
+            case LOTERIA: case BOLAO:
+                return aEventos.getInstance().getEconomy() != null;
+        }
+
+        return true;
+
+    }
     public EventoChat getEvento() {
         return this.evento;
     }

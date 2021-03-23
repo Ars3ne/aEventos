@@ -82,12 +82,13 @@ public class UpdateChecker {
                         if(release.get("tag_name").equals(CURERNT_VERSION)) break;
                         if((Boolean) release.get("draft") || (Boolean) release.get("prerelease")) continue;
 
-                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aUma nova atualização está disponível! (" + release.get("name") + ").");
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aUma nova atualização está disponível! (" + release.get("name") + ")");
                         Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aVocê pode baixar-la aqui: " + release.get("html_url"));
-                        break;
-
+                        return;
                     }
                 }
+
+                Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aVocê está usando a última versão. (" + CURERNT_VERSION + ")");
 
 
             } catch (IOException | ParseException e) {

@@ -40,12 +40,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class Paintball extends Evento {
 
     private final YamlConfiguration config;
@@ -62,6 +65,10 @@ public class Paintball extends Evento {
     private final String red_name;
     private boolean pvp_enabled;
 
+    Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    Team scoreboard_team_blue = board.registerNewTeam("blue_paintball");
+    Team scoreboard_team_red = board.registerNewTeam("red_paintball");
+
     public Paintball(YamlConfiguration config) {
         super(config);
         this.config = config;
@@ -73,6 +80,9 @@ public class Paintball extends Evento {
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
         this.red = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
+
+        scoreboard_team_blue.setPrefix(ChatColor.BLUE.toString());
+        scoreboard_team_red.setPrefix(ChatColor.RED.toString());
 
     }
 
@@ -126,6 +136,7 @@ public class Paintball extends Evento {
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
 
+                scoreboard_team_blue.addPlayer(p);
                 p.teleport(blue);
             }
 
@@ -154,6 +165,7 @@ public class Paintball extends Evento {
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
 
+                scoreboard_team_red.addPlayer(p);
                 p.teleport(red);
             }
 
@@ -255,7 +267,13 @@ public class Paintball extends Evento {
             p.getInventory().setChestplate(null);
             p.getInventory().setLeggings(null);
             p.getInventory().setBoots(null);
+            scoreboard_team_blue.removePlayer(p);
+            scoreboard_team_red.removePlayer(p);
         }
+
+        // Remova os times.
+        scoreboard_team_blue.unregister();
+        scoreboard_team_red.unregister();
 
         // Desative o friendly-fire dos jogadores.
         Iterator<ClanPlayer> iter = clans.iterator();
@@ -275,7 +293,10 @@ public class Paintball extends Evento {
         List<String> eliminated_st = config.getStringList("Messages.Eliminated");
 
         if(blue_team.contains(p)) {
+
             blue_team.remove(p);
+            scoreboard_team_blue.removePlayer(p);
+
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
                     player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + p.getName()).replace("@remeaning", "§9" + blue_team.size()).replace("@team", "§9" + blue_name));
@@ -284,11 +305,15 @@ public class Paintball extends Evento {
             for (Player player : getSpectators()) {
                 for(String s: eliminated_st) {
                     player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + p.getName()).replace("@remeaning", "§9" + blue_team.size()).replace("@team", "§9" + blue_name));
-                }            }
+                }
+            }
         }
 
         if(red_team.contains(p)) {
+
             red_team.remove(p);
+            scoreboard_team_red.removePlayer(p);
+
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
                     player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + p.getName()).replace("@remeaning", "§c" + red_team.size()).replace("@team", "§c" + red_name));

@@ -31,10 +31,10 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.FightListener;
+import com.ars3ne.eventos.utils.XMaterial;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -43,9 +43,10 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class Fight extends Evento {
 
     private final YamlConfiguration config;
@@ -136,6 +137,7 @@ public class Fight extends Evento {
             p.getInventory().setChestplate(null);
             p.getInventory().setLeggings(null);
             p.getInventory().setBoots(null);
+            p.getInventory().clear();
         }
 
         // Desative o friendly-fire dos jogadores.
@@ -160,24 +162,27 @@ public class Fight extends Evento {
             for (Player player : getSpectators()) {
                 player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
             }
-        }
 
-        // Se o jogador que saiu foi um dos lutadores, então o defina como perdedor.
-        if(fighter1 == p || fighter2 == p) {
-            setFightLoser(p);
-        }
-
-        // Desative o friendly-fire do jogador.
-        if(aEventos.getInstance().getSimpleClans() != null) {
-            if(clans.contains(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p))) {
-                clans.remove(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
-                aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+            // Desative o friendly-fire do jogador.
+            if(aEventos.getInstance().getSimpleClans() != null) {
+                if(clans.contains(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p))) {
+                    clans.remove(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
+                    aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+                }
             }
+
+            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
+            Bukkit.getPluginManager().callEvent(lose);
+
+            // Se o jogador que saiu foi um dos lutadores, então o defina como perdedor.
+            if(fighter1 == p || fighter2 == p) {
+                setFightLoser(p, true);
+            }
+
+            this.remove(p);
+
         }
 
-        PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-        Bukkit.getPluginManager().callEvent(lose);
-        this.remove(p);
 
     }
 
@@ -230,70 +235,134 @@ public class Fight extends Evento {
                 }
             }
 
-            // Se for a última luta, de os itens especiais.
+            // Se for a última luta, de os Items especiais.
             if(getPlayers().size() == 2) {
 
                 for(String s: config.getStringList("Items.Last fight.Inventory")) {
+
                     String[] separated = s.split("-");
-                    fighter1.getInventory().addItem(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().addItem(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                    ItemStack is;
+                    if(separated.length == 3) {
+                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[2]), (byte) Integer.parseInt(separated[1]));
+                    }else {
+                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[1]));
+                    }
+
+                    fighter1.getInventory().addItem(is);
+                    fighter2.getInventory().addItem(is);
                 }
 
-                if(config.getString("Itens.Last fight.Armor.Helmet") != null) {
-                    String[] separated = config.getString("Itens.Last fight.Armor.Helmet").split("-");
-                    fighter1.getInventory().setHelmet(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setHelmet(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Last fight.Armor.Helmet.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Last fight.Armor.Helmet.Data") != 0) {
+                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Helmet.Data")));
+                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Helmet.Data")));
+                    }else {
+                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
-                if(config.getString("Itens.Last fight.Armor.Chestplate") != null) {
-                    String[] separated = config.getString("Itens.Last fight.Armor.Chestplate").split("-");
-                    fighter1.getInventory().setChestplate(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setChestplate(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Last fight.Armor.Chestplate.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Last fight.Armor.Chestplate.Data") != 0) {
+                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Chestplate.Data")));
+                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Chestplate.Data")));
+                    }else {
+                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
-                if(config.getString("Itens.Last fight.Armor.Legging") != null) {
-                    String[] separated = config.getString("Itens.Last fight.Armor.Legging").split("-");
-                    fighter1.getInventory().setLeggings(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setLeggings(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Last fight.Armor.Legging.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Last fight.Armor.Legging.Data") != 0) {
+                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Legging.Data")));
+                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Legging.Data")));
+                    }else {
+                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
-                if(config.getString("Itens.Last fight.Armor.Boots") != null) {
-                    String[] separated = config.getString("Itens.Last fight.Armor.Boots").split("-");
-                    fighter1.getInventory().setBoots(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setBoots(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Last fight.Armor.Boots.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Last fight.Armor.Boots.Data") != 0) {
+                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Boots.Data")));
+                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Boots.Data")));
+                    }else {
+                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
             }else {
 
-                // Se não for, então de os itens comuns.
+                // Se não for, então de os Items comuns.
                 for(String s: config.getStringList("Items.Normal.Inventory")) {
+
                     String[] separated = s.split("-");
-                    fighter1.getInventory().addItem(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().addItem(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                    ItemStack is;
+                    if(separated.length == 3) {
+                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[2]), (byte) Integer.parseInt(separated[1]));
+                    }else {
+                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[1]));
+                    }
+
+                    fighter1.getInventory().addItem(is);
+                    fighter2.getInventory().addItem(is);
                 }
 
-                if(config.getString("Itens.Normal.Armor.Helmet") != null) {
-                    String[] separated = config.getString("Itens.Normal.Armor.Helmet").split("-");
-                    fighter1.getInventory().setHelmet(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setHelmet(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Normal.Armor.Helmet.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Normal.Armor.Helmet.Data") != 0) {
+                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Helmet.Data")));
+                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Helmet.Data")));
+                    }else {
+                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
-                if(config.getString("Itens.Normal.Armor.Chestplate") != null) {
-                    String[] separated = config.getString("Itens.Normal.Armor.Chestplate").split("-");
-                    fighter1.getInventory().setChestplate(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setChestplate(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Normal.Armor.Chestplate.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Normal.Armor.Chestplate.Data") != 0) {
+                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Chestplate.Data")));
+                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Chestplate.Data")));
+                    }else {
+                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
-                if(config.getString("Itens.Normal.Armor.Legging") != null) {
-                    String[] separated = config.getString("Itens.Normal.Armor.Legging").split("-");
-                    fighter1.getInventory().setLeggings(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setLeggings(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Normal.Armor.Legging.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Normal.Armor.Legging.Data") != 0) {
+                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Legging.Data")));
+                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Legging.Data")));
+                    }else {
+                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
 
-                if(config.getString("Itens.Normal.Armor.Boots") != null) {
-                    String[] separated = config.getString("Itens.Normal.Armor.Boots").split("-");
-                    fighter1.getInventory().setBoots(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
-                    fighter2.getInventory().setBoots(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                if(!config.getString("Items.Normal.Armor.Boots.Material").equalsIgnoreCase("air")) {
+
+                    if(config.getInt("Items.Normal.Armor.Boots.Data") != 0) {
+                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Boots.Data")));
+                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Boots.Data")));
+                    }else {
+                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1));
+                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1));
+                    }
+
                 }
             }
 
@@ -312,7 +381,7 @@ public class Fight extends Evento {
                 if(!getPlayers().contains(current_fighter1) || !getPlayers().contains(current_fighter2)) return;
                 if(fighter1 != current_fighter1 || fighter2 != current_fighter2) return;
 
-                setFightLoser(null);
+                setFightLoser(null, false);
 
             }, max_time * 20L);
 
@@ -320,7 +389,7 @@ public class Fight extends Evento {
 
     }
 
-    public void setFightLoser(Player p) {
+    public void setFightLoser(Player p, boolean leave) {
 
         // Se o player for null, significa que foi um empate.
         if(p == null) {
@@ -413,10 +482,12 @@ public class Fight extends Evento {
             }
 
             // Elimine o perdedor do evento.
-            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-            remove(p);
-            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-            Bukkit.getPluginManager().callEvent(lose);
+            if(!leave) {
+                p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                remove(p);
+                PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
+                Bukkit.getPluginManager().callEvent(lose);
+            }
 
         }
 

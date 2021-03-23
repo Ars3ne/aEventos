@@ -1,0 +1,49 @@
+Evento:
+  # Configurações do evento.
+  Title: "Loteria" # O nome do evento. Será usado na placeholder @name.
+  Type: "loteria" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá?
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Permission: "aeventos.evento" # A permissão necessária para poder participar do evento.
+  Reward: 10000 # A recompensa do evento.
+  Cost: 0 # O custo para apostar em um número.
+  Max number: 100 # O número máximo que o plugin pode sortear. Nesse caso, será sorteado um número de 0 á 100.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara apostar, digite &f/evento <número entre 0 á @max>"
+    - "&3[@name] &bPrêmio: &2$&f@reward &b+ &2[Loteria]"
+    - "&3[@name] &bCusto por aposta: &2$&f@cost"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - "&3[@name] &bO número sorteado foi &f@number&b."
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - "&3[@name] &bO número sorteado foi &f@number&b."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  No money: "&3[@name] &bVocê não tem dinheiro suficiente para apostar. &f(@cost)"
+  Lose: "&3[@name] &bVocê apostou no número &f@number&b, mas infelizmente não venceu."
+  Invalid: "&3[@name] &bUso correto: &f/evento <número entre 0 á @max>"
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_loteria" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_loteria}
+    Style: "&2[Loteria] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"

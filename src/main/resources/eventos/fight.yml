@@ -14,25 +14,48 @@ Evento:
   Fight time: 180 # Tempo máximo em segundos que uma luta pode ter.
 
 Items:
-  # FORMATO: ID-QUANTIDADE.
+  # Lista de materiais:
+  # 1.8.X - 1.12.X: https://www.digminecraft.com/lists/item_id_list_pc_1_12.php
+  # 1.13.X em diante: https://www.digminecraft.com/lists/item_id_list_pc.php
   # Itens para todas as lutas, exceto a final.
   Normal:
     Armor:
-      Helmet: null
-      Chestplate: null
-      Legging: null
-      Boots: null
+      Helmet:
+        Material: 'AIR'
+        Data: 0
+      Chestplate:
+        Material: 'AIR'
+        Data: 0
+      Legging:
+        Material: 'AIR'
+        Data: 0
+      Boots:
+        Material: 'AIR'
+        Data: 0
     Inventory:
-      - "268-1"
+      # FORMATO: <material>-(data)-<quantidade>
+      # O campo data é opicional, porém o material e a quantidade são obrigatórios.
+      - "WOOD_SWORD-1"
+
   # Itens para a última luta.
   Last fight:
     Armor:
-      Helmet: "306-1"
-      Chestplate: "307-1"
-      Legging: "308-1"
-      Boots: "309-1"
+      Helmet:
+        Material: "IRON_HELMET"
+        Data: 0
+      Chestplate:
+        Material: "IRON_CHESTPLATE"
+        Data: 0
+      Legging:
+        Material: "IRON_LEGGINGS"
+        Data: 0
+      Boots:
+        Material: "IRON_BOOTS"
+        Data: 0
     Inventory:
-      - "267-1"
+      # FORMATO: <material>-(data)-<quantidade>
+      # O campo data é opicional, porém o material e a quantidade são obrigatórios.
+      - "IRON_SWORD-1"
 
 # Mensagens
 Messages:

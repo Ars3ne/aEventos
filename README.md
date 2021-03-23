@@ -1,9 +1,9 @@
 # aEventos
 
-O ``aEventos`` é um plugin para servidores de Minecraft que traz vários eventos automáticos de forma fácil e rápida. O plugin foi testado apenas na 1.8.X, porém deve funcionar completamente até a 1.12.X. A maioria dos eventos deve funcionar nas versões mais atuais.
+O ``aEventos`` é um plugin para servidores de Minecraft que traz vários eventos automáticos de forma fácil e rápida. O plugin foi testado apenas na 1.8.X, mas possui suporte para as versões mais recentes.
 
 ## Eventos:
-O plugin conta atualmente com ``11`` eventos, que são:
+O plugin conta atualmente com ``17`` eventos no total, sendo ``14`` presenciais:
 * Sign (Você ganha o evento ao clicar na placa. Com uma configuração, também pode ser usado para Parkour.)
 * Campo Minado
 * Spleef
@@ -15,7 +15,14 @@ O plugin conta atualmente com ``11`` eventos, que são:
 * Sumo
 * Fall (Caso você ainda esteja vivo depois de X segundos do início do evento, você ganha. Pode ser usado para fazer um evento Astronauta, por exemplo.)
 * Paintball
+* Hunter (Paintball com um sistema de pontos.)
+* Quiz
+* Anvil
 
+e ``3`` no chat:
+* Votação
+* Loteria
+* Bolão
 
 ## Comandos:
 |Comando         |Descrição                      |Permissão                    |
@@ -33,7 +40,7 @@ O plugin conta atualmente com ``11`` eventos, que são:
 
 ## Configurações:
 
-Quando você carregar o plugin pela primeira vez, serão criadas ``12`` configurações de exemplo na pasta ``eventos`` com todos os eventos do plugin. Cada tipo de evento possui suas configurações únicas, mas neste exemplo será configurado o arquivo ``parkour.yml``.
+Quando você carregar o plugin pela primeira vez, serão criadas ``18`` configurações de exemplo na pasta ``eventos`` com todos os eventos do plugin. Cada tipo de evento possui suas configurações únicas, mas neste exemplo será configurado o arquivo ``parkour.yml``.
 
 ```yml
 Evento:

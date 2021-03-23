@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.SpleefListener;
 import com.ars3ne.eventos.utils.Cuboid;
+import com.ars3ne.eventos.utils.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,7 +47,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class Spleef extends Evento {
 
     private final YamlConfiguration config;
@@ -86,7 +89,6 @@ public class Spleef extends Evento {
 
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void start() {
 
@@ -97,8 +99,15 @@ public class Spleef extends Evento {
 
             String[] separated = s.split("-");
 
+            ItemStack is;
+            if(separated.length == 3) {
+                is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[2]), (byte) Integer.parseInt(separated[1]));
+            }else {
+                is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[1]));
+            }
+
             for(Player p: getPlayers()) {
-                p.getInventory().addItem(new ItemStack(Material.getMaterial(Integer.parseInt(separated[0])), Integer.parseInt(separated[1])));
+                p.getInventory().addItem(is);
             }
 
         }

@@ -46,6 +46,8 @@ public class TagManager {
         // Leia todos os arquivos de configuração de eventos e adicione as suas tags a lista.
         for (File file : Objects.requireNonNull(ConfigFile.getAllFiles())) {
 
+            if(file.getName().contains("old")) continue;
+
             // Adicione o evento á database.
             aEventos.getConnectionManager().createEvento(file.getName().substring(0, file.getName().length() - 4));
             YamlConfiguration config = ConfigFile.get(file.getName().substring(0, file.getName().length() - 4));

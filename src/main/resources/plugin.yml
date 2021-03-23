@@ -6,7 +6,7 @@ author: Ars3ne
 website: ${project.url}
 
 main: com.ars3ne.eventos.aEventos
-softdepend: [LegendChat, SimpleClans]
+softdepend: [LegendChat, SimpleClans, Vault]
 
 commands:
   evento:

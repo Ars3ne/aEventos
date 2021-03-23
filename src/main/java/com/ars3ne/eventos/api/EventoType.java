@@ -40,12 +40,15 @@ public enum EventoType {
     FALL,
     PAINTBALL,
     VOTACAO,
+    HUNTER,
+    QUIZ,
+    ANVIL,
+    LOTERIA,
+    BOLAO,
     NONE;
 
     public static EventoType getEventoType(String type) {
-        switch (type) {
-
-            // Evento presencial
+        switch (type.toLowerCase()) {
             case "sign":
                 return EventoType.SIGN;
             case "campominado":
@@ -68,11 +71,18 @@ public enum EventoType {
                 return EventoType.FALL;
             case "paintball":
                 return EventoType.PAINTBALL;
-
-            // Evento chat
             case "votacao":
                 return EventoType.VOTACAO;
-
+            case "hunter":
+                return EventoType.HUNTER;
+            case "quiz":
+                return EventoType.QUIZ;
+            case "anvil":
+                return EventoType.ANVIL;
+            case "loteria":
+                return EventoType.LOTERIA;
+            case "bolao":
+                return EventoType.BOLAO;
             default:
                 return EventoType.NONE;
         }
@@ -104,6 +114,16 @@ public enum EventoType {
                 return "paintball";
             case VOTACAO:
                 return "votacao";
+            case HUNTER:
+                return "hunter";
+            case QUIZ:
+                return "quiz";
+            case ANVIL:
+                return "anvil";
+            case LOTERIA:
+                return "loteria";
+            case BOLAO:
+                return "bolao";
             default:
                 return "none";
         }
@@ -111,7 +131,7 @@ public enum EventoType {
 
     public static boolean isEventoChat(EventoType type) {
         switch(type) {
-            case VOTACAO:
+            case VOTACAO: case LOTERIA: case BOLAO:
                 return true;
             default:
                 return false;

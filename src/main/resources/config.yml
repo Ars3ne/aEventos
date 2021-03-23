@@ -70,6 +70,8 @@ Messages:
   Not needed: "&3[Evento] &bVocê não precisa do machado para definir posições nesse evento."
   Not enough alternatives: "&3[Evento] &bO número mínimo de alternativas é maior que o número total de alternativas possíveis."
   Unknown argument: "&3[Evento] &bArgumento inválido. Digite &f/evento setup&b para ver a lista de argumentos."
+  Missing dependency: "&3[Evento] &bEste evento não pode funcionar sem o plugin &f@dependency&b."
+
   Default:
     - "&3[Evento] &bLista de Comandos:"
     - "&b/evento &f- Entrar no evento"
@@ -94,4 +96,6 @@ Messages:
     - "&c/evento setup pos &4- Obtenha um machado para definir as posições."
     - "&c/evento setup pos1 &4- Defina a primeira posição."
     - "&c/evento setup pos2 &4- Defina a segunda posição."
+    - "&c/evento setup pos3 &4- Defina a terceira posição."
+    - "&c/evento setup pos4 &4- Defina a quarta posição."
     - "&c/evento setup sair &4- Saia das configurações do evento &f@name&c."

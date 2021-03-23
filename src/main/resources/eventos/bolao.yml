@@ -1,0 +1,47 @@
+Evento:
+  # Configurações do evento.
+  Title: "Bolão" # O nome do evento. Será usado na placeholder @name.
+  Type: "bolao" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá?
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Permission: "aeventos.evento" # A permissão necessária para poder participar do evento.
+  Reward: 10000 # A recompensa do evento.
+  Cost: 10000 # O custo para apostar em um número.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento entrar"
+    - "&3[@name] &bPrêmio: &2$&f@reward &b+ &5[Bolão]"
+    - "&3[@name] &bCusto: &2$&f@cost"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  No money: "&3[@name] &bVocê não tem dinheiro suficiente para entrar no Bolão. &f(@cost)"
+  Joined: "&3[@name] &bVocê entrou no Bolão. Que a sorte esteja ao seu lado."
+  Already joined: "&3[@name] &bVocê já está no bolão."
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_bolao" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_bolao}
+    Style: "&5[Bolão] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"

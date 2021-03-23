@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.SemaforoListener;
+import com.ars3ne.eventos.utils.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -150,8 +151,9 @@ public class Semaforo extends Evento {
         // Se a hotbar estiver ativada, limpe o inventário e coloque os blocos.
         if(this.hotbar && requireEmptyInventory()) {
 
-            ItemStack item = new ItemStack(Material.STAINED_CLAY, 1, (byte) 5);
+            ItemStack item = XMaterial.LIME_TERRACOTTA.parseItem();
 
+            assert item != null;
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(this.green_name);
             item.setItemMeta(meta);
@@ -188,8 +190,9 @@ public class Semaforo extends Evento {
             // Se a hotbar estiver ativada, limpe o inventário e coloque os blocos.
             if(this.hotbar && requireEmptyInventory()) {
 
-                ItemStack item = new ItemStack(Material.STAINED_CLAY, 1, (byte) 4);
+                ItemStack item = XMaterial.YELLOW_TERRACOTTA.parseItem();
 
+                assert item != null;
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(this.yellow_name);
                 item.setItemMeta(meta);
@@ -229,8 +232,9 @@ public class Semaforo extends Evento {
             // Se a hotbar estiver ativada, limpe o inventário e coloque os blocos.
             if(this.hotbar && requireEmptyInventory()) {
 
-                ItemStack item = new ItemStack(Material.STAINED_CLAY, 1, (byte) 14);
+                ItemStack item = XMaterial.RED_TERRACOTTA.parseItem();
 
+                assert item != null;
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(this.red_name);
                 item.setItemMeta(meta);

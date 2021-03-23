@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.BatataQuenteListener;
+import com.ars3ne.eventos.utils.XMaterial;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
@@ -38,10 +39,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class BatataQuente extends Evento {
 
     private final YamlConfiguration config;
@@ -51,11 +55,15 @@ public class BatataQuente extends Evento {
 
     private Player potato_holder;
 
+    Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    Team potato_holder_team = board.registerNewTeam("potato_holder");
+
     public BatataQuente(YamlConfiguration config) {
         super(config);
         this.config = config;
         
         this.max_time = config.getInt("Evento.Time");
+        potato_holder_team.setPrefix(ChatColor.RED.toString());
     }
 
     @Override
@@ -63,7 +71,6 @@ public class BatataQuente extends Evento {
         // Registre o listener do evento
         aEventos.getInstance().getServer().getPluginManager().registerEvents(listener, aEventos.getInstance());
         listener.setEvento();
-
         randomHolder();
 
     }
@@ -100,6 +107,9 @@ public class BatataQuente extends Evento {
             p.getInventory().clear();
         }
 
+        // Remova o team.
+        potato_holder_team.unregister();
+
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
         this.removePlayers();
@@ -120,6 +130,7 @@ public class BatataQuente extends Evento {
 
         // Se o jogador que saiu for o holder da batata, então pegue outro.
         if(potato_holder == p) {
+            potato_holder_team.removePlayer(p);
             potato_holder.getInventory().clear();
             potato_holder.getInventory().setHelmet(null);
             potato_holder = null;
@@ -147,8 +158,11 @@ public class BatataQuente extends Evento {
         // Dê a batata para o holder e o equipe com TNT.
         potato_holder.getInventory().setHelmet(new ItemStack(Material.TNT, 1));
         for(int i = 0; i < 9; i++) {
-            potato_holder.getInventory().setItem(i, new ItemStack(Material.POTATO_ITEM, 1));
+            potato_holder.getInventory().setItem(i, XMaterial.POTATO.parseItem());
         }
+
+        // O adicione para o time do batata holder.
+        potato_holder_team.addPlayer(p);
 
         // Spawne um foguete na localização do holder.
         Location loc = potato_holder.getLocation();

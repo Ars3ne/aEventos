@@ -65,3 +65,9 @@ Alternatives:
     Name: "Astronauta"
   paintball:
     Name: "Paintball"
+  hunter:
+    Name: "Hunter"
+  quiz:
+    Name: "Quiz"
+  anvil:
+    Name: "Anvil"

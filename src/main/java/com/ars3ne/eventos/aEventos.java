@@ -34,10 +34,12 @@ import com.ars3ne.eventos.listeners.EventoListener;
 import com.ars3ne.eventos.manager.*;
 import com.ars3ne.eventos.utils.ConfigFile;
 import com.ars3ne.eventos.utils.ConfigUpdater;
+import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -54,6 +56,8 @@ public class aEventos extends JavaPlugin {
 
     private SimpleClans clan = null;
     private static final LegendChatHook lc_hook = new LegendChatHook();
+    private Economy econ = null;
+
     private final EventoListener setup_listener = new EventoListener();
 
     @Override
@@ -107,7 +111,6 @@ public class aEventos extends JavaPlugin {
 
         if(!settings.exists()) {
 
-            // Presencial
             ConfigFile.create("parkour");
             ConfigFile.create("campominado");
             ConfigFile.create("spleef");
@@ -120,9 +123,12 @@ public class aEventos extends JavaPlugin {
             ConfigFile.create("sumo");
             ConfigFile.create("astronauta");
             ConfigFile.create("paintball");
-
-            // Chat
             ConfigFile.create("votacao");
+            ConfigFile.create("hunter");
+            ConfigFile.create("quiz");
+            ConfigFile.create("anvil");
+            ConfigFile.create("loteria");
+            ConfigFile.create("bolao");
 
         }
 
@@ -135,6 +141,9 @@ public class aEventos extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível atualizar o arquivo de configuração.");
             e.printStackTrace();
         }
+
+        // Tenta atualizar os eventos.
+        ConfigUpdater.updateEventos();
 
     }
 
@@ -153,6 +162,9 @@ public class aEventos extends JavaPlugin {
         }
         if(!setupLegendChat()) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cLegendChat não encontrado.");
+        }
+        if(!setupEconomy()) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cVault não encontrado.");
         }
     }
 
@@ -173,6 +185,17 @@ public class aEventos extends JavaPlugin {
         return true;
     }
 
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
     public static EventosManager getEventoManager() {
         return manager;
     }
@@ -184,6 +207,8 @@ public class aEventos extends JavaPlugin {
     public SimpleClans getSimpleClans() {
         return this.clan;
     }
+
+    public Economy getEconomy() { return this.econ; }
 
     public static aEventos getInstance() {
         return (aEventos) Bukkit.getServer().getPluginManager().getPlugin("aEventos");
