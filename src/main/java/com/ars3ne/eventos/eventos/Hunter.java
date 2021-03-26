@@ -43,7 +43,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
 import java.util.*;
@@ -70,12 +69,12 @@ public class Hunter extends Evento {
 
     private final String blue_name;
     private final String red_name;
-    private boolean pvp_enabled;
+    private boolean pvp_enabled, team_selected = false;
 
-    Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    Team scoreboard_team_blue = board.registerNewTeam("blue_hunter");
-    Team scoreboard_team_red = board.registerNewTeam("red_hunter");
-    Team scoreboard_team_captured = board.registerNewTeam("captured_hunter");
+    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    final Team scoreboard_team_blue = board.registerNewTeam("blue_hunter");
+    final Team scoreboard_team_red = board.registerNewTeam("red_hunter");
+    final Team scoreboard_team_captured = board.registerNewTeam("captured_hunter");
 
     public Hunter(YamlConfiguration config) {
         super(config);
@@ -86,7 +85,6 @@ public class Hunter extends Evento {
         this.kill_points = config.getInt("Evento.Points");
         this.max_points = config.getInt("Evento.Max points");
         this.capture_time = config.getInt("Evento.Capture time");
-        this.pvp_enabled = false;
 
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
@@ -112,6 +110,8 @@ public class Hunter extends Evento {
             if(i % 2 == 0) blue_team.put(p, 0);
             else red_team.put(p, 0);
         }
+
+        team_selected = true;
 
         List<String> team_st = config.getStringList("Messages.Team");
 
@@ -219,6 +219,8 @@ public class Hunter extends Evento {
     }
 
     public void win(String team) {
+
+        if(!team_selected) return;
 
         List<String> winners = new ArrayList<>();
 
@@ -338,12 +340,16 @@ public class Hunter extends Evento {
         scoreboard_team_captured.unregister();
 
         // Desative o friendly-fire dos jogadores.
-        Iterator<ClanPlayer> iter = clans.iterator();
-        while(iter.hasNext()) {
-            ClanPlayer p = iter.next();
+        List<ClanPlayer> remove_clan = new ArrayList<>();
+        for (ClanPlayer p : clans) {
             p.setFriendlyFire(false);
+            remove_clan.add(p);
+        }
+
+        for(ClanPlayer p: remove_clan) {
             clans.remove(p);
         }
+        remove_clan.clear();
 
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
@@ -398,12 +404,12 @@ public class Hunter extends Evento {
         if(blue_team.containsKey(captured)) {
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points).replace("@time", remeaningTime()));
+                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points).replace("@time", remeaningTime()));
+                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points));
                 }
             }
         }
@@ -411,12 +417,12 @@ public class Hunter extends Evento {
         if(red_team.containsKey(captured)) {
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points).replace("@time", remeaningTime()));
+                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points).replace("@time", remeaningTime()));
+                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + captured.getName()).replace("@blueteam", "§9" + blue_points).replace("@redteam", "§c" + red_points));
                 }
             }
         }
@@ -427,11 +433,11 @@ public class Hunter extends Evento {
 
         // Verifique se algum time obteve os pontos necessários para a vitória.
         if(this.max_points != 0) {
-            if(blue_points >= this.max_points) {
+            if(team_selected && blue_points >= this.max_points) {
                 win("blue");
             }
 
-            if(red_points >= this.max_points) {
+            if(team_selected && red_points >= this.max_points) {
                 win("red");
             }
         }
@@ -507,8 +513,8 @@ public class Hunter extends Evento {
 
     }, capture_time * 20L);
 
-
     }
+
     public HashMap<Player, Integer> getBlueTeam() {
         return this.blue_team;
     }
@@ -523,9 +529,5 @@ public class Hunter extends Evento {
     public List<Player> getCaptured() { return this.captured_players; }
 
     public boolean isPvPEnabled() { return this.pvp_enabled; }
-
-    public String remeaningTime() {
-        return "COLOCAR TEMPO DEPOIS";
-    }
 
 }

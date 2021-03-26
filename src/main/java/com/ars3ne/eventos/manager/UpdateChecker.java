@@ -88,7 +88,7 @@ public class UpdateChecker {
                     }
                 }
 
-                Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aVocê está usando a última versão. (" + CURERNT_VERSION + ")");
+                Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aVocê está usando a última versão. (v" + CURERNT_VERSION + ")");
 
 
             } catch (IOException | ParseException e) {

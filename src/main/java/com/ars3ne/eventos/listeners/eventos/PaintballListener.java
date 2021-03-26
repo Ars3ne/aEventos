@@ -60,7 +60,10 @@ public class PaintballListener implements Listener {
         }
 
         if((evento.getBlueTeam().contains(p) && evento.getBlueTeam().contains(shooter))
-                || (evento.getRedTeam().contains(p) && evento.getRedTeam().contains(shooter))) return;
+                || (evento.getRedTeam().contains(p) && evento.getRedTeam().contains(shooter))) {
+            e.setCancelled(true);
+            return;
+        }
 
 
         evento.eliminate(p);

@@ -62,7 +62,10 @@ public class HunterListener implements Listener {
         if(evento.getCaptured().contains(p)) return;
 
         if((evento.getBlueTeam().containsKey(p) && evento.getBlueTeam().containsKey(shooter))
-                || (evento.getRedTeam().containsKey(p) && evento.getRedTeam().containsKey(shooter))) return;
+                || (evento.getRedTeam().containsKey(p) && evento.getRedTeam().containsKey(shooter))) {
+            e.setCancelled(true);
+            return;
+        }
 
 
         evento.eliminate(p, shooter);

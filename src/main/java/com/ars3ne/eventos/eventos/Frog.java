@@ -61,7 +61,7 @@ public class Frog extends Evento {
     private final int snow_time;
     private int task;
     private boolean level_happening;
-    Random random = new Random();
+    final Random random = new Random();
 
     public Frog(YamlConfiguration config) {
         super(config);

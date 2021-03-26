@@ -69,7 +69,7 @@ public class Evento implements EventoInterface{
         this.elimination = false;
 
         switch(type) {
-            case SPLEEF: case BATATA_QUENTE: case FIGHT: case KILLER: case SUMO: case ANVIL:
+            case SPLEEF: case BATATA_QUENTE: case FIGHT: case KILLER: case SUMO: case QUIZ: case ANVIL:
                 this.elimination = true;
                 break;
         }

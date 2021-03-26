@@ -53,8 +53,9 @@ public class FightListener implements Listener {
         Player damaged = (Player) e.getEntity();
         Player damager = (Player) e.getDamager();
 
+        if(evento.getSpectators().contains(damaged) || evento.getSpectators().contains(damager)) e.setCancelled(true);
         if(!evento.getPlayers().contains(damaged) || !evento.getPlayers().contains(damager)) return;
-        if((evento.getFighter1() != damaged && evento.getFighter1() != damager) && (evento.getFighter2() != damaged && evento.getFighter2() != damager)) e.setCancelled(true);
+        if((evento.getFighter1() != damaged && evento.getFighter1() != damager) || (evento.getFighter2() != damaged && evento.getFighter2() != damager)) e.setCancelled(true);
 
     }
 
@@ -67,7 +68,8 @@ public class FightListener implements Listener {
 
         // Limpe os drops e defina o jogador como o perdedor.
         e.getDrops().clear();
-        evento.setFightLoser(e.getEntity().getPlayer(), false);
+        e.setKeepLevel(true);
+        evento.setFightLoser(e.getEntity().getPlayer());
     }
 
 

@@ -45,6 +45,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -209,33 +210,40 @@ public class Spleef extends Evento {
 
         if(!isHappening()) return;
         long time = System.currentTimeMillis();
-        Iterator<Player> iter = listener.getLastMove().keySet().iterator();
 
-        while(iter.hasNext()) {
+        List<Player> remove_listener = new ArrayList<>();
 
-            Player p = iter.next();
-            if(!listener.getLastMove().containsKey(p)) continue;
-            if(!getPlayers().contains(p)) {
-                listener.getLastMove().remove(p);
+        for (Player p : listener.getLastMove().keySet()) {
+
+            if (!listener.getLastMove().containsKey(p)) continue;
+            if (!getPlayers().contains(p)) {
+                remove_listener.add(p);
                 continue;
             }
 
             // Se o jogador está parado a mais tempo do que o limite, elimine-o do evento.
-            if(time >= (listener.getLastMove().get(p) + (inactive_time * 1000L))) {
+            if (time >= (listener.getLastMove().get(p) + (inactive_time * 1000L))) {
                 p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
                 remove(p);
                 PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                 Bukkit.getPluginManager().callEvent(lose);
-                listener.getLastMove().remove(p);
+                remove_listener.add(p);
                 continue;
             }
 
             // Se o jogador está parado á metade do tempo limite, mande um aviso.
-            if(time >= (listener.getLastMove().get(p) + (inactive_time / 2) * 1000L)) {
-                p.sendMessage(config.getString("Messages.Kick").replace("&", "§").replace("@time", String.valueOf( Math.abs((time - (listener.getLastMove().get(p) + (inactive_time+1) * 1000L)) / 1000L ))).replace("@name", config.getString("Evento.Title")));
+            if (time >= (listener.getLastMove().get(p) + (inactive_time / 2) * 1000L)) {
+                p.sendMessage(config.getString("Messages.Kick").replace("&", "§").replace("@time", String.valueOf(Math.abs((time - (listener.getLastMove().get(p) + (inactive_time + 1) * 1000L)) / 1000L))).replace("@name", config.getString("Evento.Title")));
             }
 
         }
+
+        // Remova os listeners.
+        for(Player p: remove_listener) {
+            listener.getLastMove().remove(p);
+        }
+        remove_listener.clear();
+
     }
 
     public boolean canNotBreakBlocks() {

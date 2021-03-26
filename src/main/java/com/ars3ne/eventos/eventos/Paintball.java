@@ -45,7 +45,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
@@ -63,11 +62,11 @@ public class Paintball extends Evento {
     private final int time;
     private final String blue_name;
     private final String red_name;
-    private boolean pvp_enabled;
+    private boolean pvp_enabled, team_selected = false;
 
-    Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    Team scoreboard_team_blue = board.registerNewTeam("blue_paintball");
-    Team scoreboard_team_red = board.registerNewTeam("red_paintball");
+    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    final Team scoreboard_team_blue = board.registerNewTeam("blue_paintball");
+    final Team scoreboard_team_red = board.registerNewTeam("red_paintball");
 
     public Paintball(YamlConfiguration config) {
         super(config);
@@ -75,7 +74,6 @@ public class Paintball extends Evento {
         this.blue_name = config.getString("Evento.Blue");
         this.red_name = config.getString("Evento.Red");
         this.time = config.getInt("Evento.Time");
-        this.pvp_enabled = false;
 
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
@@ -100,6 +98,8 @@ public class Paintball extends Evento {
             if(i % 2 == 0) blue_team.add(p);
             else red_team.add(p);
         }
+
+        team_selected = true;
 
         List<String> team_st = config.getStringList("Messages.Team");
 
@@ -206,6 +206,8 @@ public class Paintball extends Evento {
 
     public void win() {
 
+        if(!team_selected) return;
+
         List<String> winners = new ArrayList<>();
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -276,12 +278,16 @@ public class Paintball extends Evento {
         scoreboard_team_red.unregister();
 
         // Desative o friendly-fire dos jogadores.
-        Iterator<ClanPlayer> iter = clans.iterator();
-        while(iter.hasNext()) {
-            ClanPlayer p = iter.next();
+        List<ClanPlayer> remove_clan = new ArrayList<>();
+        for (ClanPlayer p : clans) {
             p.setFriendlyFire(false);
+            remove_clan.add(p);
+        }
+
+        for(ClanPlayer p: remove_clan) {
             clans.remove(p);
         }
+        remove_clan.clear();
 
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
@@ -335,7 +341,7 @@ public class Paintball extends Evento {
         Bukkit.getPluginManager().callEvent(lose);
         this.remove(p);
 
-        if(blue_team.size() == 0 || red_team.size() == 0) {
+        if(team_selected && blue_team.size() == 0 || red_team.size() == 0) {
             win();
         }
 

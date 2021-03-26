@@ -28,7 +28,6 @@
 package com.ars3ne.eventos.api.events;
 
 import com.ars3ne.eventos.api.EventoType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

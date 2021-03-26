@@ -51,7 +51,7 @@ public class Fight extends Evento {
 
     private final YamlConfiguration config;
     private final FightListener listener = new FightListener();
-    Random random = new Random();
+    final Random random = new Random();
 
     private Player fighter1, fighter2;
     private final List<ClanPlayer> clans = new ArrayList<>();
@@ -176,10 +176,10 @@ public class Fight extends Evento {
 
             // Se o jogador que saiu foi um dos lutadores, então o defina como perdedor.
             if(fighter1 == p || fighter2 == p) {
-                setFightLoser(p, true);
+                setFightLoser(p);
+            }else {
+                this.remove(p);
             }
-
-            this.remove(p);
 
         }
 
@@ -252,7 +252,7 @@ public class Fight extends Evento {
                     fighter2.getInventory().addItem(is);
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Helmet.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Last fight.Armor.Helmet.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Helmet.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Last fight.Armor.Helmet.Data") != 0) {
                         fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Helmet.Data")));
@@ -264,7 +264,7 @@ public class Fight extends Evento {
 
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Chestplate.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Last fight.Armor.Chestplate.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Chestplate.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Last fight.Armor.Chestplate.Data") != 0) {
                         fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Chestplate.Data")));
@@ -276,7 +276,7 @@ public class Fight extends Evento {
 
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Legging.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Last fight.Armor.Legging.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Legging.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Last fight.Armor.Legging.Data") != 0) {
                         fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Legging.Data")));
@@ -288,7 +288,7 @@ public class Fight extends Evento {
 
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Boots.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Last fight.Armor.Boots.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Boots.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Last fight.Armor.Boots.Data") != 0) {
                         fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Boots.Data")));
@@ -317,7 +317,7 @@ public class Fight extends Evento {
                     fighter2.getInventory().addItem(is);
                 }
 
-                if(!config.getString("Items.Normal.Armor.Helmet.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Normal.Armor.Helmet.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Helmet.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Normal.Armor.Helmet.Data") != 0) {
                         fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Helmet.Data")));
@@ -329,7 +329,7 @@ public class Fight extends Evento {
 
                 }
 
-                if(!config.getString("Items.Normal.Armor.Chestplate.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Normal.Armor.Chestplate.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Chestplate.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Normal.Armor.Chestplate.Data") != 0) {
                         fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Chestplate.Data")));
@@ -341,7 +341,7 @@ public class Fight extends Evento {
 
                 }
 
-                if(!config.getString("Items.Normal.Armor.Legging.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Normal.Armor.Legging.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Legging.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Normal.Armor.Legging.Data") != 0) {
                         fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Legging.Data")));
@@ -353,7 +353,7 @@ public class Fight extends Evento {
 
                 }
 
-                if(!config.getString("Items.Normal.Armor.Boots.Material").equalsIgnoreCase("air")) {
+                if(!config.getString("Items.Normal.Armor.Boots.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Boots.Material").equalsIgnoreCase("null")) {
 
                     if(config.getInt("Items.Normal.Armor.Boots.Data") != 0) {
                         fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Boots.Data")));
@@ -381,7 +381,7 @@ public class Fight extends Evento {
                 if(!getPlayers().contains(current_fighter1) || !getPlayers().contains(current_fighter2)) return;
                 if(fighter1 != current_fighter1 || fighter2 != current_fighter2) return;
 
-                setFightLoser(null, false);
+                setFightLoser(null);
 
             }, max_time * 20L);
 
@@ -389,7 +389,7 @@ public class Fight extends Evento {
 
     }
 
-    public void setFightLoser(Player p, boolean leave) {
+    public void setFightLoser(Player p) {
 
         // Se o player for null, significa que foi um empate.
         if(p == null) {
@@ -481,13 +481,10 @@ public class Fight extends Evento {
 
             }
 
-            // Elimine o perdedor do evento.
-            if(!leave) {
-                p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                remove(p);
-                PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                Bukkit.getPluginManager().callEvent(lose);
-            }
+            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+            remove(p);
+            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
+            Bukkit.getPluginManager().callEvent(lose);
 
         }
 

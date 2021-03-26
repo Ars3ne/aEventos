@@ -55,8 +55,8 @@ public class BatataQuente extends Evento {
 
     private Player potato_holder;
 
-    Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    Team potato_holder_team = board.registerNewTeam("potato_holder");
+    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    final Team potato_holder_team = board.registerNewTeam("potato_holder");
 
     public BatataQuente(YamlConfiguration config) {
         super(config);

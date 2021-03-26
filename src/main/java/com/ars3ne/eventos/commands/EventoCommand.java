@@ -48,7 +48,7 @@ import java.util.Map;
 
 public class EventoCommand implements CommandExecutor {
 
-    public static Map<Player, YamlConfiguration> setup = new HashMap<>();
+    public static final Map<Player, YamlConfiguration> setup = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

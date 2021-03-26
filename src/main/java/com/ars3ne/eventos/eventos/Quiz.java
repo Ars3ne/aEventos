@@ -41,10 +41,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Quiz extends Evento {
 
@@ -212,12 +209,13 @@ public class Quiz extends Evento {
 
                 if(isHappening() && question_happening) {
 
+                    List<Player> eliminate = new ArrayList<>();
                     // Elimine todos os jogadores que não estão dentro dos cuboids.
                     for (Player p : getPlayers()) {
                         if (!true_cuboid.isInWithMargeY(p, 6) && !false_cuboid.isInWithMargeY(p, 6)) {
                             // Remova o jogador do evento e envie a mensagem de eliminação.
                             p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                            remove(p);
+                            eliminate.add(p);
                             PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                             Bukkit.getPluginManager().callEvent(lose);
                         }
@@ -231,11 +229,11 @@ public class Quiz extends Evento {
                         if(answer.equalsIgnoreCase("true")) {
 
                             // Elimine todos os jogadores no cuboid false.
-                            for (Player p : getPlayers()) {
+                            for(Player p: getPlayers()) {
                                 if (false_cuboid.isInWithMargeY(p, 6)) {
                                     // Remova o jogador do evento e envie a mensagem de eliminação.
                                     p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                    remove(p);
+                                    eliminate.add(p);
                                     PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                                     Bukkit.getPluginManager().callEvent(lose);
                                 }
@@ -244,11 +242,11 @@ public class Quiz extends Evento {
                         }else {
 
                             // Elimine todos os jogadores no cuboid true.
-                            for (Player p : getPlayers()) {
+                            for(Player p: getPlayers()) {
                                 if (true_cuboid.isInWithMargeY(p, 6)) {
                                     // Remova o jogador do evento e envie a mensagem de eliminação.
                                     p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                    remove(p);
+                                    eliminate.add(p);
                                     PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                                     Bukkit.getPluginManager().callEvent(lose);
                                 }
@@ -257,10 +255,13 @@ public class Quiz extends Evento {
                         }
                     }
 
-                    // Se tiver apenas um participante, então encerre o evento.
-                    if(getPlayers().size() == 1) {
-                        this.win();
+                    // Elimine os jogadores.
+                    for(Player p: eliminate) {
+                        remove(p);
                     }
+                    eliminate.clear();
+
+                    if(!isHappening()) return;
 
                     // Mande a mensagem de início da próxima pergunta para todos os participantes.
                     for (Player player : getPlayers()) {
