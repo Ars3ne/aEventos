@@ -31,7 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.BatataQuenteListener;
-import com.ars3ne.eventos.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
@@ -93,7 +93,7 @@ public class BatataQuente extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = this.config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }
@@ -194,6 +194,7 @@ public class BatataQuente extends Evento {
             @Override
             public void run() {
                 if(!isHappening()) Bukkit.getScheduler().cancelTask(task);
+                if(potato_holder != p) Bukkit.getScheduler().cancelTask(task);
                 if(run <= 1) Bukkit.getScheduler().cancelTask(task);
                 p.sendMessage(config.getString("Messages.Potato explode").replace("&", "§").replace("@time", String.valueOf(run)).replace("@name", config.getString("Evento.Title")));
                 run-=1;
@@ -206,7 +207,7 @@ public class BatataQuente extends Evento {
 
             if(!isHappening()) return;
             if(!getPlayers().contains(p)) return;
-            if(getPotatoHolder() != p) return;
+            if(potato_holder != p) return;
             if(getPotatoHolder() == null) return;
 
             potato_holder.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));

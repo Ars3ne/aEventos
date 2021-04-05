@@ -57,6 +57,7 @@ public class AnvilListener implements Listener {
         if(!evento.getAnvils().contains(e.getBlock())) return;
 
         fb.setDropItem(false);
+        e.getBlock().getDrops().clear();
         if(e.getBlock().getType() != Material.ANVIL) e.getBlock().setType(Material.ANVIL);
 
         for(Player p: evento.getPlayers()) {
@@ -65,6 +66,7 @@ public class AnvilListener implements Listener {
             if(Math.round(p.getLocation().getX()) != e.getBlock().getX() || Math.round(p.getLocation().getY()) != e.getBlock().getY() || Math.round(p.getLocation().getZ()) != e.getBlock().getZ() ) continue;
             p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
             evento.remove(p);
+            evento.leaveBungeecord(p);
             PlayerLoseEvent lose = new PlayerLoseEvent(p, evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
             Bukkit.getPluginManager().callEvent(lose);
 

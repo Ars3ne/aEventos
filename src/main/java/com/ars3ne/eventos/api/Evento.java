@@ -29,14 +29,17 @@ package com.ars3ne.eventos.api;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.*;
+import com.ars3ne.eventos.hooks.BungeecordHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Evento implements EventoInterface{
@@ -53,6 +56,7 @@ public class Evento implements EventoInterface{
     private boolean elimination;
     private final boolean count_participation;
     private final boolean count_win;
+    private final boolean bungeecord_enabled;
     private final String permission;
 
     private final YamlConfiguration config;
@@ -66,6 +70,7 @@ public class Evento implements EventoInterface{
         this.permission = config.getString("Evento.Permission");
         this.count_participation = config.getBoolean("Evento.Count participation");
         this.count_win = config.getBoolean("Evento.Count victory");
+        this.bungeecord_enabled = aEventos.getInstance().getConfig().getBoolean("Bungeecord.Enabled");
         this.elimination = false;
 
         switch(type) {
@@ -84,6 +89,10 @@ public class Evento implements EventoInterface{
         EventoStartingEvent starting = new EventoStartingEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(starting);
 
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null){
+            BungeecordHook.startEvento(type.toString(), config.getString("filename").substring(0, config.getString("filename").length() - 4));
+        }
+
         new BukkitRunnable() {
 
             int calls = config.getInt("Evento.Calls");
@@ -96,10 +105,20 @@ public class Evento implements EventoInterface{
                     return;
                 }
 
+                if (!Evento.this.isOpen()){
+                    cancel();
+                    return;
+                }
+
                 if (calls >= 0){
 
                     if(!Evento.this.happening) {
                         cancel();
+                    }
+
+                    if (!Evento.this.isOpen()){
+                        cancel();
+                        return;
                     }
 
                     List<String> broadcast_messages = config.getStringList("Messages.Broadcast");
@@ -122,10 +141,19 @@ public class Evento implements EventoInterface{
                             Evento.this.teleport(player, "entrance");
                         }
 
+                        if(Evento.this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+                            BungeecordHook.startingEvento(type.toString(), config.getString("filename").substring(0, config.getString("filename").length() - 4));
+                        }
+
                         start();
                         EventoStartedEvent start = new EventoStartedEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
                         Bukkit.getPluginManager().callEvent(start);
+
                     } else {
+
+                        if(Evento.this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+                            BungeecordHook.stopEvento("noplayers");
+                        }
 
                         List<String> broadcast_messages = config.getStringList("Messages.No players");
                         for(String s : broadcast_messages) {
@@ -138,6 +166,40 @@ public class Evento implements EventoInterface{
                 }
             }
         }.runTaskTimer(aEventos.getInstance(), 0, config.getInt("Evento.Calls interval") * 20L);
+    }
+
+    public void startBungeecord() {
+        if(this.open && this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+
+            if (Evento.this.players.size() >= config.getInt("Evento.Mininum players")){
+                Evento.this.open = false;
+
+                List<String> broadcast_messages = config.getStringList("Messages.Start");
+                for(String s : broadcast_messages) {
+                    aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                }
+
+                for (Player player : players) {
+                    Evento.this.teleport(player, "entrance");
+                }
+
+                BungeecordHook.startingEvento(type.toString(), config.getString("filename").substring(0, config.getString("filename").length() - 4));
+                start();
+                EventoStartedEvent start = new EventoStartedEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
+                Bukkit.getPluginManager().callEvent(start);
+
+            } else {
+
+                List<String> broadcast_messages = config.getStringList("Messages.No players");
+                for(String s : broadcast_messages) {
+                    aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                }
+
+                Evento.this.stop();
+
+            }
+
+        }
     }
 
     public void start() {
@@ -170,6 +232,7 @@ public class Evento implements EventoInterface{
 
     public void setWinners() {
 
+        if(EventoType.isEventoGuild(type)) return;
         if(!this.count_win) return;
         if(this.elimination) return;
 
@@ -190,6 +253,27 @@ public class Evento implements EventoInterface{
 
     }
 
+    public void setWinners(String guild_name, HashMap<OfflinePlayer, Integer> kills) {
+
+        if(!EventoType.isEventoGuild(type)) return;
+        if(!this.count_win) return;
+
+        List<String> winners = new ArrayList<>();
+
+        for (Player p: players) {
+            this.win.add(p);
+            winners.add(p.getUniqueId().toString());
+            aEventos.getConnectionManager().insertUser(p.getUniqueId());
+            aEventos.getConnectionManager().addWin(config.getString("filename").substring(0, config.getString("filename").length() - 4), p.getUniqueId());
+            PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
+            Bukkit.getPluginManager().callEvent(win);
+        }
+
+        aEventos.getConnectionManager().setEventoGuildWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), guild_name, kills, winners);        aEventos.getTagManager().updateTagHolder(config);
+        aEventos.updateTags();
+
+    }
+
     public void stop() {
 
     }
@@ -198,6 +282,10 @@ public class Evento implements EventoInterface{
 
         this.happening = false;
         this.open = false;
+
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+            BungeecordHook.stopEvento("ended");
+        }
 
         for (Player player : players) {
             if(this.empty_inventory) player.getInventory().clear();
@@ -209,6 +297,7 @@ public class Evento implements EventoInterface{
         }
 
         for (Player player : spectators) {
+            player.getInventory().clear();
             this.teleport(player, "exit");
         }
 
@@ -216,6 +305,14 @@ public class Evento implements EventoInterface{
         Bukkit.getPluginManager().callEvent(stop);
         
         aEventos.getEventoManager().startEvento(EventoType.NONE, null);
+    }
+
+    public void joinBungeecord(Player p) {
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+            BungeecordHook.joinEvento(p.getName());
+        }else {
+            join(p);
+        }
     }
 
     public void join(Player p) {
@@ -257,6 +354,14 @@ public class Evento implements EventoInterface{
 
     }
 
+    public void leaveBungeecord(Player p) {
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+            BungeecordHook.leaveEvento(p.getName());
+        }else {
+            leave(p);
+        }
+    }
+
     public void remove(Player p) {
 
         players.remove(p);
@@ -283,6 +388,25 @@ public class Evento implements EventoInterface{
         p.setFoodLevel(20);
         spectators.add(p);
         this.teleport(p, "spectator");
+    }
+
+    public void spectateBungeecord(Player p) {
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+            BungeecordHook.spectateEvento(p.getName());
+        }else {
+            spectate(p);
+        }
+    }
+
+    public void executeConsoleCommand(Player p, String command) {
+
+        // TODO: Fazer as configurações do Bungeecord terem efeito.
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+            BungeecordHook.executeCommand(p.getName(), command, config.getString("Locations.Server"));
+        }else {
+            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), command);
+        }
+
     }
 
     public YamlConfiguration getConfig() {
@@ -327,7 +451,7 @@ public class Evento implements EventoInterface{
         return this.count_win;
     }
 
-    private void teleport(Player p, String location) {
+    protected void teleport(Player p, String location) {
         World w;
         double x,y,z;
         float yaw,pitch;

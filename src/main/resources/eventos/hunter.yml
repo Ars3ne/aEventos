@@ -59,7 +59,7 @@ Messages:
     - "&3[@name] &bPvP ativado! Boa sorte á todos."
   Eliminated:
     - "&3[@name] @player &bfoi capturado!"
-    - "&3[@name] &bPontuação: @blueteam&b á @readteam&b."
+    - "&3[@name] &bPontuação: @blueteam&b á @redteam&b."
   Capturated:
     - "&3[@name] &bVocê foi capturado! Aguarde &f@time&b segundos para voltar a jogar."
   Win:
@@ -82,3 +82,4 @@ Locations:
   Exit: []
   Pos1: []
   Pos2: []
+  Server: null # Coloque aqui o nome do servidor do Bungecoord que o evento deve ocorrer.

@@ -60,3 +60,4 @@ Locations:
   Entrance: []
   Spectator: []
   Exit: []
+  Server: null # Coloque aqui o nome do servidor do Bungecoord que o evento deve ocorrer.

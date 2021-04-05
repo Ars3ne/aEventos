@@ -29,6 +29,7 @@ package com.ars3ne.eventos.commands;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
+import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.utils.ConfigFile;
 import com.ars3ne.eventos.utils.Utils;
 import org.bukkit.Material;
@@ -115,7 +116,7 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Entre no evento.
-                    aEventos.getEventoManager().getEvento().join(p);
+                    aEventos.getEventoManager().getEvento().joinBungeecord(p);
                 }
             }
 
@@ -143,7 +144,7 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Saia do evento
-                    aEventos.getEventoManager().getEvento().leave(p);
+                    aEventos.getEventoManager().getEvento().leaveBungeecord(p);
 
                 }
 
@@ -193,7 +194,7 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Entre no modo espectador.
-                    aEventos.getEventoManager().getEvento().spectate(p);
+                    aEventos.getEventoManager().getEvento().spectateBungeecord(p);
 
                 }
 
@@ -217,6 +218,11 @@ public class EventoCommand implements CommandExecutor {
                     if(aEventos.getEventoManager().getEvento() != null) {
                         config = aEventos.getEventoManager().getEvento().getConfig();
                         aEventos.getEventoManager().getEvento().stop();
+
+                        if(aEventos.getInstance().getConfig().getBoolean("Bungeecord.Enabled") && config.getString("Locations.Server") != null){
+                            BungeecordHook.stopEvento("cancelled");
+                        }
+
                     }else {
                         config = aEventos.getEventoChatManager().getEvento().getConfig();
                         aEventos.getEventoChatManager().getEvento().stop();

@@ -32,7 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.SpleefListener;
 import com.ars3ne.eventos.utils.Cuboid;
-import com.ars3ne.eventos.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,11 +46,9 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class Spleef extends Evento {
 
     private final YamlConfiguration config;
@@ -182,7 +180,7 @@ public class Spleef extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }

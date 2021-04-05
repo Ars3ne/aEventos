@@ -35,6 +35,19 @@ AutoStart:
     - "parkour-20:30"
     - "sunday-campominado-18:00"
 
+Bungeecord:
+  # Informações importantes:
+  # A configuração do evento deve existir em todos os servidores que o evento será inicializado.
+  # O servidor tem que possuir ao menos um jogador online para o evento ser inicializado. O plugin tentará iniciar novamente o evento depois do primeiro jogador entrar, mas não é garantido que irá funcionar.
+  # As opções "Send to default" e "Commands on default" ainda não possuem efeito. As suas funções serão adicionadas em um próximo update.
+  # O número de jogadores no evento não é mostrado corretamente em todos os servidores. Recomendamos que você remova o número das mensagens dos eventos.
+  # Em casos raros, os comandos de vitória acabam sendo executados mais de uma vez. Portanto, certifique que você não está premiando itens, dinheiro ou algo do tipo.
+  Enabled: false # O suporte para Bungeecord deve ser ativado?
+  Default: "rankup" # O nome do servidor padrão.
+  Servers: ["rankup", "factions"] # Lista de servidores que o evento será iniciado simultaneamente.
+  Send to default: false # Quando o evento acabar, os jogadores devem ser mandados para o servidor padrão? Caso esteja desativado, o jogador será mandado de volta para o mesmo servidor que ele entrou no evento.
+  Commands on default: false # Os comandos de vitória devem ser executados no servidor padrão? Caso esteja desativado, os comandos serão executados no servidor que o jogador usou para entrar no evento.
+
 # O plugin deve procurar por novas versões automaticamente?
 UpdateChecker: true
 

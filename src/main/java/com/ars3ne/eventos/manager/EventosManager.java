@@ -88,6 +88,9 @@ public class EventosManager {
             case ANVIL:
                 this.evento = new Anvil(config);
                 break;
+            case GUERRA:
+                this.evento = new Guerra(config);
+                break;
         }
 
         this.evento.startCall();

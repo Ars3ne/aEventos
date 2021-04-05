@@ -31,7 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.FrogListener;
 import com.ars3ne.eventos.utils.Cuboid;
-import com.ars3ne.eventos.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -137,7 +137,7 @@ public class Frog extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }
@@ -201,7 +201,6 @@ public class Frog extends Evento {
             List<Block> deleted_blocks_array = new ArrayList<>(deleted_blocks.keySet());
             wool_block = deleted_blocks_array.get(random.nextInt(deleted_blocks_array.size()));
             wool_block.setType(XMaterial.RED_WOOL.parseMaterial());
-            wool_block.setData(XMaterial.RED_WOOL.getData());
             listener.setWool();
 
             // Troque os outros blocos deletados por neve.

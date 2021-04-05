@@ -1,0 +1,151 @@
+Evento:
+  # Configurações do evento.
+  Title: "Gladiador" # O nome do evento. Será usado na placeholder @name.
+  Type: "guerra" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: false # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Hook: "simpleclans" # Qual plugin deve ser usado? Opções disponíveis: "simpleclans" e "massivefactions".
+  Minimum guilds: 2 # O mínimo de clãs ou facções que devem estar presentes no evento para ele começar.
+  Maximum per guild: 10 # O número máximo de jogadores por clã ou facção.
+  Time: 20 # Tempo em segundos antes do PvP ser ativado.
+  Pickup time: 20 # Tempo em segundos que os vencedores terão para coletar os itens.
+  FFA: false # O Friendly Fire do evento deve ser ativado? (OBS: Esta opção não tem efeito no MassiveFactions, por enquanto.)
+
+# Configurações da Actionbar:
+Actionbar:
+  Enabled: true # Ativar a actionbar no evento?
+  Enabling PvP: "&aAtivando PvP em @time segundos."
+  Normal: "&aJogadores restantes: @remeaning | Inimigos restantes: @enemies | Clans restantes: @guilds"
+  Spectator: "&aJogadores restantes: @remeaning | Clans restantes: @guilds"
+  Pickup: "&aVocê possui @time segundos para coletar os itens."
+
+# Configurações da Borda
+Border:
+  Enabled: false # Caso esteja ativado, a borda do mundo diminuirá com o passar do tempo.
+  Size: 20000 # O tamanho em blocos da borda. Para calcular isso, basta somar as coordenadas positivas e negativas. Por exemplo, se a sua borda é de +10000 x -10000, então o tamanho de blocos vai ser 20000.
+  Time: 200 # Em quanto tempo a borda deve diminuir?
+  Damage: 2 # Quanto dano a borda deve dar?
+  Delay: 10 # A borda deve começar a diminuir depois de quantos segundos do início do evento?
+
+Itens:
+  Enabled: false # Caso esteja ativado, o evento será com os itens setados abaixo. Lembre-se de ativar a opção "Empty inventory"!
+  Helmet:
+    material: "DIAMOND_HELMET"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Chestplate:
+    material: "DIAMOND_CHESTPLATE"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Leggings:
+    material: "DIAMOND_LEGGINGS"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Boots:
+    material: "DIAMOND_BOOTS"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Inventory:
+    0: # Posição do item no inventário.
+      material: "DIAMOND_SWORD"
+      damage: 0
+      enchants:
+        DAMAGE_ALL: 5
+    1: # Posição do item no inventário.
+      material: "GOLDEN_APPLE"
+      amount: 64
+      damage: 1 # Data do item.
+    2:
+      material: "POTION"
+      damage: 41 # Posição do item no inventário.
+      name: "&5Poção de Força"
+      level: 2
+      base-effect: "STRENGTH, false, false" # Efeito da poção, A poção é jogável?, Poção estendida?
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &6[Gladiador]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  No guilds:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de clans não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  Enabling:
+    - "&3[@name] &bO PvP será ativado em &f@time &bsegundos!"
+  Enabled:
+    - ""
+    - "&3[@name] &bO PvP foi ativado. Boa sorte á todos!"
+    - ""
+  Pickup:
+    - "&3[@name] &bVocê tem &f@time &bsegundos para pegar os drops."
+  Maximum: "&3[@name] &bO seu clan já bateu a quantidade máxima de jogadores!"
+  No guild: "&3[@name] &bVocê precisa ser membro de um clã para participar do evento!"
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_gladiador" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_gladiador}
+    Style: "&6[Gladiador] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"
+  Top kills:
+    Winner guild: false # Caso esteja ativado, serão considerados apenas membros do clã ou facção vencedora para o top kills. Se estiver desativado, então considerará todos os participantes.
+    1: # Posição no top kills.
+      - "give @topkiller diamond 3"
+    2: # Posição no top kills.
+      - "give @topkiller diamond 2"
+    3: # Posição no top kills.
+      - "give @topkiller diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup gladiador
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []
+  Server: null # Coloque aqui o nome do servidor do Bungecoord que o evento deve ocorrer.

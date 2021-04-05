@@ -1,0 +1,8 @@
+name: aEventos
+version: ${project.version}
+description: O seu plugin de eventos!
+
+author: Ars3ne
+website: ${project.url}
+
+main: com.ars3ne.eventos.bungeecord.aEventosBungeecord

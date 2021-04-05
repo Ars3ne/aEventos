@@ -233,17 +233,17 @@ public class Hunter extends Evento {
         if(team.equals("blue")) {
 
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Win").replace("&", "§").replace("@team", this.blue_name).replace("@points", String.valueOf(blue_points)));
+                player.sendMessage(config.getString("Messages.Win").replace("&", "§").replace("@team", this.blue_name).replace("@points", String.valueOf(blue_points)));
             }
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Win").replace("&", "§").replace("@team", this.blue_name).replace("@points", String.valueOf(blue_points)));
+                player.sendMessage(config.getString("Messages.Win").replace("&", "§").replace("@team", this.blue_name).replace("@points", String.valueOf(blue_points)));
             }
 
             // Obtenha todos os jogadores restantes e os entregue as recompensas.
             for(Player p: blue_team.keySet()) {
                 List<String> commands = this.config.getStringList("Rewards.Commands");
                 for(String s : commands) {
-                    aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+                    executeConsoleCommand(p, s.replace("@winner", p.getName()));
                 }
 
                 // Adicione o nome á lista de vencedores.
@@ -263,7 +263,7 @@ public class Hunter extends Evento {
             for(Player p: red_team.keySet()) {
                 List<String> commands = this.config.getStringList("Rewards.Commands");
                 for(String s : commands) {
-                    aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+                    executeConsoleCommand(p, s.replace("@winner", p.getName()));
                 }
 
                 // Adicione o nome á lista de vencedores.

@@ -58,7 +58,6 @@ public class Paintball extends Evento {
     private final List<Player> blue_team = new ArrayList<>();
     private final List<Player> red_team = new ArrayList<>();
     private final List<ClanPlayer> clans = new ArrayList<>();
-
     private final int time;
     private final String blue_name;
     private final String red_name;
@@ -221,7 +220,7 @@ public class Paintball extends Evento {
             // Execute os comandos de vitória
             List<String> commands = this.config.getStringList("Rewards.Commands");
             for(String s : commands) {
-                aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+                executeConsoleCommand(p, s.replace("@winner", p.getName()));
             }
 
             // Adicione o nome á lista de vencedores.

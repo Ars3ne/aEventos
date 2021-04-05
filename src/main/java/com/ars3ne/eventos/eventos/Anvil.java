@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.AnvilListener;
 import com.ars3ne.eventos.utils.Cuboid;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -114,21 +115,26 @@ public class Anvil extends Evento {
 
             if(!isHappening()) runnable.cancel();
 
-                if(anvil.size() < cuboid.getTotalBlockSize() - 1) {
+            if(anvil.size() < cuboid.getTotalBlockSize() - 1) {
 
-                    // Obtenha um bloco aleatório do cuboid.
-                    Block anvil_block = cuboid.getRandomLocation().getBlock();
-                    while(anvil_block.getType() != Material.AIR || anvil.contains(anvil_block)) {
+                // Obtenha um bloco aleatório do cuboid.
+                Block anvil_block = cuboid.getRandomLocation().getBlock();
+                if (anvil_block.getType() != Material.AIR || anvil.contains(anvil_block)) {
+                    for(int i = 0; i < cuboid.getTotalBlockSize() - 1; i++) {
                         anvil_block = cuboid.getRandomLocation().getBlock();
+                        if(anvil_block.getType() == Material.AIR) break;
                     }
 
-                    anvil_block.getWorld().spawnFallingBlock(anvil_block.getLocation().add(0, height, 0), Material.ANVIL, (byte) 0).setDropItem(false);
-                    anvil.add(anvil_block);
-
-                }else {
-                    win();
-                    runnable.cancel();
+                    Bukkit.broadcastMessage("terminou o looposo do satanas!");
                 }
+
+                anvil_block.getWorld().spawnFallingBlock(anvil_block.getLocation().add(0, height, 0), Material.ANVIL, (byte) 0).setDropItem(false);
+                anvil.add(anvil_block);
+
+            }else {
+                win();
+                runnable.cancel();
+            }
 
         }, time * 20L, delay * 20L);
 
@@ -150,7 +156,7 @@ public class Anvil extends Evento {
             // Execute os comandos de vitória
             List<String> commands = this.config.getStringList("Rewards.Commands");
             for(String s : commands) {
-                aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+                executeConsoleCommand(p, s.replace("@winner", p.getName()));
             }
 
             // Adicione o nome á lista de vencedores.
@@ -183,7 +189,7 @@ public class Anvil extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }

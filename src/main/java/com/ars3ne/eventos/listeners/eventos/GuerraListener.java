@@ -28,65 +28,65 @@
 package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
-import com.ars3ne.eventos.eventos.BatataQuente;
-import com.cryptomorin.xseries.XMaterial;
+import com.ars3ne.eventos.eventos.Guerra;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class BatataQuenteListener implements Listener {
+public class GuerraListener implements Listener {
 
-    BatataQuente evento;
+    private Guerra evento;
 
-    @EventHandler
-    public void onPotatoHit(EntityDamageByEntityEvent e) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDamage(EntityDamageByEntityEvent e) {
 
         if(evento == null) return;
+
+        // Se a entidade não for um player, retorne.
         if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
+
         Player damaged = (Player) e.getEntity();
         Player damager = (Player) e.getDamager();
 
-        if (!evento.getPlayers().contains(damager) || !evento.getPlayers().contains(damaged)) return;
-        if(evento.getPotatoHolder() != damager) return;
-        if(damager.getItemInHand().getType() != XMaterial.POTATO.parseMaterial()) return;
+        if(evento.getSpectators().contains(damaged) || evento.getSpectators().contains(damager)) {
+            e.setCancelled(true);
+            return;
+        }
 
-        // Mude o holder da batata e limpe o inventário do anterior.
-        evento.setHolder(damaged);
-        damager.getInventory().clear();
-        damager.getInventory().setHelmet(null);
-        e.setCancelled(true);
+        if(!evento.getPlayers().contains(damaged) || !evento.getPlayers().contains(damager)) return;
+
+        if(!evento.isPvPEnabled()) e.setCancelled(true);
 
     }
 
     @EventHandler
-    public void onDrop(PlayerDropItemEvent e) {
-        if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getPlayer())) return;
-        e.setCancelled(true);
-    }
+    public void onDeath(PlayerDeathEvent e) {
 
-    @EventHandler
-    public void onPickup(PlayerPickupItemEvent e) {
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getPlayer())) return;
-        e.setCancelled(true);
-    }
+        if (!evento.getPlayers().contains(e.getEntity())) return;
 
-    @SuppressWarnings("SuspiciousMethodCalls")
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getWhoClicked())) return;
-        e.setCancelled(true);
+        if(e.getEntity().getKiller() != null) {
+
+            // Se houve um killer, então adicione a kill.
+            if(!evento.getKills().containsKey(e.getEntity().getKiller())) {
+                evento.getKills().put(e.getEntity().getKiller(), 1);
+            }else {
+                evento.getKills().put(e.getEntity().getKiller(), evento.getKills().get(e.getEntity().getKiller()) + 1);
+            }
+
+        }
+
+        // Remova o jogador do evento.
+        evento.eliminate(e.getEntity());
+
     }
 
 
     public void setEvento() {
-        evento = (BatataQuente) aEventos.getEventoManager().getEvento();
+        evento = (Guerra) aEventos.getEventoManager().getEvento();
     }
 
 }

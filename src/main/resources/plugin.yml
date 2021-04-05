@@ -6,7 +6,8 @@ author: Ars3ne
 website: ${project.url}
 
 main: com.ars3ne.eventos.aEventos
-softdepend: [LegendChat, SimpleClans, Vault]
+softdepend: [LegendChat, SimpleClans, Vault, MassiveFactions]
+api-version: 1.13
 
 commands:
   evento:

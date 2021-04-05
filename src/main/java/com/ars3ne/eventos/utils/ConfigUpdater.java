@@ -28,6 +28,7 @@
 package com.ars3ne.eventos.utils;
 
 import com.ars3ne.eventos.api.EventoType;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -356,6 +357,20 @@ public class ConfigUpdater {
             YamlConfiguration config = ConfigFile.get(file.getName().substring(0, file.getName().length() - 4));
 
             if(config.getString("Evento.Type") == null) continue;
+
+            // Se a opção "Server" não existir nas localizações então a adicione.
+            if(config.getString("Locations.Server") == null) {
+                if(config.getConfigurationSection("Locations") == null) continue;
+                config.set("Locations.Server", "null");
+                try {
+                    ConfigFile.save(config);
+                } catch (IOException e) {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
+                    e.printStackTrace();
+                }
+            }
+
+            // Converter itens. TODO: Converter para o novo serializer.
             if (EventoType.getEventoType(config.getString("Evento.Type")) == EventoType.FIGHT) {
 
                 // Se for a config antiga, converta os items.

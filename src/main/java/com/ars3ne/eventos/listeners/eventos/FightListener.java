@@ -59,7 +59,7 @@ public class FightListener implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDeath(PlayerDeathEvent e) {
 
         if(evento == null) return;

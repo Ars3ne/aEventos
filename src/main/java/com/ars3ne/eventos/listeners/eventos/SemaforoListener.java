@@ -89,6 +89,7 @@ public class SemaforoListener implements Listener {
         // Remova o jogador do evento.
         e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
         evento.remove(e.getPlayer());
+        evento.leaveBungeecord(e.getPlayer());
         PlayerLoseEvent lose = new PlayerLoseEvent(e.getPlayer(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
         Bukkit.getPluginManager().callEvent(lose);
 

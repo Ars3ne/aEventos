@@ -85,10 +85,20 @@ public class EventoChat implements EventoInterface{
                     return;
                 }
 
+                if (!EventoChat.this.isOpen()){
+                    cancel();
+                    return;
+                }
+
                 if (calls >= 0){
 
                     if(!EventoChat.this.happening) {
                         cancel();
+                    }
+
+                    if (!EventoChat.this.isOpen()){
+                        cancel();
+                        return;
                     }
 
                     List<String> broadcast_messages = config.getStringList("Messages.Broadcast");

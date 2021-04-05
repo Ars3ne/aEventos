@@ -30,6 +30,7 @@ package com.ars3ne.eventos.listeners.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.eventos.Frog;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -52,9 +53,10 @@ public class FrogListener implements Listener {
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
         // Se o jogador entrou na água, então o elimine.
-        if(e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.STATIONARY_WATER) {
+        if(e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == XMaterial.WATER.parseMaterial()) {
             e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
             evento.remove(e.getPlayer());
+            evento.leaveBungeecord(e.getPlayer());
             PlayerLoseEvent lose = new PlayerLoseEvent(e.getPlayer(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
             Bukkit.getPluginManager().callEvent(lose);
         }

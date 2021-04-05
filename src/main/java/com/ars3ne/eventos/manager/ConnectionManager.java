@@ -28,14 +28,18 @@
 package com.ars3ne.eventos.manager;
 
 import com.ars3ne.eventos.aEventos;
+import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.sql.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,18 +99,21 @@ public class ConnectionManager {
 
         try {
 
-            PreparedStatement statement;
-            PreparedStatement statement2;
+            PreparedStatement statement, statement2, statement3;
             if(aEventos.getInstance().getConfig().getBoolean("MySQL.Enabled")) {
                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `aeventos_users` ( `id` integer PRIMARY KEY AUTO_INCREMENT NOT NULL, `username` TEXT NOT NULL , `uuid` TEXT NOT NULL , `total_wins` INT NOT NULL , `total_participations` INT NOT NULL , `wins` TEXT NOT NULL , `participations` TEXT NOT NULL )");
                statement2 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `aeventos_eventos` ( `id` integer PRIMARY KEY AUTO_INCREMENT NOT NULL, `name` TEXT NOT NULL , `current_winners` TEXT NOT NULL )");
+               statement3 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `aeventos_eventos_guild` ( `id` integer PRIMARY KEY AUTO_INCREMENT NOT NULL, `name` TEXT NOT NULL , `current_guild_winner` TEXT NOT NULL, `total_kills` TEXT NOT NULL, `current_winners` TEXT NOT NULL )");
             }else {
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `aeventos_users` ( `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `username` TEXT NOT NULL , `uuid` TEXT NOT NULL , `total_wins` INT NOT NULL , `total_participations` INT NOT NULL , `wins` TEXT NOT NULL , `participations` TEXT NOT NULL )");
                 statement2 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `aeventos_eventos` ( `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL , `current_winners` TEXT NOT NULL )");
+                statement3 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `aeventos_eventos_guild` ( `id` integer PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL , `current_guild_winner` TEXT NOT NULL, `total_kills` TEXT NOT NULL, `current_winners` TEXT NOT NULL )");
             }
-            statement.executeUpdate();
 
+            statement.executeUpdate();
             statement2.executeUpdate();
+            statement3.executeUpdate();
+
         } catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível criar o banco de dados. Desativando plugin...");
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
@@ -147,7 +154,33 @@ public class ConnectionManager {
             }
 
         }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao criar a database de um evento. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+    }
+
+    public void createEventoGuild(String name) {
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT name FROM aeventos_eventos_guild WHERE name=?");
+            statement.setString(1,name);
+            ResultSet results = statement.executeQuery();
+
+            if(!results.next()) {
+                PreparedStatement insert = connection
+                        .prepareStatement("INSERT INTO aeventos_eventos_guild (name, current_guild_winner, total_kills, current_winners) VALUES (?,?,?,?)");
+                insert.setString(1, name);
+                insert.setString(2, "[]");
+                insert.setString(3, "[]");
+                insert.setString(4, "[]");
+                insert.executeUpdate();
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
             aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
         }
@@ -300,6 +333,52 @@ public class ConnectionManager {
         return null;
     }
 
+    public String getEventoGuildWinners(String name) {
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT current_winners FROM aeventos_eventos_guild WHERE name=?");
+            statement.setString(1,name);
+            ResultSet results = statement.executeQuery();
+            if(results.next()) {
+                return results.getString("current_winners");
+            }else {
+                return "[]";
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter os vencedores de um evento. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+        return null;
+    }
+
+    public String getEventoGuildKills(String name) {
+
+        Gson gson = new Gson();
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT total_kills FROM aeventos_eventos_guild WHERE name=?");
+            statement.setString(1,name);
+            ResultSet results = statement.executeQuery();
+            if(results.next()) {
+                return gson.toJson(results.getString("total_kills"));
+            }else {
+                return "[]";
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as kills de um evento. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+        return null;
+    }
+
     public void setEventoWinner(String name, List<String> winner) {
 
         try {
@@ -317,4 +396,24 @@ public class ConnectionManager {
 
     }
 
+    public void setEventoGuildWinner(String name, String guild_name, HashMap<OfflinePlayer, Integer> total_kills, List<String> winner) {
+
+        Gson gson = new Gson();
+
+        try {
+            PreparedStatement update = connection
+                    .prepareStatement("UPDATE aeventos_eventos_guild SET current_guild_winner=?,total_kills=?,current_winners=? WHERE name=?");
+            update.setString(1, guild_name);
+            update.setString(2, gson.toJson(total_kills));
+            update.setString(3, String.valueOf(winner));
+            update.setString(4, name);
+            update.executeUpdate();
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+    }
 }

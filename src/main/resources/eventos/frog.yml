@@ -70,3 +70,4 @@ Locations:
   Exit: []
   Pos1: []
   Pos2: []
+  Server: null # Coloque aqui o nome do servidor do Bungecoord que o evento deve ocorrer.

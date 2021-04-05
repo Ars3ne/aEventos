@@ -28,6 +28,7 @@
 package com.ars3ne.eventos.manager;
 
 import com.ars3ne.eventos.aEventos;
+import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.utils.ConfigFile;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -47,16 +48,25 @@ public class TagManager {
         for (File file : Objects.requireNonNull(ConfigFile.getAllFiles())) {
 
             if(file.getName().contains("old")) continue;
-
             // Adicione o evento á database.
-            aEventos.getConnectionManager().createEvento(file.getName().substring(0, file.getName().length() - 4));
             YamlConfiguration config = ConfigFile.get(file.getName().substring(0, file.getName().length() - 4));
 
             if (config.getConfigurationSection("Rewards.Tag") == null) continue;
             if (!config.getBoolean("Rewards.Tag.Enabled")) continue;
 
-            lc_tags.put(config.getString("Rewards.Tag.Name"), config.getString("Rewards.Tag.Style"));
-            String holder = aEventos.getConnectionManager().getEventoWinners(file.getName().substring(0, file.getName().length() - 4)).replace("[", "").replace("]", "");
+            lc_tags.put(config.getString("Rewards.Tag.Name"), config.getString("Rewards.Tag.Style").replace("&", "§"));
+
+            String holder;
+
+            // Se o evento for de clans, então obtenha os vencedores do evento.
+            if(EventoType.isEventoGuild(EventoType.getEventoType(config.getString("Evento.Type")))) {
+                aEventos.getConnectionManager().createEventoGuild(file.getName().substring(0, file.getName().length() - 4));
+                holder = aEventos.getConnectionManager().getEventoGuildWinners(file.getName().substring(0, file.getName().length() - 4)).replace("[", "").replace("]", "");
+            }else {
+                aEventos.getConnectionManager().createEvento(file.getName().substring(0, file.getName().length() - 4));
+                holder = aEventos.getConnectionManager().getEventoWinners(file.getName().substring(0, file.getName().length() - 4)).replace("[", "").replace("]", "");
+            }
+
             for (String uuid : holder.split(", ")) {
 
                 if (uuid.isEmpty()) continue;

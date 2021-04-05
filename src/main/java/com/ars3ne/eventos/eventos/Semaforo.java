@@ -30,7 +30,7 @@ package com.ars3ne.eventos.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.SemaforoListener;
-import com.ars3ne.eventos.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -112,7 +112,7 @@ public class Semaforo extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }

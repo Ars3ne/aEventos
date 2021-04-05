@@ -29,6 +29,7 @@ package com.ars3ne.eventos;
 
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.commands.EventoCommand;
+import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.hooks.LegendChatHook;
 import com.ars3ne.eventos.listeners.EventoListener;
 import com.ars3ne.eventos.manager.*;
@@ -57,6 +58,7 @@ public class aEventos extends JavaPlugin {
     private SimpleClans clan = null;
     private static final LegendChatHook lc_hook = new LegendChatHook();
     private Economy econ = null;
+    private boolean hooked_massivefactions = false;
 
     private final EventoListener setup_listener = new EventoListener();
 
@@ -76,6 +78,12 @@ public class aEventos extends JavaPlugin {
             setupAddons();
 
             autostart.setup();
+
+            // Se tem suporte para o Bungeecord, então registre os canais.
+            if(getConfig().getBoolean("Bungeecord.Enabled")) {
+                this.getServer().getMessenger().registerOutgoingPluginChannel(this, "aeventos:channel");
+                this.getServer().getMessenger().registerIncomingPluginChannel(this, "aeventos:channel", new BungeecordHook());
+            }
 
             this.getCommand("evento").setExecutor(new EventoCommand());
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aPlugin iniciado com sucesso!");
@@ -129,6 +137,7 @@ public class aEventos extends JavaPlugin {
             ConfigFile.create("anvil");
             ConfigFile.create("loteria");
             ConfigFile.create("bolao");
+            ConfigFile.create("gladiador");
 
         }
 
@@ -157,8 +166,8 @@ public class aEventos extends JavaPlugin {
     }
 
     private void setupAddons() {
-        if(!setupSimpleClans()) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cSimpleClans não encontrado.");
+        if(!setupSimpleClans() && !setupMassiveFactions()) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cSimpleClans e MassiveFactions não encontrados.");
         }
         if(!setupLegendChat()) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cLegendChat não encontrado.");
@@ -182,6 +191,13 @@ public class aEventos extends JavaPlugin {
         Plugin simpleclans = getServer().getPluginManager().getPlugin("SimpleClans");
         if(simpleclans == null) return false;
         clan = ((SimpleClans) simpleclans);
+        return true;
+    }
+
+    private boolean setupMassiveFactions() {
+        Plugin factions = getServer().getPluginManager().getPlugin("Factions");
+        if(factions == null) return false;
+        hooked_massivefactions = true;
         return true;
     }
 
@@ -209,6 +225,8 @@ public class aEventos extends JavaPlugin {
     }
 
     public Economy getEconomy() { return this.econ; }
+
+    public boolean isHookedMassiveFactions() { return this.hooked_massivefactions; }
 
     public static aEventos getInstance() {
         return (aEventos) Bukkit.getServer().getPluginManager().getPlugin("aEventos");

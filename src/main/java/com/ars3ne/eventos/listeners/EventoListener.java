@@ -29,6 +29,7 @@ package com.ars3ne.eventos.listeners;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.commands.EventoCommand;
+import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.utils.ConfigFile;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,6 +41,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.IOException;
@@ -84,7 +86,26 @@ public class EventoListener implements Listener {
             }else if(aEventos.getEventoManager().getEvento().getSpectators().contains(e.getPlayer())) {
                 // Se o usuário estava no modo espectador, remova-o.
                 aEventos.getEventoManager().getEvento().remove(e.getPlayer());
+                aEventos.getEventoManager().getEvento().leaveBungeecord(e.getPlayer());
             }
+        }
+
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+
+        if(aEventos.getEventoManager().getEvento() == null) return;
+
+        if(BungeecordHook.getJoin().contains(e.getPlayer().getName())) {
+            aEventos.getEventoManager().getEvento().join(e.getPlayer());
+            BungeecordHook.getJoin().remove(e.getPlayer().getName());
+        }
+
+        if(BungeecordHook.getSpectate().contains(e.getPlayer().getName())) {
+            if(!aEventos.getEventoManager().getEvento().isSpectatorAllowed()) return;
+            aEventos.getEventoManager().getEvento().spectate(e.getPlayer());
+            BungeecordHook.getSpectate().remove(e.getPlayer().getName());
         }
 
     }

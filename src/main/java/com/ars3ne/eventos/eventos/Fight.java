@@ -31,7 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.FightListener;
-import com.ars3ne.eventos.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,6 +39,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -46,7 +47,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class Fight extends Evento {
 
     private final YamlConfiguration config;
@@ -123,7 +123,7 @@ public class Fight extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }
@@ -369,10 +369,10 @@ public class Fight extends Evento {
             // Teleporte os lutadores.
             fighter1.setHealth(fighter1.getMaxHealth());
             fighter1.setFoodLevel(20);
-            fighter1.teleport(fight1);
+            fighter1.teleport(fight1, PlayerTeleportEvent.TeleportCause.PLUGIN);
             fighter2.setHealth(fighter2.getMaxHealth());
             fighter2.setFoodLevel(20);
-            fighter2.teleport(fight2);
+            fighter2.teleport(fight2, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             // Se a luta ainda estiver aconteçendo depois do tempo limite, a defina como um empate.
             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -424,10 +424,10 @@ public class Fight extends Evento {
             // Teleporte ambos para a entrada.
             fighter1.setHealth(fighter1.getMaxHealth());
             fighter1.setFoodLevel(20);
-            fighter1.teleport(entrance);
+            fighter1.teleport(entrance, PlayerTeleportEvent.TeleportCause.PLUGIN);
             fighter2.setHealth(fighter2.getMaxHealth());
             fighter2.setFoodLevel(20);
-            fighter2.teleport(entrance);
+            fighter2.teleport(entrance, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
         }else {
 
@@ -461,7 +461,7 @@ public class Fight extends Evento {
 
                 fighter2.setHealth(fighter2.getMaxHealth());
                 fighter2.setFoodLevel(20);
-                fighter2.teleport(entrance);
+                fighter2.teleport(entrance, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             }else {
                 for (Player player : getPlayers()) {
@@ -477,7 +477,7 @@ public class Fight extends Evento {
 
                 fighter1.setHealth(fighter1.getMaxHealth());
                 fighter1.setFoodLevel(20);
-                fighter1.teleport(entrance);
+                fighter1.teleport(entrance, PlayerTeleportEvent.TeleportCause.PLUGIN);
 
             }
 

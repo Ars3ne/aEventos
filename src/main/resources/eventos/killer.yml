@@ -53,7 +53,7 @@ Messages:
     - "&3[@name] &bO PvP foi ativado. Boa sorte á todos!"
     - ""
   Pickup:
-    - "&3[@name] &bVocẽ tem &f@time &bsegundos para pegar os drops."
+    - "&3[@name] &bVocê tem &f@time &bsegundos para pegar os drops."
 
 # Recompensas. Elas serão dadas ao vencedor.
 Rewards:
@@ -70,3 +70,4 @@ Locations:
   Entrance: []
   Spectator: []
   Exit: []
+  Server: null # Coloque aqui o nome do servidor do Bungecoord que o evento deve ocorrer.

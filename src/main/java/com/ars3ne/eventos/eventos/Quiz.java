@@ -133,7 +133,7 @@ public class Quiz extends Evento {
         // Execute todos os comandos de vitória.
         List<String> commands = config.getStringList("Rewards.Commands");
         for(String s : commands) {
-            aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+            executeConsoleCommand(p, s.replace("@winner", p.getName()));
         }
 
     }
@@ -154,7 +154,7 @@ public class Quiz extends Evento {
             // Execute os comandos de vitória
             List<String> commands = this.config.getStringList("Rewards.Commands");
             for(String s : commands) {
-                aEventos.getInstance().getServer().dispatchCommand(aEventos.getInstance().getServer().getConsoleSender(), s.replace("@winner", p.getName()));
+                executeConsoleCommand(p, s.replace("@winner", p.getName()));
             }
 
             // Adicione o nome á lista de vencedores.
