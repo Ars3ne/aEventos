@@ -64,12 +64,12 @@ public class SpleefListener implements Listener {
         if(evento == null) return;
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
-        if(e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == XMaterial.WATER.parseMaterial()) {
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.isNewVersion() && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
 
             // Se o jogador entrou na água, então o elimine.
             e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
             evento.remove(e.getPlayer());
-            evento.leaveBungeecord(e.getPlayer());
+            evento.notifyLeave(e.getPlayer());
             last_move.remove(e.getPlayer());
             PlayerLoseEvent lose = new PlayerLoseEvent(e.getPlayer(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
             Bukkit.getPluginManager().callEvent(lose);

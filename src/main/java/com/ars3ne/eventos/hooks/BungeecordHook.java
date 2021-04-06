@@ -181,6 +181,7 @@ public class BungeecordHook implements PluginMessageListener {
             out.writeUTF(type);
             out.writeUTF(config);
             out.writeUTF(aEventos.getInstance().getConfig().getStringList("Bungeecord.Servers").toString());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,6 +198,7 @@ public class BungeecordHook implements PluginMessageListener {
             out.writeUTF(type);
             out.writeUTF(config);
             out.writeUTF(aEventos.getInstance().getConfig().getStringList("Bungeecord.Servers").toString());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -206,13 +208,18 @@ public class BungeecordHook implements PluginMessageListener {
 
     public static void stopEvento(String reason) {
 
+        if(aEventos.getEventoManager().getEvento() == null) return;
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(stream);
 
         try {
             out.writeUTF("stop");
+            out.writeUTF(aEventos.getEventoManager().getEvento().getConfig().getString("Locations.Server"));
             out.writeUTF(reason);
             out.writeUTF(aEventos.getInstance().getConfig().getStringList("Bungeecord.Servers").toString());
+            out.writeBoolean(aEventos.getInstance().getConfig().getBoolean("Bungeecord.Send to default"));
+            out.writeUTF(aEventos.getInstance().getConfig().getString("Bungeecord.Default"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -222,6 +229,8 @@ public class BungeecordHook implements PluginMessageListener {
 
     public static void joinEvento(String player) {
 
+        if(aEventos.getEventoManager().getEvento() == null) return;
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(stream);
 
@@ -230,6 +239,8 @@ public class BungeecordHook implements PluginMessageListener {
             out.writeUTF(player);
             out.writeUTF(aEventos.getEventoManager().getEvento().getConfig().getString("Locations.Server"));
             out.writeUTF(aEventos.getInstance().getConfig().getStringList("Bungeecord.Servers").toString());
+            out.writeBoolean(aEventos.getInstance().getConfig().getBoolean("Bungeecord.Send to default"));
+            out.writeUTF(aEventos.getInstance().getConfig().getString("Bungeecord.Default"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -240,6 +251,8 @@ public class BungeecordHook implements PluginMessageListener {
 
     public static void leaveEvento(String player) {
 
+        if(aEventos.getEventoManager().getEvento() == null) return;
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(stream);
 
@@ -248,6 +261,8 @@ public class BungeecordHook implements PluginMessageListener {
             out.writeUTF(player);
             out.writeUTF(aEventos.getEventoManager().getEvento().getConfig().getString("Locations.Server"));
             out.writeUTF(aEventos.getInstance().getConfig().getStringList("Bungeecord.Servers").toString());
+            out.writeBoolean(aEventos.getInstance().getConfig().getBoolean("Bungeecord.Send to default"));
+            out.writeUTF(aEventos.getInstance().getConfig().getString("Bungeecord.Default"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -258,6 +273,8 @@ public class BungeecordHook implements PluginMessageListener {
 
     public static void spectateEvento(String player) {
 
+        if(aEventos.getEventoManager().getEvento() == null) return;
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(stream);
 
@@ -266,7 +283,8 @@ public class BungeecordHook implements PluginMessageListener {
             out.writeUTF(player);
             out.writeUTF(aEventos.getEventoManager().getEvento().getConfig().getString("Locations.Server"));
             out.writeUTF(aEventos.getInstance().getConfig().getStringList("Bungeecord.Servers").toString());
-
+            out.writeBoolean(aEventos.getInstance().getConfig().getBoolean("Bungeecord.Send to default"));
+            out.writeUTF(aEventos.getInstance().getConfig().getString("Bungeecord.Default"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -283,8 +301,8 @@ public class BungeecordHook implements PluginMessageListener {
             out.writeUTF("execute");
             out.writeUTF(player);
             out.writeUTF(command);
-            out.writeUTF(server);
-
+            out.writeBoolean(aEventos.getInstance().getConfig().getBoolean("Bungeecord.Commands on default"));
+            out.writeUTF(String.valueOf(aEventos.getInstance().getConfig().getString("Bungeecord.Default")));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -124,8 +124,6 @@ public class Anvil extends Evento {
                         anvil_block = cuboid.getRandomLocation().getBlock();
                         if(anvil_block.getType() == Material.AIR) break;
                     }
-
-                    Bukkit.broadcastMessage("terminou o looposo do satanas!");
                 }
 
                 anvil_block.getWorld().spawnFallingBlock(anvil_block.getLocation().add(0, height, 0), Material.ANVIL, (byte) 0).setDropItem(false);

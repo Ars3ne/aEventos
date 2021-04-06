@@ -355,11 +355,17 @@ public class Evento implements EventoInterface{
     }
 
     public void leaveBungeecord(Player p) {
-        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
-            BungeecordHook.leaveEvento(p.getName());
-        }else {
+        if(!notifyLeave(p)) {
             leave(p);
         }
+    }
+
+    public boolean notifyLeave(Player p) {
+        if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")) {
+            BungeecordHook.leaveEvento(p.getName());
+            return true;
+        }
+        return false;
     }
 
     public void remove(Player p) {

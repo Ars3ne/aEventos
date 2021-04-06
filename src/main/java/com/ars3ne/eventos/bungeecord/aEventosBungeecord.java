@@ -95,13 +95,23 @@ public class aEventosBungeecord extends Plugin implements Listener {
 
             if(subchannel.equals("stop")){ // Pare o evento.
 
+                String srv = in.readUTF();
                 String reason = in.readUTF();
                 String[] servers = in.readUTF().replace("[", "").replace("]", "").split(", ");
+                boolean send_to_default = in.readBoolean();
+                String default_server = in.readUTF();
+
+                if(reason.equals("noplayers") && !srv.equals(((Server) e.getSender()).getInfo().getName())) return;
+                if(reason.equals("noguilds") && !srv.equals(((Server) e.getSender()).getInfo().getName())) return;
 
                 // Mande os jogadores de volta para o servidor de origem.
                 for(String player: players_origins.keySet()) {
                     if(!players_origins.get(player).equals(((Server) e.getSender()).getInfo().getName())) {
-                        getProxy().getPlayer(player).connect(getProxy().getServerInfo(players_origins.get(player)));
+                        if(send_to_default) {
+                            getProxy().getPlayer(player).connect(getProxy().getServerInfo(default_server));
+                        }else {
+                            getProxy().getPlayer(player).connect(getProxy().getServerInfo(players_origins.get(player)));
+                        }
                     }
                 }
 
@@ -151,9 +161,15 @@ public class aEventosBungeecord extends Plugin implements Listener {
                 String player = in.readUTF();
                 String srv = in.readUTF();
                 String[] servers = in.readUTF().replace("[", "").replace("]", "").split(", ");
+                boolean send_to_default = in.readBoolean();
+                String default_server = in.readUTF();
 
                 // Adicione o jogador a hashmap de origem.
-                players_origins.put(player, getProxy().getPlayer(player).getServer().getInfo().getName());
+                if(send_to_default) {
+                    players_origins.put(player, default_server);
+                }else {
+                    players_origins.put(player, getProxy().getPlayer(player).getServer().getInfo().getName());
+                }
 
                 // Se o servidor atual do jogador for diferente do atual, então o mande para o servidor.
                 if(srv.equals(((Server) e.getSender()).getInfo().getName())) {
@@ -172,7 +188,6 @@ public class aEventosBungeecord extends Plugin implements Listener {
 
                     return;
                 }
-
                 getProxy().getPlayer(player).connect(getProxy().getServerInfo(srv));
 
                 // Mande a mensagem para iniciar o evento nos servidores.
@@ -199,6 +214,8 @@ public class aEventosBungeecord extends Plugin implements Listener {
                 String player = in.readUTF();
                 String srv = in.readUTF();
                 String[] servers = in.readUTF().replace("[", "").replace("]", "").split(", ");
+                boolean send_to_default = in.readBoolean();
+                String default_server = in.readUTF();
 
                 if(!players_origins.containsKey(player)) return;
                 // Se o servidor atual do jogador for diferente do atual, então o mande para o servidor.
@@ -219,7 +236,11 @@ public class aEventosBungeecord extends Plugin implements Listener {
                     return;
                 }
 
-                getProxy().getPlayer(player).connect(getProxy().getServerInfo(players_origins.get(player)));
+                if(send_to_default) {
+                    getProxy().getPlayer(player).connect(getProxy().getServerInfo(default_server));
+                }else {
+                    getProxy().getPlayer(player).connect(getProxy().getServerInfo(players_origins.get(player)));
+                }
 
                 players_origins.remove(player);
 
@@ -247,6 +268,8 @@ public class aEventosBungeecord extends Plugin implements Listener {
                 String player = in.readUTF();
                 String srv = in.readUTF();
                 String[] servers = in.readUTF().replace("[", "").replace("]", "").split(", ");
+                boolean send_to_default = in.readBoolean();
+                String default_server = in.readUTF();
 
                 // Se o servidor atual do jogador for diferente do atual, então o mande para o servidor.
                 if(srv.equals(((Server) e.getSender()).getInfo().getName())) {
@@ -268,9 +291,13 @@ public class aEventosBungeecord extends Plugin implements Listener {
 
                 getProxy().getPlayer(player).connect(getProxy().getServerInfo(srv));
 
-
-                // Adicione o jogador a hashmap de origem.
-                players_origins.put(player, getProxy().getPlayer(player).getServer().getInfo().getName());
+                if(send_to_default) {
+                    // Adicione o jogador a hashmap de origem.
+                    players_origins.put(player, default_server);
+                }else {
+                    // Adicione o jogador a hashmap de origem.
+                    players_origins.put(player, getProxy().getPlayer(player).getServer().getInfo().getName());
+                }
 
                 // Mande a mensagem para iniciar o evento nos servidores.
                 for(String server: servers) {
@@ -295,7 +322,8 @@ public class aEventosBungeecord extends Plugin implements Listener {
 
                 String player = in.readUTF();
                 String command = in.readUTF();
-                //String srv = in.readUTF();
+                boolean send_to_default = in.readBoolean();
+                String default_server = in.readUTF();
 
                 if(!players_origins.containsKey(player)) return;
 
@@ -303,7 +331,12 @@ public class aEventosBungeecord extends Plugin implements Listener {
                 ByteArrayOutputStream st = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(st);
 
-                ServerInfo serv = getProxy().getServerInfo(players_origins.get(player));
+                ServerInfo serv;
+                if(send_to_default) {
+                    serv = getProxy().getServerInfo(default_server);
+                }else {
+                    serv = getProxy().getServerInfo(players_origins.get(player));
+                }
                 //if(serv.getPlayers().size() == 0) return; // Se o servidor não tiver jogadores online, retorne.
 
                 out.writeUTF("execute");

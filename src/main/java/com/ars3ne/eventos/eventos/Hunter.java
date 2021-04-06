@@ -253,10 +253,10 @@ public class Hunter extends Evento {
         }else {
 
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Win").replace("&", "§").replace("@team", this.red_name).replace("@points", String.valueOf(red_points)));
+                player.sendMessage(config.getString("Messages.Win").replace("&", "§").replace("@team", this.red_name).replace("@points", String.valueOf(red_points)));
             }
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Win").replace("&", "§").replace("@team", this.red_name).replace("@points", String.valueOf(red_points)));
+                player.sendMessage(config.getString("Messages.Win").replace("&", "§").replace("@team", this.red_name).replace("@points", String.valueOf(red_points)));
             }
 
             // Obtenha todos os jogadores restantes e os entregue as recompensas.
