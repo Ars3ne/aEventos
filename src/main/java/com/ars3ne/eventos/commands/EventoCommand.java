@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.utils.ConfigFile;
 import com.ars3ne.eventos.utils.Utils;
+import com.cryptomorin.xseries.XItemStack;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -169,6 +170,12 @@ public class EventoCommand implements CommandExecutor {
                         return true;
                     }
 
+                    // Se o jogador não tem a permissão para participar do evento, retorne um erro.
+                    if(!p.hasPermission(aEventos.getEventoManager().getEvento().getPermission())) {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§"));
+                        return true;
+                    }
+
                     // Se o modo espectador está desativado no evento, retorne um erro.
                     if(!aEventos.getEventoManager().getEvento().isSpectatorAllowed()) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No spectator").replace("&", "§"));
@@ -300,25 +307,25 @@ public class EventoCommand implements CommandExecutor {
                 }else if(args[0].equalsIgnoreCase("criarconfig")) {
 
                     // Se o usuário não tem a permissão, mande um erro.
-                    if(!sender.hasPermission("aeventos.admin")) {
+                    if (!sender.hasPermission("aeventos.admin")) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
                         return true;
                     }
 
                     // Se existe apenas um argumento, mande um erro.
-                    if(args.length == 1) {
+                    if (args.length == 1) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "criarconfig <evento>"));
                         return true;
                     }
 
                     // Se a resource não existir, mande um erro.
-                    if(aEventos.getInstance().getResource("eventos/" + args[1].toLowerCase() + ".yml") == null) {
+                    if (aEventos.getInstance().getResource("eventos/" + args[1].toLowerCase() + ".yml") == null) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                         return true;
                     }
 
                     // Se o arquivo de configuração já existir, mande um erro.
-                    if(ConfigFile.exists(args[1].toLowerCase())) {
+                    if (ConfigFile.exists(args[1].toLowerCase())) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration already exists").replace("&", "§"));
                         return true;
                     }
@@ -592,6 +599,58 @@ public class EventoCommand implements CommandExecutor {
                             sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
                             return true;
 
+                        }
+
+                        else if(args[1].equalsIgnoreCase("kit") || args[1].equalsIgnoreCase("item") || args[1].equalsIgnoreCase("itens")) {
+
+                            // Se o evento não possui itens, retorne.
+                            // TODO: Fazer compatível com os outros tipos de evento.
+                            
+                            if(EventoType.getEventoType(setup.get(p).get("Evento.Type").toString()) != EventoType.GUERRA && !setup.get(p).isSet("Itens")) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed kit").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                return true;
+                            }
+
+                            // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
+                            settings.set("Itens.Helmet", "");
+                            settings.set("Itens.Helmet.a", "shaark");
+                            settings.set("Itens.Chestplate", "");
+                            settings.set("Itens.Chestplate.a", "shaark");
+                            settings.set("Itens.Leggings", "");
+                            settings.set("Itens.Leggings.a", "shaark");
+                            settings.set("Itens.Boots", "");
+                            settings.set("Itens.Boots.a", "shaark");
+
+                            if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Helmet"));
+                            if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Chestplate"));
+                            if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Leggings"));
+                            if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Boots"));
+
+                            settings.set("Itens.Helmet.a", null);
+                            settings.set("Itens.Chestplate.a", null);
+                            settings.set("Itens.Leggings.a", null);
+                            settings.set("Itens.Boots.a", null);
+
+                            settings.set("Itens.Inventory", "");
+
+                            for(int i = 0; i < 36; i++) {
+                                if(p.getInventory().getItem(i) == null) continue;
+                                settings.set("Itens.Inventory." + i + ".a", "shaark");
+                                XItemStack.serialize(p.getInventory().getItem(i), settings.getConfigurationSection("Itens.Inventory." + i));
+                                settings.set("Itens.Inventory." + i + ".a", null);
+                            }
+                            
+                            try {
+                                ConfigFile.save(settings);
+                                setup.replace(p, settings);
+                            } catch (IOException e) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                e.printStackTrace();
+                            }
+
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved kit").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
+                            return true;
+                            
                         }
 
                         else if(args[1].equalsIgnoreCase("sair")) {

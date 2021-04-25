@@ -30,7 +30,7 @@ e ``3`` no chat:
 |----------------|-------------------------------|-----------------------------|
 |/evento        | Comando usado para entrar no evento. Caso não esteja aconteçendo um no momento, mostrará a lista de comandos.|A permissão depende do evento. `aeventos.admin` para mostrar os comandos de administrador.           |
 |/evento sair    |Sai do evento atual.|Nenhuma.       |
-|/evento (camarote/assistir) |Assista o evento atual, caso o mesmo permita.	     |`aeventos.spectator`			   |
+|/evento (camarote/assistir) |Assista o evento atual, caso o mesmo permita.	     |Além da permissão necessária para participar do evento, `aeventos.spectator`			   |
 |/evento iniciar [evento]|Inicia o evento especificado, caso não esteja aconteçendo outro no momento.|`aeventos.admin`			   |
 |/evento (cancelar/parar)|Cancela o evento atual.|`aeventos.admin`	
 |/evento setup [evento] |Inicia a configuração do evento especificado.|`aeventos.admin`			   |

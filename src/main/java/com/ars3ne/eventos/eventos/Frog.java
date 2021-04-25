@@ -32,6 +32,8 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.FrogListener;
 import com.ars3ne.eventos.utils.Cuboid;
 import com.cryptomorin.xseries.XMaterial;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -50,8 +52,8 @@ public class Frog extends Evento {
     private final FrogListener listener = new FrogListener();
 
     private final Map<Block, Material> current_blocks = new HashMap<>();
-    private final Map<Block, Material> deleted_blocks = new HashMap<>();
-    private final List<Material> remeaning_materials = new ArrayList<>();
+    private final Map<Block, Map<Material, Byte>> deleted_blocks = new HashMap<>();
+    private final Multimap<Material, Byte> remeaning_materials = ArrayListMultimap.create();
 
     private final Cuboid cuboid;
     private Block wool_block;
@@ -90,12 +92,29 @@ public class Frog extends Evento {
         // Obtenha todos os blocos do cuboid e adicione-os a lista. Se não existir, coloque neve.
         for(Block block: cuboid.getBlocks()) {
 
-            if(block.getType() != Material.AIR
-                    && block.getType() != Material.SNOW_BLOCK
-                    && !(block.getType() == XMaterial.RED_WOOL.parseMaterial() && block.getData() == XMaterial.RED_WOOL.getData())) {
+            if(block.getType() != Material.AIR && block.getType() != Material.SNOW_BLOCK) {
+
+                if(!XMaterial.isNewVersion() && block.getType() == XMaterial.RED_WOOL.parseMaterial() && block.getData() == XMaterial.RED_WOOL.getData()) continue;
+                else if(XMaterial.isNewVersion() && block.getType() == XMaterial.RED_WOOL.parseMaterial()) continue;
 
                 current_blocks.put(block, block.getType());
-                if(!remeaning_materials.contains(block.getType())) remeaning_materials.add(block.getType());
+
+                if(remeaning_materials.containsKey(block.getType()) && !XMaterial.isNewVersion()) {
+
+                    boolean exists = false;
+
+                    for(byte mat: remeaning_materials.get(block.getType())) {
+                        if(mat == block.getData()) exists = true;
+                    }
+
+                   if(!exists) remeaning_materials.put(block.getType(), block.getData());
+                   continue;
+
+                }else if(!XMaterial.isNewVersion()){
+                    remeaning_materials.put(block.getType(), block.getData());
+                }
+
+                if(XMaterial.isNewVersion()) remeaning_materials.put(block.getType(), (byte) 0);
 
             }else {
                 block.setType(Material.SNOW_BLOCK);
@@ -152,7 +171,9 @@ public class Frog extends Evento {
 
         // Coloque todos os blocos novamente.
         for(Block block: deleted_blocks.keySet()) {
-            block.setType(deleted_blocks.get(block));
+            Map<Material, Byte> hash = deleted_blocks.get(block);
+            block.setType((Material) hash.keySet().toArray()[0]);
+            if(!XMaterial.isNewVersion()) block.setData((Byte) hash.values().toArray()[0]);
         }
 
         // Remova o listener do evento e chame a função cancel.
@@ -168,12 +189,20 @@ public class Frog extends Evento {
         if(remeaning_materials.size() != 1) {
 
             // Obtenha um material aleatório e transforme todos o do seu tipo em neve.
-            Material material_remove = remeaning_materials.get(random.nextInt(remeaning_materials.size()));
+            int index = random.nextInt(remeaning_materials.size());
+            Material material_remove = (Material) remeaning_materials.keys().toArray()[index];
+            byte material_data = (byte) remeaning_materials.values().toArray()[index];
+
 
             // Transforme todos o do seu tipo em neve.
             for(Block b: current_blocks.keySet()) {
-                if(b.getType() == material_remove) {
-                    deleted_blocks.put(b, b.getType());
+                if(b.getType() == material_remove && (material_data == (byte) 0 || material_data == b.getData())) {
+
+                    HashMap<Material, Byte> hash = new HashMap<>();
+                    hash.put(material_remove, material_data);
+
+                    deleted_blocks.put(b, hash);
+
                     b.setType(Material.SNOW_BLOCK);
                 }
             }
@@ -183,7 +212,7 @@ public class Frog extends Evento {
 
                 if(!isHappening()) return;
 
-                remeaning_materials.remove(material_remove);
+                remeaning_materials.remove(material_remove, material_data);
 
                 for(Block b: deleted_blocks.keySet()) {
                     b.setType(Material.AIR);
@@ -197,10 +226,11 @@ public class Frog extends Evento {
 
         }else {
 
-            // Se tiver apenas um tipo de bloco, coloque a lã vermelha em um bloco deletado aleatório.
+            // Se tiver apenas um tipo de bloco, coloque a lã vermelha em um bloco removido aleatório.
             List<Block> deleted_blocks_array = new ArrayList<>(deleted_blocks.keySet());
             wool_block = deleted_blocks_array.get(random.nextInt(deleted_blocks_array.size()));
             wool_block.setType(XMaterial.RED_WOOL.parseMaterial());
+            if(!XMaterial.isNewVersion()) wool_block.setData(XMaterial.RED_WOOL.getData());
             listener.setWool();
 
             // Troque os outros blocos deletados por neve.

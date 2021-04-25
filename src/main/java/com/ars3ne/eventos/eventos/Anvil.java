@@ -31,12 +31,12 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.AnvilListener;
 import com.ars3ne.eventos.utils.Cuboid;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
@@ -74,6 +74,13 @@ public class Anvil extends Evento {
         Location pos1 = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
         Location pos2 = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
         this.cuboid = new Cuboid(pos1, pos2);
+
+        // Remova as bigornas.
+        for(Block block: cuboid.getBlocks()) {
+            if(block.getRelative(0, 1, 0).getType() == Material.ANVIL) {
+                block.getRelative(0, 1, 0).setType(Material.AIR);
+            }
+        }
 
     }
 
@@ -126,8 +133,9 @@ public class Anvil extends Evento {
                     }
                 }
 
-                anvil_block.getWorld().spawnFallingBlock(anvil_block.getLocation().add(0, height, 0), Material.ANVIL, (byte) 0).setDropItem(false);
-                anvil.add(anvil_block);
+                anvil.add(anvil_block.getRelative(0, 1 ,0));
+                FallingBlock falling_anvil = anvil_block.getWorld().spawnFallingBlock(anvil_block.getLocation().add(0, height, 0), Material.ANVIL, (byte) 0);
+                falling_anvil.setDropItem(false);
 
             }else {
                 win();
@@ -202,8 +210,8 @@ public class Anvil extends Evento {
 
         // Remova as bigornas.
         for(Block block: cuboid.getBlocks()) {
-            if(block.getType() == Material.ANVIL) {
-                block.setType(Material.AIR);
+            if(block.getRelative(0, 1, 0).getType() == Material.ANVIL) {
+                block.getRelative(0, 1, 0).setType(Material.AIR);
             }
         }
 

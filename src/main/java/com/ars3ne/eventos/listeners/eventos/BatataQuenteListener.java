@@ -55,7 +55,7 @@ public class BatataQuenteListener implements Listener {
         if(damager.getItemInHand().getType() != XMaterial.POTATO.parseMaterial()) return;
 
         // Mude o holder da batata e limpe o inventário do anterior.
-        evento.setHolder(damaged);
+        evento.setHolder(damaged, evento.getPotatoHolderChanges());
         damager.getInventory().clear();
         damager.getInventory().setHelmet(null);
         e.setCancelled(true);

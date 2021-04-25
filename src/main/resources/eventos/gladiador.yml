@@ -71,7 +71,7 @@ Itens:
       damage: 1 # Data do item.
     2:
       material: "POTION"
-      damage: 41 # Posição do item no inventário.
+      damage: 41 #  Data do item.
       name: "&5Poção de Força"
       level: 2
       base-effect: "STRENGTH, false, false" # Efeito da poção, A poção é jogável?, Poção estendida?

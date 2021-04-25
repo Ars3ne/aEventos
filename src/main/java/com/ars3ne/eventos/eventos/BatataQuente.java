@@ -51,6 +51,7 @@ public class BatataQuente extends Evento {
     private final YamlConfiguration config;
     private final BatataQuenteListener listener = new BatataQuenteListener();
     private final int max_time;
+    private int potato_holder_changes = 0;
     private int task;
 
     private Player potato_holder;
@@ -146,12 +147,14 @@ public class BatataQuente extends Evento {
     private void randomHolder() {
         // Obtenha um usuário aleatório para ser o holder.
         Random random = new Random();
-        setHolder(getPlayers().get(random.nextInt(getPlayers().size())));
+        setHolder(getPlayers().get(random.nextInt(getPlayers().size())), potato_holder_changes);
     }
 
-    public void setHolder(Player p) {
+    public void setHolder(Player p, int current_potato_holder_changes) {
 
         if(!isHappening()) return;
+        potato_holder_team.removePlayer(potato_holder);
+
         potato_holder = p;
         Bukkit.getScheduler().cancelTask(task);
 
@@ -162,6 +165,8 @@ public class BatataQuente extends Evento {
         }
 
         // O adicione para o time do batata holder.
+        current_potato_holder_changes++;
+        potato_holder_changes++;
         potato_holder_team.addPlayer(p);
 
         // Spawne um foguete na localização do holder.
@@ -188,13 +193,14 @@ public class BatataQuente extends Evento {
 
         potato_holder.sendMessage(config.getString("Messages.Potato holder").replace("@time", String.valueOf(max_time)).replace("@name", this.config.getString("Evento.Title")).replace("&", "§"));
 
+        int finalCurrent_potato_holder_changes = current_potato_holder_changes;
         task = Bukkit.getScheduler().scheduleSyncRepeatingTask(aEventos.getInstance(), new Runnable() {
 
             int run = 5;
             @Override
             public void run() {
                 if(!isHappening()) Bukkit.getScheduler().cancelTask(task);
-                if(potato_holder != p) Bukkit.getScheduler().cancelTask(task);
+                if(potato_holder_changes != finalCurrent_potato_holder_changes) Bukkit.getScheduler().cancelTask(task);
                 if(run <= 1) Bukkit.getScheduler().cancelTask(task);
                 p.sendMessage(config.getString("Messages.Potato explode").replace("&", "§").replace("@time", String.valueOf(run)).replace("@name", config.getString("Evento.Title")));
                 run-=1;
@@ -203,11 +209,12 @@ public class BatataQuente extends Evento {
         }, (max_time - 5) * 20L, 20L);
 
         // Se o portador da batata for o mesmo depois do tempo limite, então o elimine e defina outro.
+        int finalCurrent_potato_holder_changes1 = current_potato_holder_changes;
         aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
 
             if(!isHappening()) return;
             if(!getPlayers().contains(p)) return;
-            if(potato_holder != p) return;
+            if(potato_holder_changes != finalCurrent_potato_holder_changes1) return;
             if(getPotatoHolder() == null) return;
 
             potato_holder.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
@@ -227,5 +234,6 @@ public class BatataQuente extends Evento {
     public Player getPotatoHolder() {
         return potato_holder;
     }
+    public int getPotatoHolderChanges() { return potato_holder_changes; }
 
 }

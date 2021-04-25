@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
@@ -83,6 +84,11 @@ public class HunterListener implements Listener {
     public void onPickup(PlayerPickupItemEvent e) {
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
         e.setCancelled(true);
     }
 

@@ -103,6 +103,8 @@ public class SignListener implements Listener {
 
         // Se a entidade não for um jogador, não for dano de queda, ou o mesmo não está no evento, retorne.
         if(e.getEntityType() != EntityType.PLAYER) return;
+        if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK || e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) return;
+
         Player p = (Player) e.getEntity();
 
         if(evento == null) return;

@@ -46,6 +46,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -291,6 +292,10 @@ public class Guerra extends Evento {
         getPlayers().add(p);
         teleport(p, "lobby");
 
+        for(PotionEffect potion: p.getActivePotionEffects()) {
+            p.removePotionEffect(potion.getType());
+        }
+
         for (Player player : getPlayers()) {
             player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Joined").replace("&", "§").replace("@player", p.getName()));
         }
@@ -397,10 +402,6 @@ public class Guerra extends Evento {
                 if(!actionbar_enabled) Bukkit.getScheduler().cancelTask(task3);
 
                 for(Player player: getPlayers()) {
-                    ActionBar.sendActionBar(player, config.getString("Actionbar.Pickup").replace("&", "§").replace("@time", String.valueOf(pickup_time - run)));
-                }
-
-                for(Player player: getSpectators()) {
                     ActionBar.sendActionBar(player, config.getString("Actionbar.Pickup").replace("&", "§").replace("@time", String.valueOf(pickup_time - run)));
                 }
 

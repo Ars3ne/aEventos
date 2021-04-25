@@ -36,6 +36,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -321,6 +322,10 @@ public class Evento implements EventoInterface{
         players.add(p);
         this.teleport(p, "lobby");
 
+        for(PotionEffect potion: p.getActivePotionEffects()) {
+            p.removePotionEffect(potion.getType());
+        }
+
         for (Player player : players) {
             player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Joined").replace("&", "§").replace("@player", p.getName()));
         }
@@ -374,6 +379,10 @@ public class Evento implements EventoInterface{
         spectators.remove(p);
         this.teleport(p, "exit");
 
+        for(PotionEffect potion: p.getActivePotionEffects()) {
+            p.removePotionEffect(potion.getType());
+        }
+
         if(this.empty_inventory) p.getInventory().clear();
 
         if(!this.open && this.elimination && players.size() == 1) {
@@ -406,7 +415,6 @@ public class Evento implements EventoInterface{
 
     public void executeConsoleCommand(Player p, String command) {
 
-        // TODO: Fazer as configurações do Bungeecord terem efeito.
         if(this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
             BungeecordHook.executeCommand(p.getName(), command, config.getString("Locations.Server"));
         }else {
