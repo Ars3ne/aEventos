@@ -304,7 +304,8 @@ public class Evento implements EventoInterface{
 
         EventoStopEvent stop = new EventoStopEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(stop);
-        
+
+        aEventos.getCache().updateCache();
         aEventos.getEventoManager().startEvento(EventoType.NONE, null);
     }
 

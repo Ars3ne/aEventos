@@ -30,7 +30,7 @@ package com.ars3ne.eventos.listeners;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.commands.EventoCommand;
 import com.ars3ne.eventos.hooks.BungeecordHook;
-import com.ars3ne.eventos.utils.ConfigFile;
+import com.ars3ne.eventos.utils.EventoConfigFile;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -171,7 +171,7 @@ public class EventoListener implements Listener {
                 settings.set("Locations.Pos1.z", e.getClickedBlock().getZ());
 
                 try {
-                    ConfigFile.save(settings);
+                    EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
                     e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
@@ -190,7 +190,7 @@ public class EventoListener implements Listener {
                 settings.set("Locations.Pos2.z", e.getClickedBlock().getZ());
 
                 try {
-                    ConfigFile.save(settings);
+                    EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
                     e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
@@ -217,7 +217,7 @@ public class EventoListener implements Listener {
                 settings.set("Locations.Pos3.z", e.getClickedBlock().getZ());
 
                 try {
-                    ConfigFile.save(settings);
+                    EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
                     e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
@@ -236,7 +236,7 @@ public class EventoListener implements Listener {
                 settings.set("Locations.Pos4.z", e.getClickedBlock().getZ());
 
                 try {
-                    ConfigFile.save(settings);
+                    EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
                     e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));

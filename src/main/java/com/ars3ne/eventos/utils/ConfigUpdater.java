@@ -28,9 +28,8 @@
 package com.ars3ne.eventos.utils;
 
 import com.ars3ne.eventos.api.EventoType;
-import com.cryptomorin.xseries.XMaterial;
+import com.ars3ne.eventos.utils.converters.config.LegacySerializerConverter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -51,7 +50,6 @@ import java.util.stream.Collectors;
  * If a key has an attached comment above it, it is written first.
  * @author tchristofferson
  */
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class ConfigUpdater {
 
     /**
@@ -258,7 +256,7 @@ public class ConfigUpdater {
             } else if (value instanceof List) {
                 builder.append(getListAsString((List) value, actualKey, prefixSpaces.toString(), yaml));
             } else {
-                builder.append(prefixSpaces.toString()).append(actualKey).append(": ").append(yaml.dump(value));
+                builder.append(prefixSpaces).append(actualKey).append(": ").append(yaml.dump(value));
             }
         }
     }
@@ -348,13 +346,12 @@ public class ConfigUpdater {
     }
 
     // Atualiza as configurações dos eventos.
-    @SuppressWarnings("deprecation")
     public static void updateEventos() {
 
-        for (File file : Objects.requireNonNull(ConfigFile.getAllFiles())) {
+        for (File file : Objects.requireNonNull(EventoConfigFile.getAllFiles())) {
 
             if(file.getName().contains("old")) continue;
-            YamlConfiguration config = ConfigFile.get(file.getName().substring(0, file.getName().length() - 4));
+            YamlConfiguration config = EventoConfigFile.get(file.getName().substring(0, file.getName().length() - 4));
 
             if(config.getString("Evento.Type") == null) continue;
 
@@ -363,9 +360,9 @@ public class ConfigUpdater {
                 if(config.getConfigurationSection("Locations") == null) continue;
                 config.set("Locations.Server", "null");
                 try {
-                    ConfigFile.save(config);
+                    EventoConfigFile.save(config);
                 } catch (IOException e) {
-                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível atualizar o arquivo de configuração.");
                     e.printStackTrace();
                 }
             }
@@ -373,159 +370,11 @@ public class ConfigUpdater {
             // Converter itens. TODO: Converter para o novo serializer.
             if (EventoType.getEventoType(config.getString("Evento.Type")) == EventoType.FIGHT) {
 
-                // Se for a config antiga, converta os items.
-                if(config.getString("Items.Normal.Armor.Helmet.Material") == null) {
-
-                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
-
-                    // Luta normal
-                    List<String> normal_items = new ArrayList<>();
-                    for (String s : config.getStringList("Items.Normal.Inventory")) {
-                        String[] separated = s.split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        separated[0] = replace.toString();
-                        normal_items.add(String.join("-", separated));
-                    }
-                    config.set("Items.Normal.Inventory", normal_items);
-
-                    if (config.getString("Items.Normal.Armor.Helmet") != null) {
-                        String[] separated = config.getString("Items.Normal.Armor.Helmet").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Normal.Armor.Helmet.Material", replace.toString());
-                    }else {
-                        config.set("Items.Normal.Armor.Helmet.Material", "null");
-                    }
-                    config.set("Items.Normal.Armor.Helmet.Data", 0);
-
-                    if (config.getString("Items.Normal.Armor.Chestplate") != null) {
-                        String[] separated = config.getString("Items.Normal.Armor.Chestplate").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Normal.Armor.Chestplate.Material", replace.toString());
-                    }else {
-                        config.set("Items.Normal.Armor.Chestplate.Material", "null");
-                    }
-                    config.set("Items.Normal.Armor.Chestplate.Data", 0);
-
-                    if (config.getString("Items.Normal.Armor.Legging") != null) {
-                        String[] separated = config.getString("Items.Normal.Armor.Legging").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Normal.Armor.Legging.Material", replace.toString());
-                    }else {
-                        config.set("Items.Normal.Armor.Legging.Material", "null");
-                    }
-                    config.set("Items.Normal.Armor.Legging.Data", 0);
-
-                    if (config.getString("Items.Normal.Armor.Boots") != null) {
-                        String[] separated = config.getString("Items.Normal.Armor.Boots").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Normal.Armor.Boots.Material", replace.toString());
-                    }else {
-                        config.set("Items.Normal.Armor.Boots.Material", "null");
-                    }
-                    config.set("Items.Normal.Armor.Boots.Data", 0);
-
-                    // Última luta
-                    List<String> last_items = new ArrayList<>();
-                    for (String s : config.getStringList("Items.Last fight.Inventory")) {
-                        String[] separated = s.split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        separated[0] = replace.toString();
-                        last_items.add(String.join("-", separated));
-                    }
-                    config.set("Items.Last fight.Inventory", last_items);
-
-                    if (config.getString("Items.Last fight.Armor.Helmet") != null) {
-                        String[] separated = config.getString("Items.Last fight.Armor.Helmet").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Last fight.Armor.Helmet.Material", replace.toString());
-                    }else {
-                        config.set("Items.Last fight.Armor.Helmet.Material", "null");
-                    }
-                    config.set("Items.Last fight.Armor.Helmet.Data", 0);
-
-                    if (config.getString("Items.Last fight.Armor.Chestplate") != null) {
-                        String[] separated = config.getString("Items.Last fight.Armor.Chestplate").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Last fight.Armor.Chestplate.Material", replace.toString());
-                    }else {
-                        config.set("Items.Last fight.Armor.Chestplate.Material", "null");
-                    }
-                    config.set("Items.Last fight.Armor.Chestplate.Data", 0);
-
-                    if (config.getString("Items.Last fight.Armor.Legging") != null) {
-                        String[] separated = config.getString("Items.Last fight.Armor.Legging").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Last fight.Armor.Legging.Material", replace.toString());
-                    }else {
-                        config.set("Items.Last fight.Armor.Legging.Material", "null");
-                    }
-                    config.set("Items.Last fight.Armor.Legging.Data", 0);
-
-                    if (config.getString("Items.Last fight.Armor.Boots") != null) {
-                        String[] separated = config.getString("Items.Last fight.Armor.Boots").split("-");
-                        Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                        assert replace != null;
-                        config.set("Items.Last fight.Armor.Boots.Material", replace.toString());
-                    }else {
-                        config.set("Items.Last fight.Armor.Boots.Material", "null");
-                    }
-                    config.set("Items.Last fight.Armor.Boots.Data", 0);
-
-                    try {
-                        ConfigFile.save(config);
-                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
-                    } catch (IOException e) {
-                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
-                        e.printStackTrace();
-                    }
-
-                }
-
+                boolean converted = LegacySerializerConverter.convertFight(config);
 
             }else if(EventoType.getEventoType(config.getString("Evento.Type")) == EventoType.SPLEEF) {
 
-                List<String> items = config.getStringList("Items");
-                if(items != null) {
-
-                    // Se for a config antiga, converta os items.
-                    try{
-
-                        Integer.parseInt(items.get(0).split("-")[0]);
-
-                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
-
-                        List<String> new_items = new ArrayList<>();
-                        for(String item: items) {
-                            String[] separated = item.split("-");
-                            Material replace = XMaterial.matchXMaterial(Integer.parseInt(separated[0]), (byte) 0).get().parseMaterial();
-                            assert replace != null;
-                            separated[0] = replace.toString();
-                            new_items.add(String.join("-", separated));
-                        }
-
-                        config.set("Items", new_items);
-
-                        try {
-                            ConfigFile.save(config);
-                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
-                        } catch (IOException e) {
-                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
-                            e.printStackTrace();
-                        }
-
-
-                    }catch(NumberFormatException ignored) { }
-
-                }
+                boolean converted = LegacySerializerConverter.convertSpleef(config);
 
             }
 

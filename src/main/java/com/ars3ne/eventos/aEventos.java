@@ -33,8 +33,10 @@ import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.hooks.LegendChatHook;
 import com.ars3ne.eventos.listeners.EventoListener;
 import com.ars3ne.eventos.manager.*;
-import com.ars3ne.eventos.utils.ConfigFile;
 import com.ars3ne.eventos.utils.ConfigUpdater;
+import com.ars3ne.eventos.utils.EventoConfigFile;
+import com.ars3ne.eventos.utils.MenuConfigFile;
+import com.henryfabio.minecraft.inventoryapi.manager.InventoryManager;
 import net.milkbowl.vault.economy.Economy;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Bukkit;
@@ -53,8 +55,8 @@ public class aEventos extends JavaPlugin {
     private static final EventosManager manager = new EventosManager();
     private static final EventosChatManager chat_manager = new EventosChatManager();
     private static final TagManager tag_manager = new TagManager();
+    private static final Cache cache = new Cache();
     private final AutoStarter autostart = new AutoStarter();
-
     private SimpleClans clan = null;
     private static final LegendChatHook lc_hook = new LegendChatHook();
     private Economy econ = null;
@@ -78,6 +80,8 @@ public class aEventos extends JavaPlugin {
             setupAddons();
 
             autostart.setup();
+            cache.updateCache();
+            InventoryManager.enable(this);
 
             // Se tem suporte para o Bungeecord, então registre os canais.
             if(getConfig().getBoolean("Bungeecord.Enabled")) {
@@ -119,25 +123,38 @@ public class aEventos extends JavaPlugin {
 
         if(!settings.exists()) {
 
-            ConfigFile.create("parkour");
-            ConfigFile.create("campominado");
-            ConfigFile.create("spleef");
-            ConfigFile.create("corrida");
-            ConfigFile.create("semaforo");
-            ConfigFile.create("batataquente");
-            ConfigFile.create("frog");
-            ConfigFile.create("fight");
-            ConfigFile.create("killer");
-            ConfigFile.create("sumo");
-            ConfigFile.create("astronauta");
-            ConfigFile.create("paintball");
-            ConfigFile.create("votacao");
-            ConfigFile.create("hunter");
-            ConfigFile.create("quiz");
-            ConfigFile.create("anvil");
-            ConfigFile.create("loteria");
-            ConfigFile.create("bolao");
-            ConfigFile.create("gladiador");
+            // Configurações de Eventos
+            EventoConfigFile.create("parkour");
+            EventoConfigFile.create("campominado");
+            EventoConfigFile.create("spleef");
+            EventoConfigFile.create("corrida");
+            EventoConfigFile.create("semaforo");
+            EventoConfigFile.create("batataquente");
+            EventoConfigFile.create("frog");
+            EventoConfigFile.create("fight");
+            EventoConfigFile.create("killer");
+            EventoConfigFile.create("sumo");
+            EventoConfigFile.create("astronauta");
+            EventoConfigFile.create("paintball");
+            EventoConfigFile.create("votacao");
+            EventoConfigFile.create("hunter");
+            EventoConfigFile.create("quiz");
+            EventoConfigFile.create("anvil");
+            EventoConfigFile.create("loteria");
+            EventoConfigFile.create("bolao");
+            EventoConfigFile.create("gladiador");
+
+        }
+
+        // Se o arquivo menus/main.yml não existe, então crie os arquivos de configuração dos menus.
+        File gui_settings = new File(aEventos.getInstance().getDataFolder() + "/menus/main.yml");
+
+        if(!gui_settings.exists()) {
+
+            // Configurações da GUI
+            MenuConfigFile.create("main");
+            MenuConfigFile.create("eventos");
+            MenuConfigFile.create("top_players");
 
         }
 
@@ -225,6 +242,8 @@ public class aEventos extends JavaPlugin {
     }
 
     public Economy getEconomy() { return this.econ; }
+
+    public static Cache getCache() { return cache; }
 
     public boolean isHookedMassiveFactions() { return this.hooked_massivefactions; }
 

@@ -29,7 +29,7 @@ package com.ars3ne.eventos.manager;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
-import com.ars3ne.eventos.utils.ConfigFile;
+import com.ars3ne.eventos.utils.EventoConfigFile;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -45,11 +45,11 @@ public class TagManager {
     public void setup() {
         // Não estou orgulhoso dessa gambiarra, mas é o que temos para hoje.
         // Leia todos os arquivos de configuração de eventos e adicione as suas tags a lista.
-        for (File file : Objects.requireNonNull(ConfigFile.getAllFiles())) {
+        for (File file : Objects.requireNonNull(EventoConfigFile.getAllFiles())) {
 
             if(file.getName().contains("old")) continue;
             // Adicione o evento á database.
-            YamlConfiguration config = ConfigFile.get(file.getName().substring(0, file.getName().length() - 4));
+            YamlConfiguration config = EventoConfigFile.get(file.getName().substring(0, file.getName().length() - 4));
 
             if (config.getConfigurationSection("Rewards.Tag") == null) continue;
             if (!config.getBoolean("Rewards.Tag.Enabled")) continue;

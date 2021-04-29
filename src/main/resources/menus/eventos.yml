@@ -1,0 +1,20 @@
+Menu:
+  Name: "Lista de Eventos:"
+  Size: 36
+  Items:
+    Back:
+      Enabled: true
+      Slot: 23
+      Name: "&eVoltar"
+      Material: PLAYER_HEAD
+      Custom head: true # Caso seja uma cabeça com textura customizada, coloque true.
+      Head data: "bd69e06e5dadfd84e5f3d1c21063f2553b2fa945ee1d4d7152fdc5425bc12a9" # Caso seja uma cabeça com textura, coloque o ID da textura. Se for de um jogador, então coloque o seu nome.
+    Eventos:
+      # Você não precisa especificar o slot, já que ele será calculado de forma automática.
+      # A ordem de aparição dos eventos será a mesma do que aparecem aqui.
+      parkour: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eParkour"
+        Material: DIAMOND_BOOTS
+        Lore:
+          - "&eHorário: &fTodos os dias!"

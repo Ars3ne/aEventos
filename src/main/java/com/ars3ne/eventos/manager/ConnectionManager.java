@@ -29,19 +29,19 @@ package com.ars3ne.eventos.manager;
 
 import com.ars3ne.eventos.aEventos;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class ConnectionManager {
@@ -132,10 +132,6 @@ public class ConnectionManager {
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
         }
     }
-
-    /*public Connection getConnection() {
-        return connection;
-    }*/
 
     public void createEvento(String name) {
 
@@ -416,4 +412,133 @@ public class ConnectionManager {
         }
 
     }
+
+    public Map<String, Integer> getPlayerWins(UUID uuid) {
+
+        Map<String, Integer> wins = new HashMap<>();
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT wins FROM aeventos_users WHERE uuid=?");
+            statement.setString(1,uuid.toString());
+            ResultSet results = statement.executeQuery();
+            if(results.next()) {
+
+                JsonObject jsonObject = (new JsonParser()).parse(results.getString("wins")).getAsJsonObject();
+
+                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                for(Map.Entry<String,JsonElement> entry : entrySet){
+                    wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                }
+
+                return wins;
+
+            }else {
+                return null;
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as vitórias de um jogador. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+        return null;
+
+    }
+
+    public Map<String, Integer> getPlayerParticipations(UUID uuid) {
+
+        Map<String, Integer> participations = new HashMap<>();
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT participations FROM aeventos_users WHERE uuid=?");
+            statement.setString(1,uuid.toString());
+            ResultSet results = statement.executeQuery();
+            if(results.next()) {
+
+                JsonObject jsonObject = (new JsonParser()).parse(results.getString("participations")).getAsJsonObject();
+
+                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                for(Map.Entry<String,JsonElement> entry : entrySet){
+                    participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                }
+
+                return participations;
+
+            }else {
+                return null;
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as participações de um jogador. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+        return null;
+
+    }
+
+    public void getPlayersWins() {
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT uuid,wins FROM aeventos_users");
+            ResultSet results = statement.executeQuery();
+            while(results.next()) {
+
+                Map<String, Integer> wins = new HashMap<>();
+
+                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(results.getString("uuid")));
+                JsonObject jsonObject = (new JsonParser()).parse(results.getString("wins")).getAsJsonObject();
+
+                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                for(Map.Entry<String,JsonElement> entry : entrySet){
+                    wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                }
+
+                aEventos.getCache().getPlayerWinsList().put(player, wins);
+
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as vitórias. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+    }
+
+    public void getPlayersParticipations() {
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT uuid,participations FROM aeventos_users");
+            ResultSet results = statement.executeQuery();
+            while(results.next()) {
+
+                Map<String, Integer> participations = new HashMap<>();
+
+                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(results.getString("uuid")));
+                JsonObject jsonObject = (new JsonParser()).parse(results.getString("participations")).getAsJsonObject();
+
+                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                for(Map.Entry<String,JsonElement> entry : entrySet){
+                    participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                }
+
+                aEventos.getCache().getPlayerParticipationsList().put(player, participations);
+
+            }
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as participações. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+    }
+
 }

@@ -29,11 +29,15 @@ AutoStart:
   Enabled: true
   Times:
     # Formato: (dia)-<nome do arquivo de configuração do evento>-<horário>
-    # O dia é opicional, porém o nome do arquivo de configuração e o horário são obrigatórios. O nome do dia deve estar em inglês.
+    # O dia é opicional, porém o nome do arquivo de configuração e o horário são obrigatórios. O nome do dia deve estar em inglês ou em português.
     # Caso o dia não esteja presente, o evento acontecerá todos os dias no horário especificado.
 
     - "parkour-20:30"
     - "sunday-campominado-18:00"
+
+Enable GUI: true # O plugin deve usar GUI?
+
+Hook: "simpleclans" # Qual plugin de clã ou facção o plugin deve usar? Opções disponíveis: "simpleclans", "massivefactions" e "yclans" (experimental)
 
 Bungeecord:
   # Informações importantes:
@@ -47,8 +51,7 @@ Bungeecord:
   Send to default: false # Quando o evento acabar, os jogadores devem ser mandados para o servidor padrão? Caso esteja desativado, o jogador será mandado de volta para o mesmo servidor que ele entrou no evento.
   Commands on default: false # Os comandos de vitória devem ser executados no servidor padrão? Caso esteja desativado, os comandos serão executados no servidor que o jogador usou para entrar no evento.
 
-# O plugin deve procurar por novas versões automaticamente?
-UpdateChecker: true
+UpdateChecker: true # O plugin deve procurar por novas versões automaticamente?
 
 Messages:
   No event: "&3[Evento] &bNão está ocorrendo nenhum evento no momento!"

@@ -1,0 +1,48 @@
+Menu:
+  Size: 27
+  Items:
+    Player:
+      Name: "&e@top_player"
+      Lore:
+        - "&ePosição: &f#@position"
+        - ""
+        - "&eVitórias: &f@total_wins"
+        - "&3Participações: &f@total_participations"
+        - ""
+        - "&eVitórias por evento:"
+        - "@eventos_lore"
+        - ""
+
+Filter:
+  Default: "wins" # O filtro padrão. Lista de filtros: "wins", "victory", "participations".
+  Enabled: true # Os jogadores podem mudar o filtro? Se estiver como false, será usado o filtro definido no "Default."
+  Specific eventos: true # Os jogadores poderão filtrar por eventos específicos?
+  Names: # Nome do inventário para cada filtro.
+    Wins: "Top Vitórias:"
+    Participations: "TOP Participações:"
+    Evento wins: "TOP Vitórias @evento_name"
+
+Eventos:
+  Enabled: true # Mostrar as vitórias e participações de eventos específicos na lore?
+  Format:
+    - " &8- &e@evento_name: &f@evento_wins"
+  List:
+    # Lista de eventos que serão mostrados na lore. A ordem será a mesma dessa lista.
+    # Formato: nome_do_arquivo_de_configuração:Nome na lore.
+    # Os seguintes eventos não podem ser colocados, já que não contam nem vitórias ou participações: VOTACAO
+    "parkour:Parkour"
+    "campominado:Campo Minado"
+    "spleef:Spleef"
+    "corrida:Corrida"
+    "semaforo:Semáforo"
+    "batataquente:Batata Quente"
+    "frog:Frog"
+    "fight:Figt"
+    "killer:Killer"
+    "sumo:Sumô"
+    "astronauta:Astronauta"
+    "paintball:Paintball"
+    "hunter:Hunter"
+    "quiz:Quiz"
+    "anvil:Anvil"
+    "gladiador:Gladiador"

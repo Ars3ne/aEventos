@@ -29,7 +29,7 @@ package com.ars3ne.eventos.manager;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
-import com.ars3ne.eventos.utils.ConfigFile;
+import com.ars3ne.eventos.utils.EventoConfigFile;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
@@ -67,13 +67,13 @@ public class AutoStarter {
                             && cal.get(Calendar.SECOND) <= 10) {
 
                         // Se o evento não existe, envie um erro para o console.
-                        if(!ConfigFile.exists(separated[1])) {
+                        if(!EventoConfigFile.exists(separated[1])) {
                             Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                             return;
                         }
 
                         // Inicie o evento.
-                        config = ConfigFile.get(separated[1]);
+                        config = EventoConfigFile.get(separated[1]);
 
                         if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
@@ -89,13 +89,13 @@ public class AutoStarter {
                             && cal.get(Calendar.SECOND) <= 10) {
 
                         // Se o evento não existe, envie um erro para o console.
-                        if(!ConfigFile.exists(separated[0])) {
+                        if(!EventoConfigFile.exists(separated[0])) {
                             Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                             return;
                         }
 
                         // Inicie o evento.
-                        config = ConfigFile.get(separated[0]);
+                        config = EventoConfigFile.get(separated[0]);
 
                         if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
@@ -115,26 +115,26 @@ public class AutoStarter {
     }
 
     private int getDay(String day) {
-        switch (day) {
-            case "sunday":
+        switch (day.toLowerCase()) {
+            case "sunday": case "segunda":
                 day = "1";
                 break;
-            case "monday":
+            case "monday": case "terca": case "terça":
                 day = "2";
                 break;
-            case "tuesday":
+            case "tuesday": case "quarta":
                 day = "3";
                 break;
-            case "wednesday":
+            case "wednesday": case "quinta":
                 day = "4";
                 break;
-            case "thursday":
+            case "thursday": case "sexta":
                 day = "5";
                 break;
-            case "friday":
+            case "friday": case "sabado": case "sábado":
                 day = "6";
                 break;
-            case "saturday":
+            case "saturday": case "domingo":
                 day = "7";
                 break;
             default:

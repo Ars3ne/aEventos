@@ -30,7 +30,8 @@ package com.ars3ne.eventos.commands;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.hooks.BungeecordHook;
-import com.ars3ne.eventos.utils.ConfigFile;
+import com.ars3ne.eventos.manager.InventoryManager;
+import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.Utils;
 import com.cryptomorin.xseries.XItemStack;
 import org.bukkit.Material;
@@ -61,6 +62,13 @@ public class EventoCommand implements CommandExecutor {
 
                 // Se não está acontecendo nenhum evento, então envie as mensagens com os comandos.
                 if(aEventos.getEventoManager().getEvento() == null) {
+
+                    // Se o GUI estiver ativado, então abra o inventário principal.
+                    if(aEventos.getInstance().getConfig().getBoolean("Enable GUI")) {
+                        if(sender instanceof Player) {
+                            InventoryManager.openMainInventory((Player)sender);
+                        }
+                    }
 
                     // Se tiver a permissão de admin, então mande os comandos de admin.
                     if(sender.hasPermission("aeventos.admin")) {
@@ -254,6 +262,7 @@ public class EventoCommand implements CommandExecutor {
 
                     aEventos.getInstance().reloadConfig();
                     aEventos.updateTags();
+                    InventoryManager.reload();
 
                     sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Reloaded").replace("&", "§"));
                     return true;
@@ -282,13 +291,13 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Tente obter o evento para ser iniciado. Se for inválido, mande um erro.
-                    if(!ConfigFile.exists(args[1].toLowerCase())) {
+                    if(!EventoConfigFile.exists(args[1].toLowerCase())) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                         return true;
                     }
 
                     // Inicie o evento.
-                    YamlConfiguration config = ConfigFile.get(args[1].toLowerCase());
+                    YamlConfiguration config = EventoConfigFile.get(args[1].toLowerCase());
 
                     if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
                         boolean started = aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
@@ -325,13 +334,13 @@ public class EventoCommand implements CommandExecutor {
                     }
 
                     // Se o arquivo de configuração já existir, mande um erro.
-                    if (ConfigFile.exists(args[1].toLowerCase())) {
+                    if (EventoConfigFile.exists(args[1].toLowerCase())) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration already exists").replace("&", "§"));
                         return true;
                     }
 
                     // Crie o arquivo de configuração e atualize as tags.
-                    ConfigFile.create(args[1].toLowerCase());
+                    EventoConfigFile.create(args[1].toLowerCase());
                     aEventos.updateTags();
 
                     sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration created").replace("&", "§").replace("@file", args[1].toLowerCase() + ".yml"));
@@ -382,7 +391,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Entrance.pitch", p.getLocation().getPitch());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -403,7 +412,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Exit.pitch", p.getLocation().getPitch());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -424,7 +433,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Lobby.pitch", p.getLocation().getPitch());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -445,7 +454,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Spectator.pitch", p.getLocation().getPitch());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -511,7 +520,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos1.z", p.getLocation().getZ());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -537,7 +546,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos2.z", p.getLocation().getZ());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -563,7 +572,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos3.z", p.getLocation().getZ());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -589,7 +598,7 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos4.z", p.getLocation().getZ());
 
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -641,7 +650,7 @@ public class EventoCommand implements CommandExecutor {
                             }
                             
                             try {
-                                ConfigFile.save(settings);
+                                EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
@@ -667,13 +676,13 @@ public class EventoCommand implements CommandExecutor {
 
                     }else {
                         // Se não, tente achar o evento e adicione o usuário á lista. Se for inválido, mande um erro.
-                        if(!ConfigFile.exists(args[1].toLowerCase())) {
+                        if(!EventoConfigFile.exists(args[1].toLowerCase())) {
                             sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
                             return true;
                         }
 
                         // Obtenha a configuração do evento, adicione o usuário a lista e mostre a mensagem com os comandos.
-                        YamlConfiguration config = ConfigFile.get(args[1].toLowerCase());
+                        YamlConfiguration config = EventoConfigFile.get(args[1].toLowerCase());
                         setup.put(p, config);
 
                         List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.Setup");

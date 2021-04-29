@@ -10,7 +10,6 @@ Evento:
   Permission: "aeventos.evento" # A permissão necessária para participar do evento.
   Count participation: true # Esse evento contará participação?
   Count victory: true # Esse evento contará vitória?
-  Hook: "simpleclans" # Qual plugin deve ser usado? Opções disponíveis: "simpleclans" e "massivefactions".
   Minimum guilds: 2 # O mínimo de clãs ou facções que devem estar presentes no evento para ele começar.
   Maximum per guild: 10 # O número máximo de jogadores por clã ou facção.
   Time: 20 # Tempo em segundos antes do PvP ser ativado.

@@ -28,7 +28,10 @@
 package com.ars3ne.eventos.api;
 
 import com.ars3ne.eventos.aEventos;
-import com.ars3ne.eventos.api.events.*;
+import com.ars3ne.eventos.api.events.EventoStartedEvent;
+import com.ars3ne.eventos.api.events.EventoStartingEvent;
+import com.ars3ne.eventos.api.events.EventoStopEvent;
+import com.ars3ne.eventos.api.events.PlayerWinEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -162,6 +165,7 @@ public class EventoChat implements EventoInterface{
         EventoStopEvent stop = new EventoStopEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(stop);
 
+        aEventos.getCache().updateCache();
         aEventos.getEventoChatManager().startEvento(EventoType.NONE, null);
     }
 

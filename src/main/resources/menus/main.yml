@@ -1,0 +1,33 @@
+Menu:
+  Name: "Eventos"
+  Size: 27
+  Items:
+    Profile:
+      Enabled: true
+      Slot: 11
+      Name: "&eSuas estatísticas"
+      Material: PLAYER_HEAD
+      Custom head: false # Caso seja uma cabeça com textura customizada, coloque true.
+      Head data: "@player" # Caso seja uma cabeça com textura, coloque o ID da textura. Se for de um jogador, então coloque o seu nome.
+      Lore:
+        - ""
+        - "&eVitórias: &f@wins"
+        - "&eParticipações: &f@participations"
+        - ""
+    Eventos:
+      Enabled: true
+      Slot: 13
+      Name: "&eEventos"
+      Material: GOLDEN_SHOVEL
+      Glow: false # O item deve ter o efeito de brilho?
+      Lore:
+        - "&eClique para ver a lista de eventos do servidor"
+    Top:
+      Enabled: true
+      Slot: 15
+      Name: "&eRanking"
+      Material: PLAYER_HEAD
+      Custom head: true # Caso seja uma cabeça com textura customizada, coloque true.
+      Head data: "e34a592a79397a8df3997c43091694fc2fb76c883a76cce89f0227e5c9f1dfe" # Caso seja uma cabeça com textura, coloque o ID da textura. Se for de um jogador, então coloque o seu nome.
+      Lore:
+        - "&eVeja o TOP de jogadores dos eventos!"

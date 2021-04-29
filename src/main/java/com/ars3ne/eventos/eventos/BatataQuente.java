@@ -153,7 +153,7 @@ public class BatataQuente extends Evento {
     public void setHolder(Player p, int current_potato_holder_changes) {
 
         if(!isHappening()) return;
-        potato_holder_team.removePlayer(potato_holder);
+        if(potato_holder != null) potato_holder_team.removePlayer(potato_holder);
 
         potato_holder = p;
         Bukkit.getScheduler().cancelTask(task);

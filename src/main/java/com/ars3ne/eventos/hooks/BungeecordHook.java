@@ -29,7 +29,7 @@ package com.ars3ne.eventos.hooks;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
-import com.ars3ne.eventos.utils.ConfigFile;
+import com.ars3ne.eventos.utils.EventoConfigFile;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -65,7 +65,7 @@ public class BungeecordHook implements PluginMessageListener {
                 String type = in.readUTF();
                 String config = in.readUTF();
                 if(aEventos.getEventoManager().getEvento() == null) {
-                    aEventos.getEventoManager().startEvento(EventoType.getEventoType(type), ConfigFile.get(config));
+                    aEventos.getEventoManager().startEvento(EventoType.getEventoType(type), EventoConfigFile.get(config));
                 }
 
             }
@@ -76,7 +76,7 @@ public class BungeecordHook implements PluginMessageListener {
                 String config = in.readUTF();
 
                 if(aEventos.getEventoManager().getEvento() == null) {
-                    aEventos.getEventoManager().startEvento(EventoType.getEventoType(type), ConfigFile.get(config));
+                    aEventos.getEventoManager().startEvento(EventoType.getEventoType(type), EventoConfigFile.get(config));
                 }
                 aEventos.getEventoManager().getEvento().startBungeecord();
 

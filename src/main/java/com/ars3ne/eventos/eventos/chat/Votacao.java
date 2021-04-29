@@ -30,7 +30,7 @@ package com.ars3ne.eventos.eventos.chat;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.api.EventoType;
-import com.ars3ne.eventos.utils.ConfigFile;
+import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -88,7 +88,7 @@ public class Votacao extends EventoChat {
             Random random = new Random();
             Object[] keyset = valid_alternatives.keySet().toArray();
 
-            YamlConfiguration config_evento = ConfigFile.get(alternatives.getKeys(false).toArray()[(int) keyset[random.nextInt(keyset.length)]].toString());
+            YamlConfiguration config_evento = EventoConfigFile.get(alternatives.getKeys(false).toArray()[(int) keyset[random.nextInt(keyset.length)]].toString());
             boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento);
             if(!started) {
                 Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§"));
@@ -113,7 +113,7 @@ public class Votacao extends EventoChat {
                 aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", name).replace("@name", config.getString("Evento.Title")));
             }
 
-            YamlConfiguration config_evento = ConfigFile.get(alternatives.getKeys(false).toArray()[Collections.max(total_votes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey()].toString());
+            YamlConfiguration config_evento = EventoConfigFile.get(alternatives.getKeys(false).toArray()[Collections.max(total_votes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey()].toString());
             boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento);
             if(!started) {
                 Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§"));
