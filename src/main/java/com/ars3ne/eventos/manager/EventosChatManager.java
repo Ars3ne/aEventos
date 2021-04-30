@@ -31,11 +31,13 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.eventos.chat.*;
+import com.ars3ne.eventos.listeners.EventoChatListener;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class EventosChatManager {
 
     private EventoChat evento = null;
+    private final EventoChatListener listener = new EventoChatListener();
 
     public boolean startEvento(EventoType type, YamlConfiguration config) {
 
@@ -56,9 +58,17 @@ public class EventosChatManager {
             case BOLAO:
                 this.evento = new Bolao(config);
                 break;
+            case MATEMATICA:
+                this.evento = new Matematica(config);
+                break;
+            case PALAVRA:
+                this.evento = new Palavra(config);
+                break;
         }
 
+        aEventos.getInstance().getServer().getPluginManager().registerEvents(listener, aEventos.getInstance());
         this.evento.startCall();
+
         return true;
 
     }

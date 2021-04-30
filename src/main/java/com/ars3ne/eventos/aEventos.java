@@ -143,6 +143,8 @@ public class aEventos extends JavaPlugin {
             EventoConfigFile.create("loteria");
             EventoConfigFile.create("bolao");
             EventoConfigFile.create("gladiador");
+            EventoConfigFile.create("matematica");
+            EventoConfigFile.create("palavra");
 
         }
 

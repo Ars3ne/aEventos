@@ -44,10 +44,10 @@ public class LegacySerializerConverter {
 
     public static boolean convertFight(YamlConfiguration config) {
 
+        if(config.getConfigurationSection("Itens") != null) return false;
+
         // Se for a config antiga, converta os items.
         if(config.getString("Items.Normal.Armor.Helmet.Material") == null) {
-
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
 
             // Luta normal
             List<String> normal_items = new ArrayList<>();
@@ -153,7 +153,6 @@ public class LegacySerializerConverter {
 
             try {
                 EventoConfigFile.save(config);
-                Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
             } catch (IOException e) {
                 Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
                 e.printStackTrace();
@@ -167,6 +166,8 @@ public class LegacySerializerConverter {
 
     public static boolean convertSpleef(YamlConfiguration config) {
 
+        if(config.getConfigurationSection("Itens") != null) return false;
+
         List<String> items = config.getStringList("Items");
         if(items != null) {
 
@@ -174,8 +175,6 @@ public class LegacySerializerConverter {
             try{
 
                 Integer.parseInt(items.get(0).split("-")[0]);
-
-                Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
 
                 List<String> new_items = new ArrayList<>();
                 for(String item: items) {
@@ -190,7 +189,6 @@ public class LegacySerializerConverter {
 
                 try {
                     EventoConfigFile.save(config);
-                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
                 } catch (IOException e) {
                     Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
                     e.printStackTrace();

@@ -29,6 +29,7 @@ package com.ars3ne.eventos.utils;
 
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.utils.converters.config.LegacySerializerConverter;
+import com.ars3ne.eventos.utils.converters.config.SerializerConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -368,13 +369,19 @@ public class ConfigUpdater {
             }
 
             // Converter itens. TODO: Converter para o novo serializer.
-            if (EventoType.getEventoType(config.getString("Evento.Type")) == EventoType.FIGHT) {
 
-                boolean converted = LegacySerializerConverter.convertFight(config);
+            switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
 
-            }else if(EventoType.getEventoType(config.getString("Evento.Type")) == EventoType.SPLEEF) {
-
-                boolean converted = LegacySerializerConverter.convertSpleef(config);
+                case FIGHT:
+                    LegacySerializerConverter.convertFight(config);
+                    SerializerConverter.convert(config);
+                    continue;
+                case SPLEEF:
+                    LegacySerializerConverter.convertSpleef(config);
+                    SerializerConverter.convert(config);
+                    continue;
+                default:
+                    break;
 
             }
 

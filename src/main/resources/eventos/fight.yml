@@ -13,49 +13,37 @@ Evento:
   Time: 5 # Tempo em segundos de intervalo entre as lutas.
   Fight time: 180 # Tempo máximo em segundos que uma luta pode ter.
 
-Items:
-  # Lista de materiais:
-  # 1.8.X - 1.12.X: https://www.digminecraft.com/lists/item_id_list_pc_1_12.php
-  # 1.13.X em diante: https://www.digminecraft.com/lists/item_id_list_pc.php
+Itnms:
+  # Você pode configurar esta seção o comando /evento setup kit <normal/last>
   # Itens para todas as lutas, exceto a final.
   Normal:
     Armor:
-      Helmet:
-        Material: 'AIR'
-        Data: 0
-      Chestplate:
-        Material: 'AIR'
-        Data: 0
-      Legging:
-        Material: 'AIR'
-        Data: 0
-      Boots:
-        Material: 'AIR'
-        Data: 0
+      Helmet: {}
+      Chestplate: {}
+      Leggings: {}
+      Boots: {}
     Inventory:
-      # FORMATO: <material>-(data)-<quantidade>
-      # O campo data é opicional, porém o material e a quantidade são obrigatórios.
-      - "WOOD_SWORD-1"
-
-  # Itens para a última luta.
+      '0': # Slot do item no inventário.
+        material: WOOD_SWORD
+        damage: 0
   Last fight:
     Armor:
       Helmet:
-        Material: "IRON_HELMET"
-        Data: 0
+        material: IRON_HELMET
+        damage: 0
       Chestplate:
-        Material: "IRON_CHESTPLATE"
-        Data: 0
-      Legging:
-        Material: "IRON_LEGGINGS"
-        Data: 0
+        material: IRON_CHESTPLATE
+        damage: 0
+      Leggings:
+        material: IRON_LEGGINGS
+        damage: 0
       Boots:
-        Material: "IRON_BOOTS"
-        Data: 0
+        material: IRON_BOOTS
+        damage: 0
     Inventory:
-      # FORMATO: <material>-(data)-<quantidade>
-      # O campo data é opicional, porém o material e a quantidade são obrigatórios.
-      - "IRON_SWORD-1"
+      '0': # Slot do item no inventário.
+        material: IRON_SWORD
+        damage: 0
 
 # Mensagens
 Messages:

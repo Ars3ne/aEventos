@@ -15,14 +15,21 @@ Evento:
   Kick time: 20 # O tempo limite para ficar parado em segundos.
 
 # Os itens que serão dados para os jogadores no início do evento.
-Items:
-  # Lista de materiais:
-  # 1.8.X - 1.12.X: https://www.digminecraft.com/lists/item_id_list_pc_1_12.php
-  # 1.13.X em diante: https://www.digminecraft.com/lists/item_id_list_pc.php
-  # FORMATO: <material>-(data)-<quantidade>
-  # O campo data é opicional, porém o material e a quantidade são obrigatórios.
-  - "STONE_SPADE-1"
-  - "SNOW_BALL-15"
+# Você pode configurar essa seção usando o comando /evento setup kit
+Itens:
+  Armor:
+    Helmet: {}
+    Chestplate: {}
+    Leggings: {}
+    Boots: {}
+  Inventory:
+    '0': # Slot do item no inventário.
+      material: STONE_SPADE
+      damage: 0
+    '1': # Slot do item no inventário.
+      material: SNOW_BALL
+      amount: 15
+      damage: 0
 
 # Mensagens
 Messages:

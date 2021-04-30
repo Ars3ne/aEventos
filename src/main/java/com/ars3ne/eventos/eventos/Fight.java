@@ -31,7 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.FightListener;
-import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XItemStack;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,11 +40,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class Fight extends Evento {
@@ -238,132 +236,60 @@ public class Fight extends Evento {
             // Se for a última luta, de os Items especiais.
             if(getPlayers().size() == 2) {
 
-                for(String s: config.getStringList("Items.Last fight.Inventory")) {
-
-                    String[] separated = s.split("-");
-                    ItemStack is;
-                    if(separated.length == 3) {
-                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[2]), (byte) Integer.parseInt(separated[1]));
-                    }else {
-                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[1]));
-                    }
-
-                    fighter1.getInventory().addItem(is);
-                    fighter2.getInventory().addItem(is);
+                for(String item: config.getConfigurationSection("Itens.Last fight.Inventory").getKeys(false)) {
+                    fighter1.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Inventory." + item)));
+                    fighter2.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Inventory." + item)));
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Helmet.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Helmet.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Last fight.Armor.Helmet.Data") != 0) {
-                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Helmet.Data")));
-                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Helmet.Data")));
-                    }else {
-                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Helmet.Material")).get().parseMaterial()), 1));
-                    }
+                if(config.getConfigurationSection("Itens.Last fight.Armor.Helmet") != null) {
+                    fighter1.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Helmet")));
+                    fighter2.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Helmet")));
 
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Chestplate.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Chestplate.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Last fight.Armor.Chestplate.Data") != 0) {
-                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Chestplate.Data")));
-                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Chestplate.Data")));
-                    }else {
-                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Chestplate.Material")).get().parseMaterial()), 1));
-                    }
-
+                if(config.getConfigurationSection("Itens.Last fight.Armor.Chestplate") != null) {
+                    fighter1.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Chestplate")));
+                    fighter2.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Chestplate")));
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Legging.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Legging.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Last fight.Armor.Legging.Data") != 0) {
-                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Legging.Data")));
-                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Legging.Data")));
-                    }else {
-                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Legging.Material")).get().parseMaterial()), 1));
-                    }
-
+                if(config.getConfigurationSection("Itens.Last fight.Armor.Leggings") != null) {
+                    fighter1.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Leggings")));
+                    fighter2.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Leggings")));
                 }
 
-                if(!config.getString("Items.Last fight.Armor.Boots.Material").equalsIgnoreCase("air") && !config.getString("Items.Last fight.Armor.Boots.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Last fight.Armor.Boots.Data") != 0) {
-                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Boots.Data")));
-                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Last fight.Armor.Boots.Data")));
-                    }else {
-                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Last fight.Armor.Boots.Material")).get().parseMaterial()), 1));
-                    }
-
+                if(config.getConfigurationSection("Itens.Last fight.Armor.Boots") != null) {
+                    fighter1.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Boots")));
+                    fighter2.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Armor.Boots")));
                 }
 
             }else {
 
-                // Se não for, então de os Items comuns.
-                for(String s: config.getStringList("Items.Normal.Inventory")) {
-
-                    String[] separated = s.split("-");
-                    ItemStack is;
-                    if(separated.length == 3) {
-                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[2]), (byte) Integer.parseInt(separated[1]));
-                    }else {
-                        is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[1]));
-                    }
-
-                    fighter1.getInventory().addItem(is);
-                    fighter2.getInventory().addItem(is);
+                for(String item: config.getConfigurationSection("Itens.Normal.Inventory").getKeys(false)) {
+                    fighter1.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Inventory." + item)));
+                    fighter2.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Inventory." + item)));
                 }
 
-                if(!config.getString("Items.Normal.Armor.Helmet.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Helmet.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Normal.Armor.Helmet.Data") != 0) {
-                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Helmet.Data")));
-                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Helmet.Data")));
-                    }else {
-                        fighter1.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setHelmet(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Helmet.Material")).get().parseMaterial()), 1));
-                    }
+                if(config.getConfigurationSection("Itens.Normal.Armor.Helmet") != null) {
+                    fighter1.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Helmet")));
+                    fighter2.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Helmet")));
 
                 }
 
-                if(!config.getString("Items.Normal.Armor.Chestplate.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Chestplate.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Normal.Armor.Chestplate.Data") != 0) {
-                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Chestplate.Data")));
-                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Chestplate.Data")));
-                    }else {
-                        fighter1.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setChestplate(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Chestplate.Material")).get().parseMaterial()), 1));
-                    }
-
+                if(config.getConfigurationSection("Itens.Normal.Armor.Chestplate") != null) {
+                    fighter1.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Chestplate")));
+                    fighter2.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Chestplate")));
                 }
 
-                if(!config.getString("Items.Normal.Armor.Legging.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Legging.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Normal.Armor.Legging.Data") != 0) {
-                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Legging.Data")));
-                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Legging.Data")));
-                    }else {
-                        fighter1.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setLeggings(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Legging.Material")).get().parseMaterial()), 1));
-                    }
-
+                if(config.getConfigurationSection("Itens.Normal.Armor.Leggings") != null) {
+                    fighter1.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Leggings")));
+                    fighter2.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Leggings")));
                 }
 
-                if(!config.getString("Items.Normal.Armor.Boots.Material").equalsIgnoreCase("air") && !config.getString("Items.Normal.Armor.Boots.Material").equalsIgnoreCase("null")) {
-
-                    if(config.getInt("Items.Normal.Armor.Boots.Data") != 0) {
-                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Boots.Data")));
-                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1, (byte) config.getInt("Items.Normal.Armor.Boots.Data")));
-                    }else {
-                        fighter1.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1));
-                        fighter2.getInventory().setBoots(new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(config.getString("Items.Normal.Armor.Boots.Material")).get().parseMaterial()), 1));
-                    }
-
+                if(config.getConfigurationSection("Itens.Normal.Armor.Boots") != null) {
+                    fighter1.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Boots")));
+                    fighter2.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Armor.Boots")));
                 }
+                
             }
 
             // Teleporte os lutadores.

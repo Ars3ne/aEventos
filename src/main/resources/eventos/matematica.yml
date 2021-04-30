@@ -1,0 +1,46 @@
+Evento:
+  # Configurações do evento.
+  Title: "Matemática" # O nome do evento. Será usado na placeholder @name.
+  Type: "matematica" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá?
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Permission: "aeventos.evento" # A permissão necessária para poder participar do evento.
+  Reward: 10000 # A recompensa do evento.
+  Min: 10 # O número mínimo que pode ser gerado nas questões.
+  Max: 1000 # O número máximo que pode ser gerado nas questões.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bQuanto é &f@sum&b?"
+    - "&3[@name] &bDigite o valor no chat para vencer."
+    - "&3[@name] &bPrêmio: &2$&f@reward &b+ &a[Matemática]"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - "&3[@name] &bA resposta era: &f@result&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - "&3[@name] &bA resposta era: &f@result&b!"
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_matematica" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_matematica}
+    Style: "&a[Matemática] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"

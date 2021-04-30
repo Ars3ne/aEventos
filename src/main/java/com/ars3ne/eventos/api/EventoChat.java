@@ -192,6 +192,10 @@ public class EventoChat implements EventoInterface{
 
     }
 
+    public void parsePlayerMessage(Player p, String message) {
+
+    }
+
     public YamlConfiguration getConfig() {
         return this.config;
     }

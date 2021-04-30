@@ -613,42 +613,117 @@ public class EventoCommand implements CommandExecutor {
                         else if(args[1].equalsIgnoreCase("kit") || args[1].equalsIgnoreCase("item") || args[1].equalsIgnoreCase("itens")) {
 
                             // Se o evento não possui itens, retorne.
-                            // TODO: Fazer compatível com os outros tipos de evento.
-                            
-                            if(EventoType.getEventoType(setup.get(p).get("Evento.Type").toString()) != EventoType.GUERRA && !setup.get(p).isSet("Itens")) {
+
+                            if(!setup.get(p).isSet("Itens")) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed kit").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
                                 return true;
                             }
 
-                            // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
-                            settings.set("Itens.Helmet", "");
-                            settings.set("Itens.Helmet.a", "shaark");
-                            settings.set("Itens.Chestplate", "");
-                            settings.set("Itens.Chestplate.a", "shaark");
-                            settings.set("Itens.Leggings", "");
-                            settings.set("Itens.Leggings.a", "shaark");
-                            settings.set("Itens.Boots", "");
-                            settings.set("Itens.Boots.a", "shaark");
+                            if(args.length >= 3) {
 
-                            if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Helmet"));
-                            if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Chestplate"));
-                            if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Leggings"));
-                            if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Boots"));
+                                if(setup.get(p).isSet("Itens.Normal")) {
 
-                            settings.set("Itens.Helmet.a", null);
-                            settings.set("Itens.Chestplate.a", null);
-                            settings.set("Itens.Leggings.a", null);
-                            settings.set("Itens.Boots.a", null);
+                                    if(args[2].equalsIgnoreCase("normal")) {
 
-                            settings.set("Itens.Inventory", "");
+                                        // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
+                                        settings.set("Itens.Normal.Armor.Helmet", "");
+                                        settings.set("Itens.Normal.Armor.Helmet.a", "shaark");
+                                        settings.set("Itens.Normal.Armor.Chestplate", "");
+                                        settings.set("Itens.Normal.Armor.Chestplate.a", "shaark");
+                                        settings.set("Itens.Normal.Armor.Leggings", "");
+                                        settings.set("Itens.Normal.Armor.Leggings.a", "shaark");
+                                        settings.set("Itens.Normal.Armor.Boots", "");
+                                        settings.set("Itens.Normal.Armor.Boots.a", "shaark");
 
-                            for(int i = 0; i < 36; i++) {
-                                if(p.getInventory().getItem(i) == null) continue;
-                                settings.set("Itens.Inventory." + i + ".a", "shaark");
-                                XItemStack.serialize(p.getInventory().getItem(i), settings.getConfigurationSection("Itens.Inventory." + i));
-                                settings.set("Itens.Inventory." + i + ".a", null);
+                                        if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Normal.Armor.Helmet"));
+                                        if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Normal.Armor.Chestplate"));
+                                        if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Normal.Armor.Leggings"));
+                                        if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Normal.Armor.Boots"));
+
+                                        settings.set("Itens.Normal.Armor.Helmet.a", null);
+                                        settings.set("Itens.Normal.Armor.Chestplate.a", null);
+                                        settings.set("Itens.Normal.Armor.Leggings.a", null);
+                                        settings.set("Itens.Normal.Armor.Boots.a", null);
+
+                                        settings.set("Itens.Normal.Armor.Inventory", "");
+
+                                        for(int i = 0; i < 36; i++) {
+                                            if(p.getInventory().getItem(i) == null) continue;
+                                            settings.set("Itens.Normal.Inventory." + i + ".a", "shaark");
+                                            XItemStack.serialize(p.getInventory().getItem(i), settings.getConfigurationSection("Itens.Normal.Inventory." + i));
+                                            settings.set("Itens.Normal.Inventory." + i + ".a", null);
+                                        }
+
+                                    }
+
+                                    if(args[2].equalsIgnoreCase("last") || args[2].equalsIgnoreCase("lastfight")) {
+
+                                        // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
+                                        settings.set("Itens.Last fight.Armor.Helmet", "");
+                                        settings.set("Itens.Last fight.Armor.Helmet.a", "shaark");
+                                        settings.set("Itens.Last fight.Armor.Chestplate", "");
+                                        settings.set("Itens.Last fight.Armor.Chestplate.a", "shaark");
+                                        settings.set("Itens.Last fight.Armor.Leggings", "");
+                                        settings.set("Itens.Last fight.Armor.Leggings.a", "shaark");
+                                        settings.set("Itens.Last fight.Armor.Boots", "");
+                                        settings.set("Itens.Last fight.Armor.Boots.a", "shaark");
+
+                                        if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Last fight.Armor.Helmet"));
+                                        if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Last fight.Armor.Chestplate"));
+                                        if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Last fight.Armor.Leggings"));
+                                        if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Last fight.Armor.Boots"));
+
+                                        settings.set("Itens.Last fight.Armor.Helmet.a", null);
+                                        settings.set("Itens.Last fight.Armor.Chestplate.a", null);
+                                        settings.set("Itens.Last fight.Armor.Leggings.a", null);
+                                        settings.set("Itens.Last fight.Armor.Boots.a", null);
+
+                                        settings.set("Itens.Last fight.Armor.Inventory", "");
+
+                                        for(int i = 0; i < 36; i++) {
+                                            if(p.getInventory().getItem(i) == null) continue;
+                                            settings.set("Itens.Last fight.Inventory." + i + ".a", "shaark");
+                                            XItemStack.serialize(p.getInventory().getItem(i), settings.getConfigurationSection("Itens.Last fight.Inventory." + i));
+                                            settings.set("Itens.Last fight.Inventory." + i + ".a", null);
+                                        }
+
+                                    }
+
+                                }
+
+                            }else {
+
+                                // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
+                                settings.set("Itens.Helmet", "");
+                                settings.set("Itens.Helmet.a", "shaark");
+                                settings.set("Itens.Chestplate", "");
+                                settings.set("Itens.Chestplate.a", "shaark");
+                                settings.set("Itens.Leggings", "");
+                                settings.set("Itens.Leggings.a", "shaark");
+                                settings.set("Itens.Boots", "");
+                                settings.set("Itens.Boots.a", "shaark");
+
+                                if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Helmet"));
+                                if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Chestplate"));
+                                if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Leggings"));
+                                if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Boots"));
+
+                                settings.set("Itens.Helmet.a", null);
+                                settings.set("Itens.Chestplate.a", null);
+                                settings.set("Itens.Leggings.a", null);
+                                settings.set("Itens.Boots.a", null);
+
+                                settings.set("Itens.Inventory", "");
+
+                                for(int i = 0; i < 36; i++) {
+                                    if(p.getInventory().getItem(i) == null) continue;
+                                    settings.set("Itens.Inventory." + i + ".a", "shaark");
+                                    XItemStack.serialize(p.getInventory().getItem(i), settings.getConfigurationSection("Itens.Inventory." + i));
+                                    settings.set("Itens.Inventory." + i + ".a", null);
+                                }
+
                             }
-                            
+
                             try {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);

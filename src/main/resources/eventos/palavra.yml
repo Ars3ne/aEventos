@@ -1,0 +1,47 @@
+Evento:
+  # Configurações do evento.
+  Title: "Palavra" # O nome do evento. Será usado na placeholder @name.
+  Type: "palavra" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá?
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Permission: "aeventos.evento" # A permissão necessária para poder participar do evento.
+  Reward: 10000 # A recompensa do evento.
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bDigite a seguinte palavra no chat: &f@word"
+    - "&3[@name] &bPrêmio: &2$&f@reward &b+ &3[Palavra]"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - "&3[@name] &bA resposta era: &f@result&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+
+Words: # Lista de palavras.
+  - "aEventos"
+  - "Teste"
+  - "Você tem que digitar essa frase EXATAMENTE desse 'g'eito."
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_palavra" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_palavra}
+    Style: "&3[Palavra] " # A aparência da tag.
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"

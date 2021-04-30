@@ -32,7 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.SpleefListener;
 import com.ars3ne.eventos.utils.Cuboid;
-import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,13 +41,11 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Spleef extends Evento {
 
@@ -93,23 +91,18 @@ public class Spleef extends Evento {
 
         listener.setEvento();
 
-        // De os itens para os jogadores.
-        for(String s: config.getStringList("Items")) {
+        for(Player p: getPlayers()) {
 
-            String[] separated = s.split("-");
+            if(config.getConfigurationSection("Itens.Helmet") != null) p.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Helmet")));
+            if(config.getConfigurationSection("Itens.Chestplate") != null)  p.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Chestplate")));
+            if(config.getConfigurationSection("Itens.Leggings") != null) p.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Leggings")));
+            if(config.getConfigurationSection("Itens.Boots") != null) p.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Boots")));
 
-            ItemStack is;
-            if(separated.length == 3) {
-                is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[2]), (byte) Integer.parseInt(separated[1]));
-            }else {
-                is = new ItemStack(Objects.requireNonNull(XMaterial.matchXMaterial(separated[0]).get().parseMaterial()), Integer.parseInt(separated[1]));
+            for(String item: config.getConfigurationSection("Itens.Inventory").getKeys(false)) {
+                p.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Inventory." + item)));
             }
-
-            for(Player p: getPlayers()) {
-                p.getInventory().addItem(is);
-            }
-
         }
+
 
         // Envie a mensagem para todos os usuários no evento.
         List<String> starting_level = config.getStringList("Messages.Enabling breaking");
