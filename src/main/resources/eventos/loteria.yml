@@ -5,6 +5,8 @@ Evento:
   Calls: 5 # Quantas chamadas o evento terá?
   Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
   Permission: "aeventos.evento" # A permissão necessária para poder participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
   Reward: 10000 # A recompensa do evento.
   Cost: 0 # O custo para apostar em um número.
   Max number: 100 # O número máximo que o plugin pode sortear. Nesse caso, será sorteado um número de 0 á 100.

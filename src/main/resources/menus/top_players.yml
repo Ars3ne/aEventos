@@ -1,17 +1,19 @@
 Menu:
-  Size: 27
+  Size: 45
+  Previous page slot: 39
+  Next page slot: 41
+  Empty page slot: 22
+  Item page limit: 21
   Items:
     Player:
       Name: "&e@top_player"
       Lore:
-        - "&ePosição: &f#@position"
+        - "&7Posição: &f#@position"
         - ""
-        - "&eVitórias: &f@total_wins"
-        - "&3Participações: &f@total_participations"
+        - "&7Vitórias: &f@total_wins &7(&f#@wins_position&7)"
+        - "&7Participações: &f@total_participations &7(&f#@participations_position&7)"
         - ""
-        - "&eVitórias por evento:"
-        - "@eventos_lore"
-        - ""
+        - "&7Vitórias e Participações por evento:"
 
 Filter:
   Default: "wins" # O filtro padrão. Lista de filtros: "wins", "victory", "participations".
@@ -20,29 +22,35 @@ Filter:
   Names: # Nome do inventário para cada filtro.
     Wins: "Top Vitórias:"
     Participations: "TOP Participações:"
-    Evento wins: "TOP Vitórias @evento_name"
 
 Eventos:
   Enabled: true # Mostrar as vitórias e participações de eventos específicos na lore?
-  Format:
-    - " &8- &e@evento_name: &f@evento_wins"
+  Format: " &8- &7@evento_name: &f@evento_wins &7| &f@evento_participations"
+  New line: true # Adicionar uma nova linha na lore depois dos eventos?
+  Only with wins: true # Mostrar apenas os eventos que o jogador tem pelo menos uma vitória?
   List:
     # Lista de eventos que serão mostrados na lore. A ordem será a mesma dessa lista.
     # Formato: nome_do_arquivo_de_configuração:Nome na lore.
+    # Os eventos em chat não contam participação.
     # Os seguintes eventos não podem ser colocados, já que não contam nem vitórias ou participações: VOTACAO
-    "parkour:Parkour"
-    "campominado:Campo Minado"
-    "spleef:Spleef"
-    "corrida:Corrida"
-    "semaforo:Semáforo"
-    "batataquente:Batata Quente"
-    "frog:Frog"
-    "fight:Figt"
-    "killer:Killer"
-    "sumo:Sumô"
-    "astronauta:Astronauta"
-    "paintball:Paintball"
-    "hunter:Hunter"
-    "quiz:Quiz"
-    "anvil:Anvil"
-    "gladiador:Gladiador"
+    - "parkour:Parkour"
+    - "campominado:Campo Minado"
+    - "spleef:Spleef"
+    - "corrida:Corrida"
+    - "semaforo:Semáforo"
+    - "batataquente:Batata Quente"
+    - "frog:Frog"
+    - "fight:Figt"
+    - "killer:Killer"
+    - "sumo:Sumô"
+    - "astronauta:Astronauta"
+    - "paintball:Paintball"
+    - "hunter:Hunter"
+    - "quiz:Quiz"
+    - "anvil:Anvil"
+    - "loteria:Loteria"
+    - "bolao:Bolão"
+    - "gladiador:Gladiador"
+    - "matematica:Matemática"
+    - "palavra:Palavra"
+    - "fastclick:FastClick"

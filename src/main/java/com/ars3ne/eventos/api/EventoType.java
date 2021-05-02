@@ -48,6 +48,7 @@ public enum EventoType {
     GUERRA,
     MATEMATICA,
     PALAVRA,
+    FAST_CLICK,
     NONE;
 
     public static EventoType getEventoType(String type) {
@@ -92,6 +93,8 @@ public enum EventoType {
                 return EventoType.MATEMATICA;
             case "palavra":
                 return EventoType.PALAVRA;
+            case "fastclick":
+                return EventoType.FAST_CLICK;
             default:
                 return EventoType.NONE;
         }
@@ -139,6 +142,8 @@ public enum EventoType {
                 return "matematica";
             case PALAVRA:
                 return "palavra";
+            case FAST_CLICK:
+                return "fastclick";
             default:
                 return "none";
         }
@@ -146,7 +151,7 @@ public enum EventoType {
 
     public static boolean isEventoChat(EventoType type) {
         switch(type) {
-            case VOTACAO: case LOTERIA: case BOLAO: case MATEMATICA: case PALAVRA:
+            case VOTACAO: case LOTERIA: case BOLAO: case MATEMATICA: case PALAVRA: case FAST_CLICK:
                 return true;
             default:
                 return false;

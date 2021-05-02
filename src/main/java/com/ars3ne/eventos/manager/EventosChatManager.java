@@ -64,6 +64,9 @@ public class EventosChatManager {
             case PALAVRA:
                 this.evento = new Palavra(config);
                 break;
+            case FAST_CLICK:
+                this.evento = new FastClick(config);
+                break;
         }
 
         aEventos.getInstance().getServer().getPluginManager().registerEvents(listener, aEventos.getInstance());
@@ -76,7 +79,7 @@ public class EventosChatManager {
     private boolean verify(YamlConfiguration config) {
 
         switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
-            case LOTERIA: case BOLAO:
+            case LOTERIA: case BOLAO: case MATEMATICA: case PALAVRA: case FAST_CLICK:
                 return aEventos.getInstance().getEconomy() != null;
         }
 

@@ -368,7 +368,7 @@ public class ConfigUpdater {
                 }
             }
 
-            // Converter itens. TODO: Converter para o novo serializer.
+            // Converter itens.
 
             switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
 

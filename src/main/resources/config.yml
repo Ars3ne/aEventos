@@ -24,7 +24,7 @@ Allowed commands:
   - "/tell"
   - "/evento"
 
-# AutoStarter. Aqui você configurará quando o evento irá se iniciar automáticamente. O tempo de início é baseado no tempo do servidor.
+# AutoStarter. Aqui você configurará quando o evento irá se iniciar automaticamente. O tempo de início é baseado no tempo do servidor.
 AutoStart:
   Enabled: true
   Times:
@@ -36,6 +36,7 @@ AutoStart:
     - "sunday-campominado-18:00"
 
 Enable GUI: true # O plugin deve usar GUI?
+Show commands: true # Mostrar os comandos do plugin ao abrir o GUI?
 
 Hook: "simpleclans" # Qual plugin de clã ou facção o plugin deve usar? Opções disponíveis: "simpleclans", "massivefactions" e "yclans" (experimental)
 

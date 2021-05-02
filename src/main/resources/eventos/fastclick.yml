@@ -1,28 +1,34 @@
 Evento:
   # Configurações do evento.
-  Title: "Palavra" # O nome do evento. Será usado na placeholder @name.
-  Type: "palavra" # O tipo do evento. Não modifique!
+  Title: "FastClick" # O nome do evento. Será usado na placeholder @name.
+  Type: "fastclick" # O tipo do evento. Não modifique!
   Calls: 5 # Quantas chamadas o evento terá?
   Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
   Permission: "aeventos.evento" # A permissão necessária para poder participar do evento.
   Count participation: true # Esse evento contará participação?
   Count victory: true # Esse evento contará vitória?
   Reward: 10000 # A recompensa do evento.
+  Quantity: 12 # Quantos lugares para clicar devem ter por linha?
+  Lines: 3 # Quantas linhas devem ter?
 
 # Mensagens
 Messages:
   Broadcast:
     - ""
     - "&3[@name] &bIniciando evento &f@name"
-    - "&3[@name] &bDigite a seguinte palavra no chat: &f@word"
-    - "&3[@name] &bPrêmio: &2$&f@reward &b+ &3[Palavra]"
+    - "&3[@name] &bClique na opção correta para vencer:"
+    - ""
+    -  "  @line1"
+    -  "  @line2"
+    -  "  @line3"
+    - ""
+    - "&3[@name] &bPrêmio: &2$&f@reward &b+ &9[FastClick]"
     - "&3[@name] &bChamadas restantes: &f@broadcasts"
     - ""
   Winner:
     - ""
     - "&3[@name] &bO evento &f@name &bfoi finalizado!"
     - "&3[@name] &bO vencedor foi &f@winner&b!"
-    - "&3[@name] &bA resposta era: &f@result&b!"
     - ""
   No winner:
     - ""
@@ -33,17 +39,15 @@ Messages:
     - ""
     - "&3[@name] &bO evento foi cancelado manualmente."
     - ""
-
-Words: # Lista de palavras.
-  - "aEventos"
-  - "Teste"
-  - "Você tem que digitar essa frase EXATAMENTE desse 'g'eito."
+  Wrong: "&3[@name] &bVocê clicou na opção errada."
+  Clickable: "&b[X] "
+  Not clickable: "&3[X] "
 
 # Recompensas. Elas serão dadas ao vencedor.
 Rewards:
   Tag: # Tag do LegendChat.
     Enabled: true # Ativar a tag do evento?
-    Name: "aeventos_palavra" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_palavra}
-    Style: "&3[Palavra] " # A aparência da tag.
+    Name: "aeventos_fastclick" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_fastclick}
+    Style: "&9[FastClick] " # A aparência da tag.
   Commands: # Lista de comandos que serão executados no vencedor.
     - "give @winner diamond 1"

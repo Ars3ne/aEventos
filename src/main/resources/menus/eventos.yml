@@ -1,10 +1,14 @@
 Menu:
-  Name: "Lista de Eventos:"
-  Size: 36
+  Name: "Eventos - Lista de Eventos:"
+  Size: 45
+  Previous page slot: 39
+  Next page slot: 41
+  Empty page slot: 22
+  Item page limit: 21
   Items:
     Back:
       Enabled: true
-      Slot: 23
+      Slot: 40
       Name: "&eVoltar"
       Material: PLAYER_HEAD
       Custom head: true # Caso seja uma cabeça com textura customizada, coloque true.
@@ -17,4 +21,214 @@ Menu:
         Name: "&eParkour"
         Material: DIAMOND_BOOTS
         Lore:
-          - "&eHorário: &fTodos os dias!"
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      campominado: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eCampo Minado"
+        Material: GLASS
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      spleef: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eSpleef"
+        Material: DIAMOND_SHOVEL
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      corrida: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eCorrida"
+        Material: PLAYER_HEAD
+        Custom head: true
+        Head data: "8e4a70b7bbcd7a8c322d522520491a27ea6b83d60ecf961d2b4efbbf9f605d"
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      semaforo: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eSemáforo"
+        Material: LIME_TERRACOTTA
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      batataquente: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eBatata Quente"
+        Material: POTATO
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      frog: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eFrog"
+        Material: RED_WOOL
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      fight: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eFight"
+        Material: WOODEN_SWORD
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      killer: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eKiller"
+        Material: GOLDEN_AXE
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      sumo: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eSumô"
+        Material: STICK
+        Glow: true
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      astronauta: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eAstronauta"
+        Material: PLAYER_HEAD
+        Custom head: true
+        Head data: "42337f620588291101c5107d5685fdd4ab1f698d0bda18aa186a512da6765"
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      paintball: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&ePaintball"
+        Material: BOW
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      hunter: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eHunter"
+        Material: BOW
+        Glow: true
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      quiz: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eQuiz"
+        Material: SLIME_BALL
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      anvil: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eAnvil"
+        Material: ANVIL
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      loteria: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eLoteria"
+        Material: SUNFLOWER
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      bolao: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eLoteria"
+        Material: PAPER
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      gladiador: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eGladiador"
+        Material: DIAMOND_SWORD
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      matematica: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eMatemática"
+        Material: COMPASS
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      palavra: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&ePalavra"
+        Material: WRITABLE_BOOK
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      fastclick: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eFastClick"
+        Material: FEATHER
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""

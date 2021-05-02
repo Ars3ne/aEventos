@@ -61,6 +61,7 @@ public class aEventos extends JavaPlugin {
     private static final LegendChatHook lc_hook = new LegendChatHook();
     private Economy econ = null;
     private boolean hooked_massivefactions = false;
+    private boolean hooked_yclans = false;
 
     private final EventoListener setup_listener = new EventoListener();
 
@@ -145,6 +146,7 @@ public class aEventos extends JavaPlugin {
             EventoConfigFile.create("gladiador");
             EventoConfigFile.create("matematica");
             EventoConfigFile.create("palavra");
+            EventoConfigFile.create("fastclick");
 
         }
 
@@ -185,8 +187,8 @@ public class aEventos extends JavaPlugin {
     }
 
     private void setupAddons() {
-        if(!setupSimpleClans() && !setupMassiveFactions()) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cSimpleClans e MassiveFactions não encontrados.");
+        if(!setupSimpleClans() && !setupMassiveFactions() && !setupyClans()) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cSimpleClans, MassiveFactions e yClans não encontrados.");
         }
         if(!setupLegendChat()) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cLegendChat não encontrado.");
@@ -220,6 +222,14 @@ public class aEventos extends JavaPlugin {
         return true;
     }
 
+    private boolean setupyClans() {
+        Plugin yclans = getServer().getPluginManager().getPlugin("yClans");
+        if(yclans == null) return false;
+        hooked_yclans = true;
+        return true;
+    }
+
+
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
@@ -248,6 +258,8 @@ public class aEventos extends JavaPlugin {
     public static Cache getCache() { return cache; }
 
     public boolean isHookedMassiveFactions() { return this.hooked_massivefactions; }
+
+    public boolean isHookedyClans() { return this.hooked_yclans; }
 
     public static aEventos getInstance() {
         return (aEventos) Bukkit.getServer().getPluginManager().getPlugin("aEventos");

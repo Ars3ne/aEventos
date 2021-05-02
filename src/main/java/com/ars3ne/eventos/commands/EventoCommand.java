@@ -65,9 +65,12 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o GUI estiver ativado, então abra o inventário principal.
                     if(aEventos.getInstance().getConfig().getBoolean("Enable GUI")) {
+
                         if(sender instanceof Player) {
                             InventoryManager.openMainInventory((Player)sender);
                         }
+
+                        if(!aEventos.getInstance().getConfig().getBoolean("Show commands")) return true;
                     }
 
                     // Se tiver a permissão de admin, então mande os comandos de admin.
