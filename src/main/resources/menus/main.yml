@@ -38,6 +38,7 @@ Eventos:
   Format: " &8- &7@evento_name: &f@evento_wins &7| &f@evento_participations"
   New line: true # Adicionar uma nova linha na lore depois dos eventos?
   Only with wins: true # Mostrar apenas os eventos que o jogador tem pelo menos uma vitória?
+  Empty: "  &8Nenhuma" # Caso a opḉão "Only with wins" esteja ativada, então essa mensagem será mostrada quando o jogador não tiver nenhuma vitória ou participação.
   List:
     # Lista de eventos que serão mostrados na lore. A ordem será a mesma dessa lista.
     # Formato: nome_do_arquivo_de_configuração:Nome na lore.

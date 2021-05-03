@@ -167,6 +167,9 @@ public class aEventos extends JavaPlugin {
         // Tenta atualizar o arquivo de configuração.
         try {
             ConfigUpdater.update(this, "config.yml", settings, Collections.singletonList("none"));
+            ConfigUpdater.update(this, "menus/main.yml", new File(aEventos.getInstance().getDataFolder() + "/menus/main.yml"), Collections.singletonList("none"));
+            ConfigUpdater.update(this, "menus/top_players.yml", new File(aEventos.getInstance().getDataFolder() + "/menus/top_players.yml"), Collections.singletonList("none"));
+
         } catch (IOException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível atualizar o arquivo de configuração.");
             e.printStackTrace();

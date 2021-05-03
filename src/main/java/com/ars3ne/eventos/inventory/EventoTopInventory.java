@@ -99,8 +99,8 @@ public final class EventoTopInventory extends PagedInventory {
                 meta.setOwner(p.getName());
                 meta.setDisplayName(config.getString("Menu.Items.Player.Name").replace("@top_player", p.getName()).replace("&", "§"));
 
-                int total_wins = aEventos.getCache().getPlayerWins(p).values().stream().reduce(0, Integer::sum);
-                int total_participations = aEventos.getCache().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum);
+                int total_wins = aEventos.getCache().getPlayerWins(p) != null ? aEventos.getCache().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
+                int total_participations = aEventos.getCache().getPlayerParticipations(p) != null ? aEventos.getCache().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
 
                 int player_top_wins_position = aEventos.getCache().getPlayerTopWinsPosition(p);
                 int player_top_participations_position = aEventos.getCache().getPlayerTopParticipationsPosition(p);
@@ -111,6 +111,8 @@ public final class EventoTopInventory extends PagedInventory {
 
                 if(config.getBoolean("Eventos.Enabled")) {
 
+                    boolean has_win_or_victory = false;
+
                     for(String s: config.getStringList("Eventos.List")) {
 
                         String[] separated = s.split(":");
@@ -120,15 +122,20 @@ public final class EventoTopInventory extends PagedInventory {
                             Map<String, Integer> player_participations = aEventos.getCache().getPlayerParticipations(p);
 
                             int wins = 0;
-                            if(player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
+                            if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
 
                             int participations = 0;
-                            if(player_participations.containsKey(separated[0])) participations = player_participations.get(separated[0]);
+                            if(player_participations != null && player_participations.containsKey(separated[0])) participations = player_participations.get(separated[0]);
 
                             if(config.getBoolean("Eventos.Only with wins") && wins == 0 && participations == 0) continue;
+                            has_win_or_victory = true;
                             lore.add(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§"));
 
                         }
+                    }
+
+                    if(!has_win_or_victory) {
+                        lore.add(config.getString("Eventos.Empty").replace("&", "§"));
                     }
 
                     if(config.getBoolean("Eventos.New line")) lore.add("");
@@ -159,8 +166,8 @@ public final class EventoTopInventory extends PagedInventory {
                 meta.setOwner(p.getName());
                 meta.setDisplayName(config.getString("Menu.Items.Player.Name").replace("@top_player", p.getName()).replace("&", "§"));
 
-                int total_wins = aEventos.getCache().getPlayerWins(p).values().stream().reduce(0, Integer::sum);
-                int total_participations = aEventos.getCache().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum);
+                int total_wins = aEventos.getCache().getPlayerWins(p) != null ? aEventos.getCache().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
+                int total_participations = aEventos.getCache().getPlayerParticipations(p) != null ? aEventos.getCache().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
 
                 int player_top_wins_position = aEventos.getCache().getPlayerTopWinsPosition(p);
                 int player_top_participations_position = aEventos.getCache().getPlayerTopParticipationsPosition(p);
@@ -171,6 +178,7 @@ public final class EventoTopInventory extends PagedInventory {
 
                 if(config.getBoolean("Eventos.Enabled")) {
 
+                    boolean has_win_or_victory = false;
                     for(String s: config.getStringList("Eventos.List")) {
 
                         String[] separated = s.split(":");
@@ -180,15 +188,20 @@ public final class EventoTopInventory extends PagedInventory {
                             Map<String, Integer> player_participations = aEventos.getCache().getPlayerParticipations(p);
 
                             int wins = 0;
-                            if(player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
+                            if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
 
                             int participations = 0;
-                            if(player_participations.containsKey(separated[0])) participations = player_participations.get(separated[0]);
+                            if(player_participations != null && player_participations.containsKey(separated[0])) participations = player_participations.get(separated[0]);
 
                             if(config.getBoolean("Eventos.Only with wins") && wins == 0 && participations == 0) continue;
+                            has_win_or_victory = true;
                             lore.add(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§"));
 
                         }
+                    }
+
+                    if(!has_win_or_victory) {
+                        lore.add(config.getString("Eventos.Empty").replace("&", "§"));
                     }
 
                     if(config.getBoolean("Eventos.New line")) lore.add("");
