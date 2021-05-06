@@ -143,7 +143,7 @@ A partir da versão v1.4.1, o plugin possui placeholders na PlaceholderAPI. Aqui
 - %aeventos_participations_total% - Mostra o total de participações do jogador.
 - %aeventos_wins_[NOME DO ARQUIVO DE CONFIGURAÇÃO]% - Mostra o total de vitórias que o jogador teve no evento específico.
 - %aeventos_participations_[NOME DO ARQUIVO DE CONFIGURAÇÃO]% - Mostra o total de participações que o jogador teve no evento específico.
-- %aeventos_tag_[NOME DA TAG] - Mostra a tag do evento, caso o jogador á possua.<br>Substitua o "[NOME DA TAG]" pelo nome que está na configuração ``Rewards.Tag.Name``.
+- %aeventos_tag_[NOME DA TAG]% - Mostra a tag do evento, caso o jogador á possua.<br>Substitua o "[NOME DA TAG]" pelo nome que está na configuração ``Rewards.Tag.Name``.
 
 ## Créditos:
 
