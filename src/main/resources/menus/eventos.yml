@@ -184,7 +184,7 @@ Menu:
           - ""
       bolao: # Nome do arquivo de configuração do evento.
         Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
-        Name: "&eLoteria"
+        Name: "&eBolão"
         Material: PAPER
         Lore:
           - "&7Aqui você pode escrever uma"

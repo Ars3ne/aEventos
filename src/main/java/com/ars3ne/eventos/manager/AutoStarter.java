@@ -110,9 +110,7 @@ public class AutoStarter {
 
     }
 
-    public void stop() {
-        this.task.cancel();
-    }
+    public void stop() { if(this.task != null) this.task.cancel(); }
 
     private int getDay(String day) {
         switch (day.toLowerCase()) {

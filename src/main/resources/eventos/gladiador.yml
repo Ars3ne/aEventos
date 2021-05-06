@@ -92,7 +92,8 @@ Messages:
   Winner:
     - ""
     - "&3[@name] &bO evento &f@name &bfoi finalizado!"
-    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - "&3[@name] &bO clã vencedor foi: &f@guild&b!"
+    - "&3[@name] &bOs sobreviventes restantes foram: &f@winner&b!"
     - ""
   No winner:
     - ""

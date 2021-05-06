@@ -89,6 +89,8 @@ public class HunterListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        if(evento == null) return;
+        if (!evento.getPlayers().contains(e.getWhoClicked())) return;
         e.setCancelled(true);
     }
 

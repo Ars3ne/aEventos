@@ -499,7 +499,7 @@ public class ConnectionManager {
                     wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                 }
 
-                aEventos.getCache().getPlayerWinsList().put(player, wins);
+                aEventos.getCacheManager().getPlayerWinsList().put(player, wins);
 
             }
 
@@ -529,7 +529,7 @@ public class ConnectionManager {
                     participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                 }
 
-                aEventos.getCache().getPlayerParticipationsList().put(player, participations);
+                aEventos.getCacheManager().getPlayerParticipationsList().put(player, participations);
 
             }
 
@@ -541,4 +541,57 @@ public class ConnectionManager {
 
     }
 
+    public void setTotalWins(UUID uuid, int wins) {
+
+        try {
+
+            PreparedStatement update = connection
+                    .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=? WHERE uuid=?");
+            update.setString(1, "{\"converted\": " + wins + "}");
+            update.setInt(2, wins);
+            update.setString(3, uuid.toString());
+            update.executeUpdate();
+
+        } catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir as vitórias de um usuário. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+    }
+
+    public void setTotalParticipations(UUID uuid, int participations) {
+
+        try {
+
+            PreparedStatement update = connection
+                    .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=? WHERE uuid=?");
+            update.setString(1, "{\"converted\": " + participations + "}");
+            update.setInt(2, participations);
+            update.setString(3, uuid.toString());
+            update.executeUpdate();
+
+        } catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir as participações de um usuário. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+    }
+
+    public boolean isEmpty() {
+
+        try {
+
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT id from aeventos_users WHERE id=1");
+            ResultSet results = statement.executeQuery();
+            return !results.next();
+
+        } catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter a tabela de usuários. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+        return true;
+    }
 }

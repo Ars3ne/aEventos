@@ -33,13 +33,16 @@ import org.bukkit.OfflinePlayer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Cache {
+public class CacheManager {
 
     private Map<OfflinePlayer, Map<String, Integer>> player_wins = new HashMap<>();
     private Map<OfflinePlayer, Map<String, Integer>> player_participations = new HashMap<>();
 
     private LinkedHashMap<OfflinePlayer, Integer> top_player_wins = new LinkedHashMap<>();
     private LinkedHashMap<OfflinePlayer, Integer> top_player_participations = new LinkedHashMap<>();
+
+    private Map<String, String> lc_tags = aEventos.getTagManager().getTags();
+    private Map<OfflinePlayer, List<String>> lc_tag_holders = aEventos.getTagManager().getTagHolders();
 
     public Map<String, Integer> getPlayerWins(OfflinePlayer p) {
         if(!player_wins.containsKey(p)) return null;
@@ -54,6 +57,10 @@ public class Cache {
     public void updateCache() {
 
         if(!aEventos.getInstance().getConfig().getBoolean("Enable GUI")) return;
+
+        player_wins.clear();
+        player_participations.clear();
+
         aEventos.getConnectionManager().getPlayersWins();
         aEventos.getConnectionManager().getPlayersParticipations();
 
@@ -73,6 +80,11 @@ public class Cache {
         top_player_wins = p_wins.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2) -> entry2, LinkedHashMap::new));
         top_player_participations = p_participations.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2) -> entry2, LinkedHashMap::new));
 
+    }
+
+    public void updateTags() {
+        lc_tags = aEventos.getTagManager().getTags();
+        lc_tag_holders = aEventos.getTagManager().getTagHolders();
     }
 
     public Map<OfflinePlayer, Map<String, Integer>> getPlayerWinsList() {
@@ -111,4 +123,11 @@ public class Cache {
         return top_player_participations;
     }
 
+    public Map<String, String> getLegendChatTags() {
+        return lc_tags;
+    }
+
+    public Map<OfflinePlayer, List<String>> getLegendChatTagHolders() {
+        return lc_tag_holders;
+    }
 }

@@ -265,6 +265,7 @@ public class EventoCommand implements CommandExecutor {
 
                     aEventos.getInstance().reloadConfig();
                     aEventos.updateTags();
+                    aEventos.getCacheManager().updateCache();
                     InventoryManager.reload();
 
                     sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Reloaded").replace("&", "§"));

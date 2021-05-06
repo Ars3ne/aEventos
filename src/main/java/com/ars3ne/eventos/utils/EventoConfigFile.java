@@ -57,6 +57,7 @@ public class EventoConfigFile {
     }
 
     public static boolean exists(String name) {
+        if(name.contains("converted")) return false;
         File settings = new File(aEventos.getInstance().getDataFolder() + "/eventos/", name + ".yml");
         return settings.exists();
     }

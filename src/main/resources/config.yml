@@ -54,6 +54,21 @@ Bungeecord:
 
 UpdateChecker: true # O plugin deve procurar por novas versões automaticamente?
 
+Conversor:
+  # Aqui você pode converter as vitórias e participações de outros plugins para o aEventos.
+  # A database de usuários do aEventos deve estar vazia antes de rodar o conversor. Caso a database seja SQLite, copie o arquivo .db do plugin para essa pasta e o renomeie para "convert.db".
+  # Porém, cada plugin possuirá suas peculiaridades. Por exemplo, não é possível converter as vitórias e participações de eventos específicos do HEventos, já que ele não salva essa informação.
+  Enabled: false # O conversor deve estar ativado? Lembre-se que caso a tabela do aEventos já possua usuários, o plugin não ligará.
+  Plugin: "heventos" # O plugin que será convertido para o aEventos. Valores disponíveis: "heventos"
+  # Conexão MySQL. Caso esteja desativado, será usada a database SQLite localizada no arquivo "convert.db"
+  MySQL:
+    Enabled: false
+    Host: "localhost"
+    Username: "root"
+    Password: "pass"
+    Database: "heventos"
+    Port: 3306
+
 Messages:
   No event: "&3[Evento] &bNão está ocorrendo nenhum evento no momento!"
   No spectator: "&3[Evento] &bNão é possível assistir esse evento."

@@ -31,6 +31,7 @@ import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.commands.EventoCommand;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.hooks.LegendChatHook;
+import com.ars3ne.eventos.hooks.PlaceholderAPIHook;
 import com.ars3ne.eventos.listeners.EventoListener;
 import com.ars3ne.eventos.manager.*;
 import com.ars3ne.eventos.utils.ConfigUpdater;
@@ -55,7 +56,7 @@ public class aEventos extends JavaPlugin {
     private static final EventosManager manager = new EventosManager();
     private static final EventosChatManager chat_manager = new EventosChatManager();
     private static final TagManager tag_manager = new TagManager();
-    private static final Cache cache = new Cache();
+    private static final CacheManager cache = new CacheManager();
     private final AutoStarter autostart = new AutoStarter();
     private SimpleClans clan = null;
     private static final LegendChatHook lc_hook = new LegendChatHook();
@@ -71,6 +72,8 @@ public class aEventos extends JavaPlugin {
 
         setupConfig();
         if(connection.setup()) {
+
+            if(conversor()) return;
 
             if(getConfig().getBoolean("UpdateChecker")) {
                 UpdateChecker.verify();
@@ -180,6 +183,47 @@ public class aEventos extends JavaPlugin {
 
     }
 
+    private boolean conversor() {
+
+        // Caso o conversor esteja ativado, então converta as informações do plugin.
+        if(getConfig().getBoolean("Conversor.Enabled")) {
+
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aIniciando conversão...");
+
+            // Se a database de usuários do aEventos não estiver vazia, desligue o plugin.
+            if(!getConnectionManager().isEmpty()) {
+                Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cA database do aEventos não está vazia! Desativando plugin...");
+                getPluginLoader().disablePlugin(this);
+                return true;
+            }
+
+            // Faça a conversão.
+
+            ConversorConnectionManager conversor = new ConversorConnectionManager();
+            conversor.setup();
+
+            switch(getConfig().getString("Conversor.Plugin").toLowerCase()) {
+                case "heventos":
+                    boolean converted = conversor.convertHEventos();
+                    if(!converted) return true;
+                    break;
+                default:
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cConversor para o plugin '" + getConfig().getString("Conversor.Plugin") + "' não encontrado. Desativando plugin...");
+                    getPluginLoader().disablePlugin(this);
+                    return true;
+            }
+
+            // A conversão foi feita com sucesso. Desative o plugin.
+            conversor.close();
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConversão feita com sucesso! Desative o modo conversão para iniciar o plugin.");
+            getPluginLoader().disablePlugin(this);
+            return true;
+        }
+
+        return false;
+
+    }
+
     private void setupListener() {
         getServer().getPluginManager().registerEvents(setup_listener, this);
     }
@@ -198,6 +242,9 @@ public class aEventos extends JavaPlugin {
         }
         if(!setupEconomy()) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cVault não encontrado.");
+        }
+        if(!setupPlaceholderAPI()) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cPlaceholderAPI não encontrado.");
         }
     }
 
@@ -232,6 +279,13 @@ public class aEventos extends JavaPlugin {
         return true;
     }
 
+    private boolean setupPlaceholderAPI() {
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new PlaceholderAPIHook(this).register();
+            return true;
+        }
+        return false;
+    }
 
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -258,7 +312,7 @@ public class aEventos extends JavaPlugin {
 
     public Economy getEconomy() { return this.econ; }
 
-    public static Cache getCache() { return cache; }
+    public static CacheManager getCacheManager() { return cache; }
 
     public boolean isHookedMassiveFactions() { return this.hooked_massivefactions; }
 
@@ -277,7 +331,7 @@ public class aEventos extends JavaPlugin {
 
     public static void updateTags() {
         tag_manager.setup();
-        lc_hook.updateTags();
+        cache.updateTags();
     }
 
 }

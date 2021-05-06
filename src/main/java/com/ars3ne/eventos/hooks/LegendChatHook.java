@@ -27,20 +27,15 @@
 
 package com.ars3ne.eventos.hooks;
 
+import br.com.devpaulo.legendchat.api.events.ChatMessageEvent;
 import com.ars3ne.eventos.aEventos;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import br.com.devpaulo.legendchat.api.events.ChatMessageEvent;
-
 import java.util.List;
-import java.util.Map;
 
 public class LegendChatHook implements Listener {
-
-    private Map<String, String> lc_tags = aEventos.getTagManager().getTags();
-    private Map<OfflinePlayer, List<String>> lc_tag_holders = aEventos.getTagManager().getTagHolders();
 
     @EventHandler
     private void onChat(ChatMessageEvent e) {
@@ -48,17 +43,13 @@ public class LegendChatHook implements Listener {
         OfflinePlayer p = e.getSender();
 
         // Não estou orgulhoso da gambiarra, mas é o que temos para hoje.
-        if(lc_tag_holders.containsKey(p)) {
+        if(aEventos.getCacheManager().getLegendChatTagHolders().containsKey(p)) {
             // Obtenha todas as tags do usuário
-            List<String> tags = lc_tag_holders.get(p);
+            List<String> tags = aEventos.getCacheManager().getLegendChatTagHolders().get(p);
             for(String tag: tags) {
-                e.setTagValue(tag, lc_tags.get(tag));
+                e.setTagValue(tag, aEventos.getCacheManager().getLegendChatTags().get(tag));
             }
         }
     }
 
-    public void updateTags() {
-        lc_tags = aEventos.getTagManager().getTags();
-        lc_tag_holders = aEventos.getTagManager().getTagHolders();
-    }
 }

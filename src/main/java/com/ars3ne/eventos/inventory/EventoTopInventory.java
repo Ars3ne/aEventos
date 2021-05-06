@@ -87,8 +87,12 @@ public final class EventoTopInventory extends PagedInventory {
         // Vitórias.
         if(current_filter.get() == -1) {
 
+            List<OfflinePlayer> players = new ArrayList<>();
 
-            for(OfflinePlayer p: aEventos.getCache().getPlayerTopWinsList().keySet()) {
+            for(OfflinePlayer p: aEventos.getCacheManager().getPlayerTopWinsList().keySet()) {
+
+                if(players.contains(p)) continue;
+                players.add(p);
 
                 List<String> lore = new ArrayList<>();
 
@@ -99,11 +103,11 @@ public final class EventoTopInventory extends PagedInventory {
                 meta.setOwner(p.getName());
                 meta.setDisplayName(config.getString("Menu.Items.Player.Name").replace("@top_player", p.getName()).replace("&", "§"));
 
-                int total_wins = aEventos.getCache().getPlayerWins(p) != null ? aEventos.getCache().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
-                int total_participations = aEventos.getCache().getPlayerParticipations(p) != null ? aEventos.getCache().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
+                int total_wins = aEventos.getCacheManager().getPlayerWins(p) != null ? aEventos.getCacheManager().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
+                int total_participations = aEventos.getCacheManager().getPlayerParticipations(p) != null ? aEventos.getCacheManager().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
 
-                int player_top_wins_position = aEventos.getCache().getPlayerTopWinsPosition(p);
-                int player_top_participations_position = aEventos.getCache().getPlayerTopParticipationsPosition(p);
+                int player_top_wins_position = aEventos.getCacheManager().getPlayerTopWinsPosition(p);
+                int player_top_participations_position = aEventos.getCacheManager().getPlayerTopParticipationsPosition(p);
 
                 for(String s: config.getStringList("Menu.Items.Player.Lore")) {
                     lore.add(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§"));
@@ -118,8 +122,8 @@ public final class EventoTopInventory extends PagedInventory {
                         String[] separated = s.split(":");
                         if(EventoConfigFile.exists(separated[0])) {
 
-                            Map<String, Integer> player_wins = aEventos.getCache().getPlayerWins(p);
-                            Map<String, Integer> player_participations = aEventos.getCache().getPlayerParticipations(p);
+                            Map<String, Integer> player_wins = aEventos.getCacheManager().getPlayerWins(p);
+                            Map<String, Integer> player_participations = aEventos.getCacheManager().getPlayerParticipations(p);
 
                             int wins = 0;
                             if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
@@ -155,7 +159,12 @@ public final class EventoTopInventory extends PagedInventory {
         // Participações.
         if(current_filter.get() == 0) {
 
-            for(OfflinePlayer p: aEventos.getCache().getPlayerTopParticipationsList().keySet()) {
+            List<OfflinePlayer> players = new ArrayList<>();
+
+            for(OfflinePlayer p: aEventos.getCacheManager().getPlayerTopParticipationsList().keySet()) {
+
+                if(players.contains(p)) continue;
+                players.add(p);
 
                 List<String> lore = new ArrayList<>();
 
@@ -166,11 +175,11 @@ public final class EventoTopInventory extends PagedInventory {
                 meta.setOwner(p.getName());
                 meta.setDisplayName(config.getString("Menu.Items.Player.Name").replace("@top_player", p.getName()).replace("&", "§"));
 
-                int total_wins = aEventos.getCache().getPlayerWins(p) != null ? aEventos.getCache().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
-                int total_participations = aEventos.getCache().getPlayerParticipations(p) != null ? aEventos.getCache().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
+                int total_wins = aEventos.getCacheManager().getPlayerWins(p) != null ? aEventos.getCacheManager().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
+                int total_participations = aEventos.getCacheManager().getPlayerParticipations(p) != null ? aEventos.getCacheManager().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
 
-                int player_top_wins_position = aEventos.getCache().getPlayerTopWinsPosition(p);
-                int player_top_participations_position = aEventos.getCache().getPlayerTopParticipationsPosition(p);
+                int player_top_wins_position = aEventos.getCacheManager().getPlayerTopWinsPosition(p);
+                int player_top_participations_position = aEventos.getCacheManager().getPlayerTopParticipationsPosition(p);
 
                 for(String s: config.getStringList("Menu.Items.Player.Lore")) {
                     lore.add(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§"));
@@ -184,8 +193,8 @@ public final class EventoTopInventory extends PagedInventory {
                         String[] separated = s.split(":");
                         if(EventoConfigFile.exists(separated[0])) {
 
-                            Map<String, Integer> player_wins = aEventos.getCache().getPlayerWins(p);
-                            Map<String, Integer> player_participations = aEventos.getCache().getPlayerParticipations(p);
+                            Map<String, Integer> player_wins = aEventos.getCacheManager().getPlayerWins(p);
+                            Map<String, Integer> player_participations = aEventos.getCacheManager().getPlayerParticipations(p);
 
                             int wins = 0;
                             if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);

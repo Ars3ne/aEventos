@@ -64,7 +64,6 @@ public class Guerra extends Evento {
     private final boolean actionbar_enabled, border_enabled, ffa, defined_items;
     private final String hook;
 
-
     private final HashMap<ClanPlayer, Clan> simpleclans_clan_participants = new HashMap<>();
     private final HashMap<MPlayer, Faction> massivefactions_factions_participants = new HashMap<>();
     private final HashMap<yclans.model.ClanPlayer, yclans.model.Clan> yclans_clan_participants = new HashMap<>();
@@ -401,8 +400,22 @@ public class Guerra extends Evento {
         List<String> winners = new ArrayList<>();
 
         // Adicionar vitória e dar a tag no LegendChat.
+
+        String winner_guild = null;
+
         if(hook.equalsIgnoreCase("simpleclans")) {
             this.setWinners(simpleclans_clan_participants.values().stream().findFirst().get().getTag(), this.kills);
+            winner_guild = simpleclans_clan_participants.values().stream().findFirst().get().getTag();
+        }
+
+        if(hook.equalsIgnoreCase("massivefactions")) {
+            this.setWinners(massivefactions_factions_participants.values().stream().findFirst().get().getName(), this.kills);
+            winner_guild = massivefactions_factions_participants.values().stream().findFirst().get().getName();
+        }
+
+        if(hook.equalsIgnoreCase("yclans")) {
+            this.setWinners(yclans_clan_participants.values().stream().findFirst().get().getTag(), this.kills);
+            winner_guild = yclans_clan_participants.values().stream().findFirst().get().getTag();
         }
 
         // Mande a mensagem da coleta de itens.
@@ -420,7 +433,8 @@ public class Guerra extends Evento {
         // Mande a mensagem de vitória para o servidor.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title")));
+            assert winner_guild != null;
+            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@guild", winner_guild).replace("@name", config.getString("Evento.Title")));
         }
 
         // Mande a actionbar para os jogadores e espectadores.

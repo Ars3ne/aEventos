@@ -70,14 +70,14 @@ public final class EventoMainInventory extends SimpleInventory {
     @Override
     protected void configureInventory(Viewer viewer, InventoryEditor editor) {
 
-        int total_wins = aEventos.getCache().getPlayerWins(viewer.getPlayer()) != null ? aEventos.getCache().getPlayerWins(viewer.getPlayer()).values().stream().reduce(0, Integer::sum) : 0;
-        int total_participations = aEventos.getCache().getPlayerParticipations(viewer.getPlayer()) != null ? aEventos.getCache().getPlayerParticipations(viewer.getPlayer()).values().stream().reduce(0, Integer::sum) : 0;
+        int total_wins = aEventos.getCacheManager().getPlayerWins(viewer.getPlayer()) != null ? aEventos.getCacheManager().getPlayerWins(viewer.getPlayer()).values().stream().reduce(0, Integer::sum) : 0;
+        int total_participations = aEventos.getCacheManager().getPlayerParticipations(viewer.getPlayer()) != null ? aEventos.getCacheManager().getPlayerParticipations(viewer.getPlayer()).values().stream().reduce(0, Integer::sum) : 0;
 
         int player_top_wins_position = 0;
         int player_top_participations_position = 0;
 
-        if(total_wins > 0) player_top_wins_position = aEventos.getCache().getPlayerTopWinsPosition(viewer.getPlayer());
-        if(total_participations > 0) player_top_participations_position = aEventos.getCache().getPlayerTopParticipationsPosition(viewer.getPlayer());
+        if(total_wins > 0) player_top_wins_position = aEventos.getCacheManager().getPlayerTopWinsPosition(viewer.getPlayer());
+        if(total_participations > 0) player_top_participations_position = aEventos.getCacheManager().getPlayerTopParticipationsPosition(viewer.getPlayer());
 
         // Configure as Placeholders.
         Map<String, String> placeholders = new HashMap<>();
@@ -103,8 +103,8 @@ public final class EventoMainInventory extends SimpleInventory {
                     String[] separated = s.split(":");
                     if(EventoConfigFile.exists(separated[0])) {
 
-                        Map<String, Integer> player_wins = aEventos.getCache().getPlayerWins(viewer.getPlayer());
-                        Map<String, Integer> player_participations = aEventos.getCache().getPlayerParticipations(viewer.getPlayer());
+                        Map<String, Integer> player_wins = aEventos.getCacheManager().getPlayerWins(viewer.getPlayer());
+                        Map<String, Integer> player_participations = aEventos.getCacheManager().getPlayerParticipations(viewer.getPlayer());
 
                         int wins = 0;
                         if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
