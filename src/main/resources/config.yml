@@ -57,9 +57,9 @@ UpdateChecker: true # O plugin deve procurar por novas versões automaticamente?
 Conversor:
   # Aqui você pode converter as vitórias e participações de outros plugins para o aEventos.
   # A database de usuários do aEventos deve estar vazia antes de rodar o conversor. Caso a database seja SQLite, copie o arquivo .db do plugin para essa pasta e o renomeie para "convert.db".
-  # Porém, cada plugin possuirá suas peculiaridades. Por exemplo, não é possível converter as vitórias e participações de eventos específicos do HEventos, já que ele não salva essa informação.
+  # Para o plugin HEventos, as participações e vitórias serão convertidas para um evento chamado "converted". Por padrão, ele não aparece na lore de vitórias.
   Enabled: false # O conversor deve estar ativado? Lembre-se que caso a tabela do aEventos já possua usuários, o plugin não ligará.
-  Plugin: "heventos" # O plugin que será convertido para o aEventos. Valores disponíveis: "heventos"
+  Plugin: "yeventos" # O plugin que será convertido para o aEventos. Valores disponíveis: "heventos", "yeventos."
   # Conexão MySQL. Caso esteja desativado, será usada a database SQLite localizada no arquivo "convert.db"
   MySQL:
     Enabled: false
@@ -68,6 +68,24 @@ Conversor:
     Password: "pass"
     Database: "heventos"
     Port: 3306
+
+  # Configurações para o conversor do yEventos. Aqui você colocará para qual arquivo de configuração as vitórias devem ser convertidas.
+  # Nesse exemplo, as vitórias do evento "Parkour" serão convertidas para o evento no arquivo de configuração "parkour".
+  yEventos:
+    parkour: "parkour"
+    corrida: "corrida"
+    fight: "fight"
+    sumo: "sumo"
+    labirinto: "labirinto" # Esse plugin não possui um evento labirinto por padrão, mas você pode criar um copiando o arquivo de configuração "corrida.yml" e fazer as modificações desejadas.
+    paintball: "paintball"
+    spleef: "spleef"
+    killer: "killer"
+    quiz: "quiz"
+    bolao: "bolao"
+    loteria: "loteria"
+    matematica: "matematica"
+    palavra: "palavra"
+    fastclick: "fastclick"
 
 Messages:
   No event: "&3[Evento] &bNão está ocorrendo nenhum evento no momento!"

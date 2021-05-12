@@ -202,9 +202,15 @@ public class aEventos extends JavaPlugin {
             ConversorConnectionManager conversor = new ConversorConnectionManager();
             conversor.setup();
 
+            boolean converted;
+
             switch(getConfig().getString("Conversor.Plugin").toLowerCase()) {
                 case "heventos":
-                    boolean converted = conversor.convertHEventos();
+                    converted = conversor.convertHEventos();
+                    if(!converted) return true;
+                    break;
+                case "yeventos":
+                    converted = conversor.convertyEventos();
                     if(!converted) return true;
                     break;
                 default:

@@ -122,19 +122,19 @@ public class Frog extends Evento {
 
         }
 
-        // Depois do período inicial, remova os blocos de neve.
+        // Depois do período inicial, remova os blocos de neve e inicie o evento.
         aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
             for(Block block: cuboid.getBlocks()) {
                 if(block.getType() == Material.SNOW_BLOCK) block.setType(Material.AIR);
             }
-        }, start * 20L);
 
-        // Depois do período inicial, inicie o evento.
-        task = Bukkit.getScheduler().scheduleSyncRepeatingTask(aEventos.getInstance(), () -> {
-            if(!isHappening()) Bukkit.getScheduler().cancelTask(task);
-            if(level_happening) return;
-            frog();
-        }, start * 20L, (time + snow_time) * 20L);
+            task = Bukkit.getScheduler().scheduleSyncRepeatingTask(aEventos.getInstance(), () -> {
+                if(!isHappening()) Bukkit.getScheduler().cancelTask(task);
+                if(level_happening) return;
+                frog();
+            }, (time + snow_time) * 20L, 20L);
+
+        }, start * 20L);
 
     }
 
@@ -186,13 +186,12 @@ public class Frog extends Evento {
         if(!isHappening()) return;
         level_happening = true;
 
-        if(remeaning_materials.size() != 1) {
+        if(remeaning_materials.size() > 1) {
 
             // Obtenha um material aleatório e transforme todos o do seu tipo em neve.
             int index = random.nextInt(remeaning_materials.size());
             Material material_remove = (Material) remeaning_materials.keys().toArray()[index];
             byte material_data = (byte) remeaning_materials.values().toArray()[index];
-
 
             // Transforme todos o do seu tipo em neve.
             for(Block b: current_blocks.keySet()) {

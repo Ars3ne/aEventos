@@ -260,6 +260,31 @@ public class ConnectionManager {
         }
     }
 
+    public void addWins(String name, UUID uuid, int qtd) {
+
+        try {
+            JSONObject json = (JSONObject) parser.parse(getWins(uuid));
+
+            if(!json.containsKey(name)) json.put(name, 0);
+
+            int wins = Integer.parseInt(json.get(name).toString());
+            json.remove(name);
+            json.put(name, wins + qtd);
+
+            PreparedStatement update = connection
+                    .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=total_wins+? WHERE uuid=?");
+            update.setObject(1, json.toString());
+            update.setInt(2, qtd);
+            update.setString(3, uuid.toString());
+            update.executeUpdate();
+
+        } catch (ParseException | SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar vitórias. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+    }
+
     public String getParticipations(UUID uuid) {
 
         try {
@@ -302,6 +327,31 @@ public class ConnectionManager {
 
         } catch (ParseException | SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar uma participação. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+    }
+
+    public void addParticipations(String name, UUID uuid, int qtd) {
+
+        try {
+            JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
+
+            if(!json.containsKey(name)) json.put(name, 0);
+
+            int wins = Integer.parseInt(json.get(name).toString());
+            json.remove(name);
+            json.put(name, wins + qtd);
+
+            PreparedStatement update = connection
+                    .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=total_participations+? WHERE uuid=?");
+            update.setObject(1, json.toString());
+            update.setInt(2, qtd);
+            update.setString(3, uuid.toString());
+            update.executeUpdate();
+
+        } catch (ParseException | SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar participações. Desativando plugin...");
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
             aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
         }

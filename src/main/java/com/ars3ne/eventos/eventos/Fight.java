@@ -236,9 +236,11 @@ public class Fight extends Evento {
             // Se for a última luta, de os Items especiais.
             if(getPlayers().size() == 2) {
 
-                for(String item: config.getConfigurationSection("Itens.Last fight.Inventory").getKeys(false)) {
-                    fighter1.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Inventory." + item)));
-                    fighter2.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Inventory." + item)));
+                if(config.getConfigurationSection("Itens.Last fight.Inventory") != null) {
+                    for(String item: config.getConfigurationSection("Itens.Last fight.Inventory").getKeys(false)) {
+                        fighter1.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Inventory." + item)));
+                        fighter2.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Last fight.Inventory." + item)));
+                    }
                 }
 
                 if(config.getConfigurationSection("Itens.Last fight.Armor.Helmet") != null) {
@@ -264,9 +266,11 @@ public class Fight extends Evento {
 
             }else {
 
-                for(String item: config.getConfigurationSection("Itens.Normal.Inventory").getKeys(false)) {
-                    fighter1.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Inventory." + item)));
-                    fighter2.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Inventory." + item)));
+                if(config.getConfigurationSection("Itens.Normal.Inventory") != null) {
+                    for(String item: config.getConfigurationSection("Itens.Normal.Inventory").getKeys(false)) {
+                        fighter1.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Inventory." + item)));
+                        fighter2.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Normal.Inventory." + item)));
+                    }
                 }
 
                 if(config.getConfigurationSection("Itens.Normal.Armor.Helmet") != null) {

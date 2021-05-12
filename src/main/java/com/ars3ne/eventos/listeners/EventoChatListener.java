@@ -37,9 +37,12 @@ public class EventoChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
 
-        if(aEventos.getEventoChatManager().getEvento() == null) return;
+        if (aEventos.getEventoChatManager().getEvento() == null) return;
 
-        aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().getEvento().parsePlayerMessage(e.getPlayer(), e.getMessage()) , 20L);
+        aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+            if (aEventos.getEventoChatManager().getEvento() == null) return;
+            aEventos.getEventoChatManager().getEvento().parsePlayerMessage(e.getPlayer(), e.getMessage());
+        });
 
     }
 

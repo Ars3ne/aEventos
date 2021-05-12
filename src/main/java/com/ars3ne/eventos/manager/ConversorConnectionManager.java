@@ -28,19 +28,22 @@
 package com.ars3ne.eventos.manager;
 
 import com.ars3ne.eventos.aEventos;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
-import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.sql.*;
+import java.util.Map;
+import java.util.Set;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("deprecation")
 public class ConversorConnectionManager {
 
     private Connection connection;
-    private final JSONParser parser = new JSONParser();
 
     private void openConnection() throws SQLException, ClassNotFoundException{
 
@@ -102,30 +105,6 @@ public class ConversorConnectionManager {
         }
     }
 
-    public void createEvento(String name) {
-
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT name FROM aeventos_eventos WHERE name=?");
-            statement.setString(1,name);
-            ResultSet results = statement.executeQuery();
-
-            if(!results.next()) {
-                PreparedStatement insert = connection
-                        .prepareStatement("INSERT INTO aeventos_eventos (name, current_winners) VALUES (?,?)");
-                insert.setString(1, name);
-                insert.setString(2, "[]");
-                insert.executeUpdate();
-            }
-
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
-
-    }
-
     public boolean convertHEventos() {
 
         try {
@@ -145,7 +124,42 @@ public class ConversorConnectionManager {
             return true;
 
         }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as participações. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao fazer a conversão. Desativando plugin...");
+            Bukkit.getConsoleSender().sendMessage(e.getMessage());
+            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+        }
+
+        return false;
+    }
+
+    public boolean convertyEventos() {
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT key,json FROM evento");
+            ResultSet results = statement.executeQuery();
+            while(results.next()) {
+
+                OfflinePlayer player = Bukkit.getOfflinePlayer(results.getString("key"));
+                JsonObject jsonObject = (new JsonParser()).parse(results.getString("json")).getAsJsonObject();
+
+                aEventos.getConnectionManager().insertUser(player.getUniqueId());
+
+                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                for(Map.Entry<String,JsonElement> entry : entrySet){
+
+                    if(aEventos.getInstance().getConfig().getString("Conversor.yEventos." + entry.getKey()) != null) {
+                        aEventos.getConnectionManager().addWins(aEventos.getInstance().getConfig().getString("Conversor.yEventos." + entry.getKey()), player.getUniqueId(), jsonObject.get(entry.getKey()).getAsInt());
+                        aEventos.getConnectionManager().addParticipations(aEventos.getInstance().getConfig().getString("Conversor.yEventos." + entry.getKey()), player.getUniqueId(), jsonObject.get(entry.getKey()).getAsInt());
+                    }
+                }
+
+            }
+
+            return true;
+
+        }catch (SQLException e) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao fazer a conversão. Desativando plugin...");
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
             aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
         }
