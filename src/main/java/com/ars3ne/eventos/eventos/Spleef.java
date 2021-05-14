@@ -188,7 +188,13 @@ public class Spleef extends Evento {
 
         // Limpe o inventário de todos os jogadores do evento.
         for(Player p: getPlayers()) {
+
+            p.getInventory().setHelmet(null);
+            p.getInventory().setChestplate(null);
+            p.getInventory().setLeggings(null);
+            p.getInventory().setBoots(null);
             p.getInventory().clear();
+
             listener.getLastMove().remove(p);
         }
 

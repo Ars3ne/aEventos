@@ -319,6 +319,8 @@ public class Evento implements EventoInterface{
 
     public void join(Player p) {
 
+        if(this.empty_inventory) p.getInventory().clear();
+
         p.setFoodLevel(20);
         players.add(p);
         this.teleport(p, "lobby");
@@ -344,6 +346,9 @@ public class Evento implements EventoInterface{
     public void leave(Player p) {
 
         if(players.contains(p)) {
+
+            if(this.empty_inventory) p.getInventory().clear();
+
             for (Player player : players) {
                 player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
             }
@@ -401,6 +406,7 @@ public class Evento implements EventoInterface{
     }
 
     public void spectate(Player p) {
+        p.getInventory().clear();
         p.setFoodLevel(20);
         spectators.add(p);
         this.teleport(p, "spectator");

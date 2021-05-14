@@ -28,7 +28,6 @@
 package com.ars3ne.eventos.inventory;
 
 import com.ars3ne.eventos.aEventos;
-import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.MenuConfigFile;
 import com.cryptomorin.xseries.XMaterial;
 import com.henryfabio.minecraft.inventoryapi.editor.InventoryEditor;
@@ -82,19 +81,10 @@ public final class EventoTopInventory extends PagedInventory {
         List<InventoryItemSupplier> itemSuppliers = new LinkedList<>();
         AtomicInteger current_filter = new AtomicInteger(player_filter.getOrDefault(viewer.getName(), -1));
 
-        int position = 1;
-
         // Vitórias.
         if(current_filter.get() == -1) {
 
-            List<OfflinePlayer> players = new ArrayList<>();
-
-            for(OfflinePlayer p: aEventos.getCacheManager().getPlayerTopWinsList().keySet()) {
-
-                if(players.contains(p)) continue;
-                players.add(p);
-
-                List<String> lore = new ArrayList<>();
+            for(OfflinePlayer p: aEventos.getCacheManager().getTopWinsMenuItems().keySet()) {
 
                 ItemStack item = XMaterial.PLAYER_HEAD.parseItem();
                 assert item != null;
@@ -103,54 +93,9 @@ public final class EventoTopInventory extends PagedInventory {
                 meta.setOwner(p.getName());
                 meta.setDisplayName(config.getString("Menu.Items.Player.Name").replace("@top_player", p.getName()).replace("&", "§"));
 
-                int total_wins = aEventos.getCacheManager().getPlayerWins(p) != null ? aEventos.getCacheManager().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
-                int total_participations = aEventos.getCacheManager().getPlayerParticipations(p) != null ? aEventos.getCacheManager().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
-
-                int player_top_wins_position = aEventos.getCacheManager().getPlayerTopWinsPosition(p);
-                int player_top_participations_position = aEventos.getCacheManager().getPlayerTopParticipationsPosition(p);
-
-                for(String s: config.getStringList("Menu.Items.Player.Lore")) {
-                    lore.add(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§"));
-                }
-
-                if(config.getBoolean("Eventos.Enabled")) {
-
-                    boolean has_win_or_victory = false;
-
-                    for(String s: config.getStringList("Eventos.List")) {
-
-                        String[] separated = s.split(":");
-                        if(EventoConfigFile.exists(separated[0])) {
-
-                            Map<String, Integer> player_wins = aEventos.getCacheManager().getPlayerWins(p);
-                            Map<String, Integer> player_participations = aEventos.getCacheManager().getPlayerParticipations(p);
-
-                            int wins = 0;
-                            if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
-
-                            int participations = 0;
-                            if(player_participations != null && player_participations.containsKey(separated[0])) participations = player_participations.get(separated[0]);
-
-                            if(config.getBoolean("Eventos.Only with wins") && wins == 0 && participations == 0) continue;
-                            has_win_or_victory = true;
-                            lore.add(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§"));
-
-                        }
-                    }
-
-                    if(!has_win_or_victory) {
-                        lore.add(config.getString("Eventos.Empty").replace("&", "§"));
-                    }
-
-                    if(config.getBoolean("Eventos.New line")) lore.add("");
-
-                }
-
-                meta.setLore(lore);
+                meta.setLore(aEventos.getCacheManager().getTopWinsMenuItems().get(p));
                 item.setItemMeta(meta);
                 itemSuppliers.add(() -> InventoryItem.of(item));
-
-                position++;
 
             }
 
@@ -159,14 +104,7 @@ public final class EventoTopInventory extends PagedInventory {
         // Participações.
         if(current_filter.get() == 0) {
 
-            List<OfflinePlayer> players = new ArrayList<>();
-
-            for(OfflinePlayer p: aEventos.getCacheManager().getPlayerTopParticipationsList().keySet()) {
-
-                if(players.contains(p)) continue;
-                players.add(p);
-
-                List<String> lore = new ArrayList<>();
+            for (OfflinePlayer p : aEventos.getCacheManager().getTopParticipations().keySet()) {
 
                 ItemStack item = XMaterial.PLAYER_HEAD.parseItem();
                 assert item != null;
@@ -175,55 +113,11 @@ public final class EventoTopInventory extends PagedInventory {
                 meta.setOwner(p.getName());
                 meta.setDisplayName(config.getString("Menu.Items.Player.Name").replace("@top_player", p.getName()).replace("&", "§"));
 
-                int total_wins = aEventos.getCacheManager().getPlayerWins(p) != null ? aEventos.getCacheManager().getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
-                int total_participations = aEventos.getCacheManager().getPlayerParticipations(p) != null ? aEventos.getCacheManager().getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
-
-                int player_top_wins_position = aEventos.getCacheManager().getPlayerTopWinsPosition(p);
-                int player_top_participations_position = aEventos.getCacheManager().getPlayerTopParticipationsPosition(p);
-
-                for(String s: config.getStringList("Menu.Items.Player.Lore")) {
-                    lore.add(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§"));
-                }
-
-                if(config.getBoolean("Eventos.Enabled")) {
-
-                    boolean has_win_or_victory = false;
-                    for(String s: config.getStringList("Eventos.List")) {
-
-                        String[] separated = s.split(":");
-                        if(EventoConfigFile.exists(separated[0])) {
-
-                            Map<String, Integer> player_wins = aEventos.getCacheManager().getPlayerWins(p);
-                            Map<String, Integer> player_participations = aEventos.getCacheManager().getPlayerParticipations(p);
-
-                            int wins = 0;
-                            if(player_wins != null && player_wins.containsKey(separated[0])) wins = player_wins.get(separated[0]);
-
-                            int participations = 0;
-                            if(player_participations != null && player_participations.containsKey(separated[0])) participations = player_participations.get(separated[0]);
-
-                            if(config.getBoolean("Eventos.Only with wins") && wins == 0 && participations == 0) continue;
-                            has_win_or_victory = true;
-                            lore.add(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§"));
-
-                        }
-                    }
-
-                    if(!has_win_or_victory) {
-                        lore.add(config.getString("Eventos.Empty").replace("&", "§"));
-                    }
-
-                    if(config.getBoolean("Eventos.New line")) lore.add("");
-
-                }
-
-                meta.setLore(lore);
+                meta.setLore(aEventos.getCacheManager().getTopParticipations().get(p));
                 item.setItemMeta(meta);
                 itemSuppliers.add(() -> InventoryItem.of(item));
 
-                position++;
             }
-
         }
 
         return itemSuppliers;

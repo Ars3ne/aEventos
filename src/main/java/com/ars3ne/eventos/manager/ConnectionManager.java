@@ -126,89 +126,111 @@ public class ConnectionManager {
 
     public void close() {
         try {
-            connection.close();
+            if(connection != null) connection.close();
         } catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível emcerrar a conexão com o banco de dados.");
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível encerrar a conexão com o banco de dados.");
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
         }
     }
 
     public void createEvento(String name) {
 
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT name FROM aeventos_eventos WHERE name=?");
-            statement.setString(1,name);
-            ResultSet results = statement.executeQuery();
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            if(!results.next()) {
-                PreparedStatement insert = connection
-                        .prepareStatement("INSERT INTO aeventos_eventos (name, current_winners) VALUES (?,?)");
-                insert.setString(1, name);
-                insert.setString(2, "[]");
-                insert.executeUpdate();
+            try {
+                PreparedStatement statement = connection
+                        .prepareStatement("SELECT name FROM aeventos_eventos WHERE name=?");
+                statement.setString(1,name);
+                ResultSet results = statement.executeQuery();
+
+                if(!results.next()) {
+                    PreparedStatement insert = connection
+                            .prepareStatement("INSERT INTO aeventos_eventos (name, current_winners) VALUES (?,?)");
+                    insert.setString(1, name);
+                    insert.setString(2, "[]");
+                    insert.executeUpdate();
+                }
+
+            }catch (SQLException e) {
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+
             }
 
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+        });
 
     }
 
     public void createEventoGuild(String name) {
 
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT name FROM aeventos_eventos_guild WHERE name=?");
-            statement.setString(1,name);
-            ResultSet results = statement.executeQuery();
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            if(!results.next()) {
-                PreparedStatement insert = connection
-                        .prepareStatement("INSERT INTO aeventos_eventos_guild (name, current_guild_winner, total_kills, current_winners) VALUES (?,?,?,?)");
-                insert.setString(1, name);
-                insert.setString(2, "[]");
-                insert.setString(3, "[]");
-                insert.setString(4, "[]");
-                insert.executeUpdate();
+            try {
+                PreparedStatement statement = connection
+                        .prepareStatement("SELECT name FROM aeventos_eventos_guild WHERE name=?");
+                statement.setString(1,name);
+                ResultSet results = statement.executeQuery();
+
+                if(!results.next()) {
+                    PreparedStatement insert = connection
+                            .prepareStatement("INSERT INTO aeventos_eventos_guild (name, current_guild_winner, total_kills, current_winners) VALUES (?,?,?,?)");
+                    insert.setString(1, name);
+                    insert.setString(2, "[]");
+                    insert.setString(3, "[]");
+                    insert.setString(4, "[]");
+                    insert.executeUpdate();
+                }
+
+            }catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
             }
 
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um evento na database. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+        });
 
     }
 
     public void insertUser(UUID uuid) {
 
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT username FROM aeventos_users WHERE uuid=?");
-            statement.setString(1,uuid.toString());
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            ResultSet results = statement.executeQuery();
-            if(!results.next()) {
+            try {
+                PreparedStatement statement = connection
+                        .prepareStatement("SELECT username FROM aeventos_users WHERE uuid=?");
+                statement.setString(1,uuid.toString());
 
-                PreparedStatement insert = connection
-                        .prepareStatement("INSERT INTO aeventos_users (username, uuid, total_wins, total_participations, wins, participations) VALUES (?,?,?,?,?,?)");
-                insert.setString(1, Bukkit.getOfflinePlayer(uuid).getName());
-                insert.setString(2, uuid.toString());
-                insert.setInt(3, 0);
-                insert.setInt(4, 0);
-                insert.setString(5, "{}");
-                insert.setString(6, "{}");
-                insert.executeUpdate();
+                ResultSet results = statement.executeQuery();
+                if(!results.next()) {
+
+                    PreparedStatement insert = connection
+                            .prepareStatement("INSERT INTO aeventos_users (username, uuid, total_wins, total_participations, wins, participations) VALUES (?,?,?,?,?,?)");
+                    insert.setString(1, Bukkit.getOfflinePlayer(uuid).getName());
+                    insert.setString(2, uuid.toString());
+                    insert.setInt(3, 0);
+                    insert.setInt(4, 0);
+                    insert.setString(5, "{}");
+                    insert.setString(6, "{}");
+                    insert.executeUpdate();
+
+                }
+            }catch (SQLException e) {
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um usuário. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
 
             }
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao inserir um usuário. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+
+        });
 
     }
 
@@ -238,51 +260,67 @@ public class ConnectionManager {
 
     public void addWin(String name, UUID uuid) {
 
-        try {
-            JSONObject json = (JSONObject) parser.parse(getWins(uuid));
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            if(!json.containsKey(name)) json.put(name, 0);
+            try {
+                JSONObject json = (JSONObject) parser.parse(getWins(uuid));
 
-            int wins = Integer.parseInt(json.get(name).toString());
-            json.remove(name);
-            json.put(name, wins + 1);
+                if(!json.containsKey(name)) json.put(name, 0);
 
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=total_wins+1 WHERE uuid=?");
-            update.setObject(1, json.toString());
-            update.setString(2, uuid.toString());
-            update.executeUpdate();
+                int wins = Integer.parseInt(json.get(name).toString());
+                json.remove(name);
+                json.put(name, wins + 1);
 
-        } catch (ParseException | SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar uma vitória. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=total_wins+1 WHERE uuid=?");
+                update.setObject(1, json.toString());
+                update.setString(2, uuid.toString());
+                update.executeUpdate();
+
+            } catch (ParseException | SQLException e) {
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar uma vitória. Desativando plugin...");
+                        Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                        aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                    }, 20L);
+
+            }
+
+        });
+
     }
 
     public void addWins(String name, UUID uuid, int qtd) {
 
-        try {
-            JSONObject json = (JSONObject) parser.parse(getWins(uuid));
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            if(!json.containsKey(name)) json.put(name, 0);
+            try {
+                JSONObject json = (JSONObject) parser.parse(getWins(uuid));
 
-            int wins = Integer.parseInt(json.get(name).toString());
-            json.remove(name);
-            json.put(name, wins + qtd);
+                if(!json.containsKey(name)) json.put(name, 0);
 
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=total_wins+? WHERE uuid=?");
-            update.setObject(1, json.toString());
-            update.setInt(2, qtd);
-            update.setString(3, uuid.toString());
-            update.executeUpdate();
+                int wins = Integer.parseInt(json.get(name).toString());
+                json.remove(name);
+                json.put(name, wins + qtd);
 
-        } catch (ParseException | SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar vitórias. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=total_wins+? WHERE uuid=?");
+                update.setObject(1, json.toString());
+                update.setInt(2, qtd);
+                update.setString(3, uuid.toString());
+                update.executeUpdate();
+
+            } catch (ParseException | SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar vitórias. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
+
     }
 
     public String getParticipations(UUID uuid) {
@@ -310,51 +348,65 @@ public class ConnectionManager {
 
     public void addParticipation(String name, UUID uuid) {
 
-        try {
-            JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            if(!json.containsKey(name)) json.put(name, 0);
+            try {
+                JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
 
-            int wins = Integer.parseInt(json.get(name).toString());
-            json.remove(name);
-            json.put(name, wins + 1);
+                if(!json.containsKey(name)) json.put(name, 0);
 
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=total_participations+1 WHERE uuid=?");
-            update.setObject(1, json.toString());
-            update.setString(2, uuid.toString());
-            update.executeUpdate();
+                int wins = Integer.parseInt(json.get(name).toString());
+                json.remove(name);
+                json.put(name, wins + 1);
 
-        } catch (ParseException | SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar uma participação. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=total_participations+1 WHERE uuid=?");
+                update.setObject(1, json.toString());
+                update.setString(2, uuid.toString());
+                update.executeUpdate();
+
+            } catch (ParseException | SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar uma participação. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
+
     }
 
     public void addParticipations(String name, UUID uuid, int qtd) {
 
-        try {
-            JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            if(!json.containsKey(name)) json.put(name, 0);
+            try {
+                JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
 
-            int wins = Integer.parseInt(json.get(name).toString());
-            json.remove(name);
-            json.put(name, wins + qtd);
+                if(!json.containsKey(name)) json.put(name, 0);
 
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=total_participations+? WHERE uuid=?");
-            update.setObject(1, json.toString());
-            update.setInt(2, qtd);
-            update.setString(3, uuid.toString());
-            update.executeUpdate();
+                int wins = Integer.parseInt(json.get(name).toString());
+                json.remove(name);
+                json.put(name, wins + qtd);
 
-        } catch (ParseException | SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar participações. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=total_participations+? WHERE uuid=?");
+                update.setObject(1, json.toString());
+                update.setInt(2, qtd);
+                update.setString(3, uuid.toString());
+                update.executeUpdate();
+
+            } catch (ParseException | SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao adicionar participações. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
+
     }
 
     public String getEventoWinners(String name) {
@@ -427,18 +479,24 @@ public class ConnectionManager {
 
     public void setEventoWinner(String name, List<String> winner) {
 
-        try {
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_eventos SET current_winners=? WHERE name=?");
-            update.setString(1, String.valueOf(winner));
-            update.setString(2, name);
-            update.executeUpdate();
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+            try {
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_eventos SET current_winners=? WHERE name=?");
+                update.setString(1, String.valueOf(winner));
+                update.setString(2, name);
+                update.executeUpdate();
+
+            }catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
 
     }
 
@@ -446,20 +504,26 @@ public class ConnectionManager {
 
         Gson gson = new Gson();
 
-        try {
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_eventos_guild SET current_guild_winner=?,total_kills=?,current_winners=? WHERE name=?");
-            update.setString(1, guild_name);
-            update.setString(2, gson.toJson(total_kills));
-            update.setString(3, String.valueOf(winner));
-            update.setString(4, name);
-            update.executeUpdate();
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+            try {
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_eventos_guild SET current_guild_winner=?,total_kills=?,current_winners=? WHERE name=?");
+                update.setString(1, guild_name);
+                update.setString(2, gson.toJson(total_kills));
+                update.setString(3, String.valueOf(winner));
+                update.setString(4, name);
+                update.executeUpdate();
+
+            }catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
 
     }
 
@@ -533,98 +597,128 @@ public class ConnectionManager {
 
     public void getPlayersWins() {
 
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT uuid,wins FROM aeventos_users");
-            ResultSet results = statement.executeQuery();
-            while(results.next()) {
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-                Map<String, Integer> wins = new HashMap<>();
+            try {
+                PreparedStatement statement = connection
+                        .prepareStatement("SELECT uuid,wins FROM aeventos_users");
+                ResultSet results = statement.executeQuery();
+                while(results.next()) {
 
-                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(results.getString("uuid")));
-                JsonObject jsonObject = (new JsonParser()).parse(results.getString("wins")).getAsJsonObject();
+                    Map<String, Integer> wins = new HashMap<>();
 
-                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
-                for(Map.Entry<String,JsonElement> entry : entrySet){
-                    wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(results.getString("uuid")));
+                    JsonObject jsonObject = (new JsonParser()).parse(results.getString("wins")).getAsJsonObject();
+
+                    Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                    for(Map.Entry<String,JsonElement> entry : entrySet){
+                        wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                    }
+
+                    aEventos.getCacheManager().getPlayerWinsList().put(player, wins);
+
                 }
 
-                aEventos.getCacheManager().getPlayerWinsList().put(player, wins);
+                aEventos.getCacheManager().calculateTop();
 
+            }catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as vitórias. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
             }
 
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as vitórias. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+        });
 
     }
 
     public void getPlayersParticipations() {
 
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT uuid,participations FROM aeventos_users");
-            ResultSet results = statement.executeQuery();
-            while(results.next()) {
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-                Map<String, Integer> participations = new HashMap<>();
+            try {
+                PreparedStatement statement = connection
+                        .prepareStatement("SELECT uuid,participations FROM aeventos_users");
+                ResultSet results = statement.executeQuery();
+                while(results.next()) {
 
-                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(results.getString("uuid")));
-                JsonObject jsonObject = (new JsonParser()).parse(results.getString("participations")).getAsJsonObject();
+                    Map<String, Integer> participations = new HashMap<>();
 
-                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
-                for(Map.Entry<String,JsonElement> entry : entrySet){
-                    participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(results.getString("uuid")));
+                    JsonObject jsonObject = (new JsonParser()).parse(results.getString("participations")).getAsJsonObject();
+
+                    Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+                    for(Map.Entry<String,JsonElement> entry : entrySet){
+                        participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
+                    }
+
+                    aEventos.getCacheManager().getPlayerParticipationsList().put(player, participations);
+
                 }
 
-                aEventos.getCacheManager().getPlayerParticipationsList().put(player, participations);
+                aEventos.getCacheManager().calculateTop();
 
+            }catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as participações. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
             }
 
-        }catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as participações. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+        });
 
     }
 
     public void setTotalWins(UUID uuid, int wins) {
 
-        try {
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=? WHERE uuid=?");
-            update.setString(1, "{\"converted\": " + wins + "}");
-            update.setInt(2, wins);
-            update.setString(3, uuid.toString());
-            update.executeUpdate();
+            try {
 
-        } catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir as vitórias de um usuário. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=? WHERE uuid=?");
+                update.setString(1, "{\"converted\": " + wins + "}");
+                update.setInt(2, wins);
+                update.setString(3, uuid.toString());
+                update.executeUpdate();
+
+            } catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir as vitórias de um usuário. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
+
     }
 
     public void setTotalParticipations(UUID uuid, int participations) {
 
-        try {
+        Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
-            PreparedStatement update = connection
-                    .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=? WHERE uuid=?");
-            update.setString(1, "{\"converted\": " + participations + "}");
-            update.setInt(2, participations);
-            update.setString(3, uuid.toString());
-            update.executeUpdate();
+            try {
 
-        } catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir as participações de um usuário. Desativando plugin...");
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-        }
+                PreparedStatement update = connection
+                        .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=? WHERE uuid=?");
+                update.setString(1, "{\"converted\": " + participations + "}");
+                update.setInt(2, participations);
+                update.setString(3, uuid.toString());
+                update.executeUpdate();
+
+            } catch (SQLException e) {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir as participações de um usuário. Desativando plugin...");
+                    Bukkit.getConsoleSender().sendMessage(e.getMessage());
+                    aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
+                }, 20L);
+            }
+
+        });
+
     }
 
     public boolean isEmpty() {

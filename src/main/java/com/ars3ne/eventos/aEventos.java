@@ -58,17 +58,32 @@ public class aEventos extends JavaPlugin {
     private static final TagManager tag_manager = new TagManager();
     private static final CacheManager cache = new CacheManager();
     private final AutoStarter autostart = new AutoStarter();
+
     private SimpleClans clan = null;
     private static final LegendChatHook lc_hook = new LegendChatHook();
     private Economy econ = null;
+
     private boolean hooked_massivefactions = false;
     private boolean hooked_yclans = false;
+    private boolean is_reloaded = true;
 
     private final EventoListener setup_listener = new EventoListener();
 
     @Override
+    public void onLoad() {
+        is_reloaded = false;
+    }
+
+    @Override
     public void onEnable() {
+
         Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aIniciando plugin...");
+
+        // Se o plugin foi recarregado, mande um aviso no console.
+        if(is_reloaded) {
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cEste plugin não é compatível com o /reload, nem com o Plugman ou plugins parecidos.");
+            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cVários erros podem ocorrer e você não receberá suporte. Caso queira recarregar os arquivos de configuração, use o comando /evento reload.");
+        }
 
         setupConfig();
         if(connection.setup()) {
@@ -102,6 +117,8 @@ public class aEventos extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        is_reloaded = false;
+
         // Se estiver ocorrendo um evento, então o cancele.
         if(manager.getEvento() != null) {
             manager.getEvento().stop();
@@ -116,6 +133,7 @@ public class aEventos extends JavaPlugin {
         removeListeners();
         autostart.stop();
         connection.close();
+        Bukkit.getServer().getScheduler().cancelTasks(this);
 
         Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cPlugin desativado com sucesso!");
     }

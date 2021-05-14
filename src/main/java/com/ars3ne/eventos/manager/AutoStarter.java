@@ -114,25 +114,25 @@ public class AutoStarter {
 
     private int getDay(String day) {
         switch (day.toLowerCase()) {
-            case "sunday": case "segunda":
+            case "sunday": case "domingo":
                 day = "1";
                 break;
-            case "monday": case "terca": case "terça":
+            case "monday": case "segunda":
                 day = "2";
                 break;
-            case "tuesday": case "quarta":
+            case "tuesday": case "terca": case "terça":
                 day = "3";
                 break;
-            case "wednesday": case "quinta":
+            case "wednesday": case "quarta":
                 day = "4";
                 break;
-            case "thursday": case "sexta":
+            case "thursday": case "quinta":
                 day = "5";
                 break;
-            case "friday": case "sabado": case "sábado":
+            case "friday": case "sexta":
                 day = "6";
                 break;
-            case "saturday": case "domingo":
+            case "saturday": case "sábado": case "sabado":
                 day = "7";
                 break;
             default:

@@ -96,6 +96,12 @@ public class EventoCommand implements CommandExecutor {
                     }
                     Player p = (Player) sender;
 
+                    // Se o evento está fechado, retorne um erro.
+                    if(!aEventos.getEventoManager().getEvento().isOpen()) {
+                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Closed").replace("&", "§"));
+                        return true;
+                    }
+
                     // Se o jogador não tem a permissão para participar do evento, retorne um erro.
                     if(!p.hasPermission(aEventos.getEventoManager().getEvento().getPermission())) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§"));
@@ -118,12 +124,6 @@ public class EventoCommand implements CommandExecutor {
                     // Se o evento requer um inventário vazio, e o usuário possui itens no inventário, retorne um erro.
                     if(aEventos.getEventoManager().getEvento().requireEmptyInventory() && Utils.isInventoryFull(p)) {
                         sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
-                        return true;
-                    }
-
-                    // Se o evento está fechado, retorne um erro.
-                    if(!aEventos.getEventoManager().getEvento().isOpen()) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Closed").replace("&", "§"));
                         return true;
                     }
 
