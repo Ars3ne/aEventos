@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.manager.InventoryManager;
+import com.ars3ne.eventos.manager.InventorySerializer;
 import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.Utils;
 import com.cryptomorin.xseries.XItemStack;
@@ -122,9 +123,13 @@ public class EventoCommand implements CommandExecutor {
 
 
                     // Se o evento requer um inventário vazio, e o usuário possui itens no inventário, retorne um erro.
-                    if(aEventos.getEventoManager().getEvento().requireEmptyInventory() && Utils.isInventoryFull(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
-                        return true;
+                    if(!aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                        if(aEventos.getEventoManager().getEvento().requireEmptyInventory() && Utils.isInventoryFull(p)) {
+                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
+                            return true;
+                        }
+                    }else {
+                        InventorySerializer.serialize(p);
                     }
 
                     // Entre no evento.

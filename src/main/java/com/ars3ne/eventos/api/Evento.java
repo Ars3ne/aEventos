@@ -30,6 +30,7 @@ package com.ars3ne.eventos.api;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.*;
 import com.ars3ne.eventos.hooks.BungeecordHook;
+import com.ars3ne.eventos.manager.InventorySerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -289,7 +290,14 @@ public class Evento implements EventoInterface{
         }
 
         for (Player player : players) {
-            if(this.empty_inventory) player.getInventory().clear();
+
+            if(this.empty_inventory) {
+                player.getInventory().clear();
+                if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                    InventorySerializer.deserialize(player);
+                }
+            }
+
             if(!this.open && !this.win.contains(player)) {
                 PlayerLoseEvent lose = new PlayerLoseEvent(player, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
                 Bukkit.getPluginManager().callEvent(lose);
@@ -347,8 +355,6 @@ public class Evento implements EventoInterface{
 
         if(players.contains(p)) {
 
-            if(this.empty_inventory) p.getInventory().clear();
-
             for (Player player : players) {
                 player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
             }
@@ -385,11 +391,16 @@ public class Evento implements EventoInterface{
         spectators.remove(p);
         this.teleport(p, "exit");
 
+        if(this.empty_inventory) {
+            p.getInventory().clear();
+            if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                InventorySerializer.deserialize(p);
+            }
+        }
+
         for(PotionEffect potion: p.getActivePotionEffects()) {
             p.removePotionEffect(potion.getType());
         }
-
-        if(this.empty_inventory) p.getInventory().clear();
 
         if(!this.open && this.elimination && players.size() == 1) {
             this.winner(players.get(0));

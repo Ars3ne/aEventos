@@ -37,6 +37,7 @@ AutoStart:
 
 Enable GUI: true # O plugin deve usar GUI?
 Show commands: true # Mostrar os comandos do plugin ao abrir o GUI?
+Save inventory: true # Se estiver ativado, ao invés de requerer que o usuário entre com o inventário vazio, o seu inventário será salvo em um arquivo e os seus itens serão apagados. Quando ele sair do evento, receberá os seus itens de volta.
 
 Hook: "simpleclans" # Qual plugin de clã ou facção o plugin deve usar? Opções disponíveis: "simpleclans", "massivefactions" e "yclans" (experimental)
 
@@ -60,6 +61,7 @@ Conversor:
   # Para o plugin HEventos, as participações e vitórias serão convertidas para um evento chamado "converted". Por padrão, ele não aparece na lore de vitórias.
   Enabled: false # O conversor deve estar ativado? Lembre-se que caso a tabela do aEventos já possua usuários, o plugin não ligará.
   Plugin: "yeventos" # O plugin que será convertido para o aEventos. Valores disponíveis: "heventos", "yeventos."
+
   # Conexão MySQL. Caso esteja desativado, será usada a database SQLite localizada no arquivo "convert.db"
   MySQL:
     Enabled: false
@@ -76,7 +78,7 @@ Conversor:
     corrida: "corrida"
     fight: "fight"
     sumo: "sumo"
-    labirinto: "labirinto" # Esse plugin não possui um evento labirinto por padrão, mas você pode criar um copiando o arquivo de configuração "corrida.yml" e fazer as modificações desejadas.
+    labirinto: "labirinto" # O aEventos não possui um evento labirinto por padrão, mas você pode criar um copiando o arquivo de configuração "corrida.yml" e fazer as modificações desejadas. Essa é uma das vantagens do aEventos: você pode criar quantos eventos você quiser.
     paintball: "paintball"
     spleef: "spleef"
     killer: "killer"

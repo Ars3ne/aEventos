@@ -619,7 +619,7 @@ public class ConnectionManager {
 
                 }
 
-                aEventos.getCacheManager().calculateTop();
+                aEventos.getCacheManager().calculateTopWins();
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -657,7 +657,7 @@ public class ConnectionManager {
 
                 }
 
-                aEventos.getCacheManager().calculateTop();
+                aEventos.getCacheManager().calculateTopParticipations();
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {

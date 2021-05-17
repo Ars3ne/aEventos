@@ -253,23 +253,30 @@ public class CacheManager {
         return lc_tag_holders;
     }
 
-    public void calculateTop() {
+    public void calculateTopWins() {
 
         Map<OfflinePlayer, Integer> p_wins = new HashMap<>();
-        Map<OfflinePlayer, Integer> p_participations = new HashMap<>();
 
         for(OfflinePlayer p: player_wins.keySet()) {
             int wins = player_wins.get(p).values().stream().reduce(0, Integer::sum);
             p_wins.put(p, wins);
         }
 
+        top_player_wins = p_wins.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2) -> entry2, LinkedHashMap::new));
+
+    }
+
+    public void calculateTopParticipations() {
+
+        Map<OfflinePlayer, Integer> p_participations = new HashMap<>();
+
         for(OfflinePlayer p: player_participations.keySet()) {
             int participations = player_participations.get(p).values().stream().reduce(0, Integer::sum);
             p_participations.put(p, participations);
         }
 
-        top_player_wins = p_wins.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2) -> entry2, LinkedHashMap::new));
         top_player_participations = p_participations.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (entry1, entry2) -> entry2, LinkedHashMap::new));
 
     }
+
 }
