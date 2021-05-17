@@ -123,13 +123,17 @@ public class EventoCommand implements CommandExecutor {
 
 
                     // Se o evento requer um inventário vazio, e o usuário possui itens no inventário, retorne um erro.
-                    if(!aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
-                        if(aEventos.getEventoManager().getEvento().requireEmptyInventory() && Utils.isInventoryFull(p)) {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
-                            return true;
+                    if(aEventos.getEventoManager().getEvento().requireEmptyInventory()) {
+
+                        if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                            InventorySerializer.serialize(p);
+                        }else {
+                            if(Utils.isInventoryFull(p)) {
+                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
+                                return true;
+                            }
                         }
-                    }else {
-                        InventorySerializer.serialize(p);
+
                     }
 
                     // Entre no evento.

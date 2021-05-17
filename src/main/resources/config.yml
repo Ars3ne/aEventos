@@ -60,7 +60,7 @@ Conversor:
   # A database de usuários do aEventos deve estar vazia antes de rodar o conversor. Caso a database seja SQLite, copie o arquivo .db do plugin para essa pasta e o renomeie para "convert.db".
   # Para o plugin HEventos, as participações e vitórias serão convertidas para um evento chamado "converted". Por padrão, ele não aparece na lore de vitórias.
   Enabled: false # O conversor deve estar ativado? Lembre-se que caso a tabela do aEventos já possua usuários, o plugin não ligará.
-  Plugin: "yeventos" # O plugin que será convertido para o aEventos. Valores disponíveis: "heventos", "yeventos."
+  Plugin: "yeventos" # O plugin que será convertido para o aEventos. Opções disponíveis: "heventos" e "yeventos."
 
   # Conexão MySQL. Caso esteja desativado, será usada a database SQLite localizada no arquivo "convert.db"
   MySQL:
