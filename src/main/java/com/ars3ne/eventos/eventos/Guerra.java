@@ -57,7 +57,7 @@ public class Guerra extends Evento {
     private final YamlConfiguration config;
     private final GuerraListener listener = new GuerraListener();
 
-    private final yClansAPI yclans_api = yClansAPI.yclansapi;
+    private yClansAPI yclans_api;
 
     private final int enable_pvp, pickup_time, min_guilds, max_players;
     private boolean pvp_enabled, ended = false;
@@ -93,6 +93,11 @@ public class Guerra extends Evento {
         this.border_damage = config.getInt("Border.Damage");
 
         this.border = Bukkit.getWorld(config.getString("Locations.Entrance.world")).getWorldBorder();
+
+        if(hook.equalsIgnoreCase("yclans")) {
+            yclans_api = yClansAPI.yclansapi;
+        }
+
     }
 
     @Override
@@ -132,7 +137,7 @@ public class Guerra extends Evento {
 
             for(Player p: getPlayers()) {
                     massivefactions_factions_participants.put(MPlayer.get(p), MPlayer.get(p).getFaction());
-                    //if(ffa) aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(true);
+                    if(ffa) aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(true);
             }
 
             if(getTotalGuilds() < this.min_guilds) {
@@ -359,7 +364,7 @@ public class Guerra extends Evento {
         }
 
         if(hook.equalsIgnoreCase("massivefactions") && aEventos.getInstance().isHookedMassiveFactions()) {
-            //if(ffa) aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+            if(ffa) aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
             massivefactions_factions_participants.remove(MPlayer.get(p));
         }
 

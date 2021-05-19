@@ -141,8 +141,8 @@ public class Fight extends Evento {
         // Desative o friendly-fire dos jogadores.
         for(ClanPlayer p: clans) {
             p.setFriendlyFire(false);
-            clans.remove(p);
         }
+        clans.clear();
 
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
