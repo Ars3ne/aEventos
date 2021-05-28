@@ -31,13 +31,19 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.KillerListener;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MFlag;
+import com.massivecraft.factions.entity.MPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import yclans.api.yClansAPI;
+import yclans.model.Clan;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Killer extends Evento {
@@ -48,13 +54,23 @@ public class Killer extends Evento {
     private final int enable_pvp, pickup_time;
     private boolean pvp_enabled = false;
 
-    private final List<ClanPlayer> clans = new ArrayList<>();
+    private yClansAPI yclans_api;
+
+    private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
+    private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
+    private final HashMap<yclans.model.ClanPlayer, Clan> yclans_clans = new HashMap<>();
 
     public Killer(YamlConfiguration config) {
+
         super(config);
         this.config = config;
         this.enable_pvp = config.getInt("Evento.Time");
         this.pickup_time = config.getInt("Evento.Pickup time");
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
+            yclans_api = yClansAPI.yclansapi;
+        }
+
     }
 
     @Override
@@ -65,12 +81,30 @@ public class Killer extends Evento {
         listener.setEvento();
 
         // Se o servidor tiver SimpleClans, então ative o friendly fire.
-        if(aEventos.getInstance().getSimpleClans() != null) {
-            for(Player p: getPlayers()) {
-                if(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) != null) {
-                    clans.add(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
+            for (Player p : getPlayers()) {
+                if (aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) != null) {
+                    simpleclans_clans.add(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
                     aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(true);
                 }
+            }
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("massivefactions") && aEventos.getInstance().isHookedMassiveFactions()) {
+            for (Player p : getPlayers()) {
+                massivefactions_factions.put(MPlayer.get(p), MPlayer.get(p).getFaction());
+                MPlayer.get(p).getFaction().setFlag(MFlag.ID_FRIENDLYFIRE, true);
+            }
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans") && aEventos.getInstance().isHookedyClans()) {
+            for(Player p: getPlayers()) {
+                if(yclans_api == null || yclans_api.getPlayer(p) == null) continue;
+                yclans.model.ClanPlayer clan_player = yclans_api.getPlayer(p);
+                if(!clan_player.hasClan()) continue;
+                yclans_clans.put(clan_player, clan_player.getClan());
+                clan_player.getClan().setFriendlyFireAlly(true);
+                clan_player.getClan().setFriendlyFireMember(true);
             }
         }
 
@@ -127,10 +161,23 @@ public class Killer extends Evento {
         }
 
         // Desative o friendly-fire do jogador.
-        if(aEventos.getInstance().getSimpleClans() != null) {
-            if(clans.contains(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p))) {
-                clans.remove(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
-                aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
+            simpleclans_clans.remove(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
+            aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("massivefactions") && aEventos.getInstance().isHookedMassiveFactions()) {
+            massivefactions_factions.remove(MPlayer.get(p));
+            if(getClanMembers(p) < 1) MPlayer.get(p).getFaction().setFlag(MFlag.ID_FRIENDLYFIRE, false);
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans") && aEventos.getInstance().isHookedyClans()) {
+            if(yclans_api == null || yclans_api.getPlayer(p) == null) return;
+            yclans.model.ClanPlayer clan_player = yclans_api.getPlayer(p);
+            yclans_clans.remove(clan_player);
+            if(getClanMembers(p) < 1) {
+                yclans_clans.get(clan_player).setFriendlyFireMember(false);
+                yclans_clans.get(clan_player).setFriendlyFireAlly(false);
             }
         }
 
@@ -180,10 +227,22 @@ public class Killer extends Evento {
     public void stop() {
 
         // Desative o friendly-fire dos jogadores.
-        for(ClanPlayer p: clans) {
+        for (ClanPlayer p : simpleclans_clans) {
             p.setFriendlyFire(false);
-            clans.remove(p);
         }
+
+        for(MPlayer p: massivefactions_factions.keySet()) {
+            p.getFaction().setFlag(MFlag.ID_FRIENDLYFIRE, false);
+        }
+
+        for(yclans.model.ClanPlayer p: yclans_clans.keySet()) {
+            p.getClan().setFriendlyFireMember(false);
+            p.getClan().setFriendlyFireAlly(false);
+        }
+
+        simpleclans_clans.clear();
+        massivefactions_factions.clear();
+        yclans_clans.clear();
 
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
@@ -191,5 +250,24 @@ public class Killer extends Evento {
     }
 
     public boolean isPvPEnabled() { return this.pvp_enabled; }
+
+    private int getClanMembers(Player p) {
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("massivefactions")) {
+            return (int) massivefactions_factions.keySet()
+                    .stream()
+                    .filter(map -> map.getFaction() == MPlayer.get(p).getFaction())
+                    .count();
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
+            return (int) yclans_clans.keySet()
+                    .stream()
+                    .filter(map -> map.getClan() == yclans_api.getPlayer(p).getClan())
+                    .count();
+        }
+
+        return -1;
+    }
 
 }

@@ -39,7 +39,7 @@ Enable GUI: true # O plugin deve usar GUI?
 Show commands: true # Mostrar os comandos do plugin ao abrir o GUI?
 Save inventory: true # Se estiver ativado, ao invés de requerer que o usuário entre com o inventário vazio, o seu inventário será salvo em um arquivo e os seus itens serão apagados. Quando ele sair do evento, receberá os seus itens de volta.
 
-Hook: "simpleclans" # Qual plugin de clã ou facção o plugin deve usar? Opções disponíveis: "simpleclans", "massivefactions" e "yclans" (experimental)
+Hook: "simpleclans" # Qual plugin de clã ou facção o plugin deve usar? Opções disponíveis: "simpleclans", "massivefactions" e "yclans"
 
 Bungeecord:
   # Informações importantes:

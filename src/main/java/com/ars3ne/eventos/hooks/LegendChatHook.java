@@ -47,6 +47,7 @@ public class LegendChatHook implements Listener {
             // Obtenha todas as tags do usuário
             List<String> tags = aEventos.getCacheManager().getLegendChatTagHolders().get(p);
             for(String tag: tags) {
+                if(tag == null || aEventos.getCacheManager().getLegendChatTags().get(tag) == null) continue;
                 e.setTagValue(tag, aEventos.getCacheManager().getLegendChatTags().get(tag));
             }
         }

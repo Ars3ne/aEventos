@@ -31,6 +31,9 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.HunterListener;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MFlag;
+import com.massivecraft.factions.entity.MPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -44,8 +47,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import yclans.api.yClansAPI;
+import yclans.model.Clan;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class Hunter extends Evento {
@@ -60,7 +68,8 @@ public class Hunter extends Evento {
     private final List<Player> captured_players = new ArrayList<>();
     private int blue_points = 0;
     private int red_points = 0;
-    private final List<ClanPlayer> clans = new ArrayList<>();
+
+    private yClansAPI yclans_api;
 
     private final int enable_pvp;
     private final int kill_points;
@@ -76,7 +85,12 @@ public class Hunter extends Evento {
     final Team scoreboard_team_red = board.registerNewTeam("red_hunter");
     final Team scoreboard_team_captured = board.registerNewTeam("captured_hunter");
 
+    private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
+    private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
+    private final HashMap<yclans.model.ClanPlayer, Clan> yclans_clans = new HashMap<>();
+
     public Hunter(YamlConfiguration config) {
+
         super(config);
         this.config = config;
         this.blue_name = config.getString("Evento.Blue");
@@ -93,6 +107,10 @@ public class Hunter extends Evento {
         scoreboard_team_blue.setPrefix(ChatColor.BLUE.toString());
         scoreboard_team_red.setPrefix(ChatColor.RED.toString());
         scoreboard_team_captured.setPrefix(ChatColor.BLACK.toString());
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
+            yclans_api = yClansAPI.yclansapi;
+        }
 
     }
 
@@ -189,12 +207,30 @@ public class Hunter extends Evento {
         }
 
         // Se o servidor tiver SimpleClans, então ative o friendly fire.
-        if(aEventos.getInstance().getSimpleClans() != null) {
-            for(Player p: getPlayers()) {
-                if(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) != null) {
-                    clans.add(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
+            for (Player p : getPlayers()) {
+                if (aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) != null) {
+                    simpleclans_clans.add(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
                     aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(true);
                 }
+            }
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("massivefactions") && aEventos.getInstance().isHookedMassiveFactions()) {
+            for (Player p : getPlayers()) {
+                massivefactions_factions.put(MPlayer.get(p), MPlayer.get(p).getFaction());
+                MPlayer.get(p).getFaction().setFlag(MFlag.ID_FRIENDLYFIRE, true);
+            }
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans") && aEventos.getInstance().isHookedyClans()) {
+            for(Player p: getPlayers()) {
+                if(yclans_api == null || yclans_api.getPlayer(p) == null) continue;
+                yclans.model.ClanPlayer clan_player = yclans_api.getPlayer(p);
+                if(!clan_player.hasClan()) continue;
+                yclans_clans.put(clan_player, clan_player.getClan());
+                clan_player.getClan().setFriendlyFireAlly(true);
+                clan_player.getClan().setFriendlyFireMember(true);
             }
         }
 
@@ -294,10 +330,23 @@ public class Hunter extends Evento {
         }
 
         // Desative o friendly-fire do jogador.
-        if(aEventos.getInstance().getSimpleClans() != null) {
-            if(clans.contains(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p))) {
-                clans.remove(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
-                aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
+            simpleclans_clans.remove(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p));
+            aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).setFriendlyFire(false);
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("massivefactions") && aEventos.getInstance().isHookedMassiveFactions()) {
+            massivefactions_factions.remove(MPlayer.get(p));
+            if(getClanMembers(p) < 1) MPlayer.get(p).getFaction().setFlag(MFlag.ID_FRIENDLYFIRE, false);
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans") && aEventos.getInstance().isHookedyClans()) {
+            if(yclans_api == null || yclans_api.getPlayer(p) == null) return;
+            yclans.model.ClanPlayer clan_player = yclans_api.getPlayer(p);
+            yclans_clans.remove(clan_player);
+            if(getClanMembers(p) < 1) {
+                yclans_clans.get(clan_player).setFriendlyFireMember(false);
+                yclans_clans.get(clan_player).setFriendlyFireAlly(false);
             }
         }
 
@@ -340,16 +389,22 @@ public class Hunter extends Evento {
         scoreboard_team_captured.unregister();
 
         // Desative o friendly-fire dos jogadores.
-        List<ClanPlayer> remove_clan = new ArrayList<>();
-        for (ClanPlayer p : clans) {
+        for (ClanPlayer p : simpleclans_clans) {
             p.setFriendlyFire(false);
-            remove_clan.add(p);
         }
 
-        for(ClanPlayer p: remove_clan) {
-            clans.remove(p);
+        for(MPlayer p: massivefactions_factions.keySet()) {
+            p.getFaction().setFlag(MFlag.ID_FRIENDLYFIRE, false);
         }
-        remove_clan.clear();
+
+        for(yclans.model.ClanPlayer p: yclans_clans.keySet()) {
+            p.getClan().setFriendlyFireMember(false);
+            p.getClan().setFriendlyFireAlly(false);
+        }
+
+        simpleclans_clans.clear();
+        massivefactions_factions.clear();
+        yclans_clans.clear();
 
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
@@ -518,16 +573,36 @@ public class Hunter extends Evento {
     public HashMap<Player, Integer> getBlueTeam() {
         return this.blue_team;
     }
-    public int getBluePoints() { return this.blue_points; }
 
     public HashMap<Player, Integer> getRedTeam() {
         return this.red_team;
     }
+
+    public int getBluePoints() { return this.blue_points; }
 
     public int getRedPoints() { return this.red_points; }
 
     public List<Player> getCaptured() { return this.captured_players; }
 
     public boolean isPvPEnabled() { return this.pvp_enabled; }
+
+    private int getClanMembers(Player p) {
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("massivefactions")) {
+            return (int) massivefactions_factions.keySet()
+                    .stream()
+                    .filter(map -> map.getFaction() == MPlayer.get(p).getFaction())
+                    .count();
+        }
+
+        if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
+            return (int) yclans_clans.keySet()
+                    .stream()
+                    .filter(map -> map.getClan() == yclans_api.getPlayer(p).getClan())
+                    .count();
+        }
+
+        return -1;
+    }
 
 }
