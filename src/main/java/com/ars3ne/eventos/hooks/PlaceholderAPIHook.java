@@ -39,7 +39,7 @@ import java.util.Objects;
 
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 
-    private aEventos plugin;
+    private final aEventos plugin;
 
     public PlaceholderAPIHook(aEventos plugin){
         this.plugin = plugin;
@@ -56,17 +56,17 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     }
 
     @Override
-    public String getAuthor(){
+    public @NotNull String getAuthor(){
         return plugin.getDescription().getAuthors().toString();
     }
 
     @Override
-    public String getIdentifier(){
+    public @NotNull String getIdentifier(){
         return "aeventos";
     }
 
     @Override
-    public String getVersion(){
+    public @NotNull String getVersion(){
         return plugin.getDescription().getVersion();
     }
 

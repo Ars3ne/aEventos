@@ -80,7 +80,7 @@ public class ConversorConnectionManager {
 
     }
 
-    public boolean setup() {
+    public void setup() {
 
         if(connection == null) { // Se a conexão não foi feita, tente fazer-la.
             try {
@@ -89,11 +89,9 @@ public class ConversorConnectionManager {
                 Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível se conectar ao banco de dados do plugin antigo. Desativando plugin...");
                 Bukkit.getConsoleSender().sendMessage(e.getMessage());
                 aEventos.getPlugin(aEventos.class).getPluginLoader().disablePlugin(aEventos.getPlugin(aEventos.class));
-                return false;
             }
         }
 
-        return true;
     }
 
     public void close() {

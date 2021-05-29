@@ -42,9 +42,9 @@ public class LegacySerializerConverter {
 
     // Converte para o antigo serializer. Caso queira converter para o novo, utilize a classe SerializerConverter.
 
-    public static boolean convertFight(YamlConfiguration config) {
+    public static void convertFight(YamlConfiguration config) {
 
-        if(config.getConfigurationSection("Itens") != null) return false;
+        if(config.getConfigurationSection("Itens") != null) return;
 
         // Se for a config antiga, converta os items.
         if(config.getString("Items.Normal.Armor.Helmet.Material") == null) {
@@ -158,15 +158,13 @@ public class LegacySerializerConverter {
                 e.printStackTrace();
             }
 
-            return true;
         }
 
-        return false;
     }
 
-    public static boolean convertSpleef(YamlConfiguration config) {
+    public static void convertSpleef(YamlConfiguration config) {
 
-        if(config.getConfigurationSection("Itens") != null) return false;
+        if(config.getConfigurationSection("Itens") != null) return;
 
         List<String> items = config.getStringList("Items");
         if(items != null) {
@@ -194,13 +192,9 @@ public class LegacySerializerConverter {
                     e.printStackTrace();
                 }
 
-                return true;
-
             }catch(NumberFormatException ignored) { }
 
         }
-
-        return false;
 
     }
 
