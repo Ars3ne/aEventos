@@ -180,6 +180,10 @@ public class EventoChat implements EventoInterface{
 
     }
 
+    public void remove(Player p, boolean leaved) {
+
+    }
+
     public void spectate(Player p) {
 
     }

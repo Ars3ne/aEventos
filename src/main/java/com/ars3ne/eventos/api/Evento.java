@@ -30,6 +30,7 @@ package com.ars3ne.eventos.api;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.*;
 import com.ars3ne.eventos.hooks.BungeecordHook;
+import com.ars3ne.eventos.manager.InventoryManager;
 import com.ars3ne.eventos.manager.InventorySerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,9 +41,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Evento implements EventoInterface{
 
@@ -60,6 +61,7 @@ public class Evento implements EventoInterface{
     private final boolean count_win;
     private final boolean bungeecord_enabled;
     private final String permission;
+    private final String identifier;
 
     private final YamlConfiguration config;
 
@@ -74,6 +76,12 @@ public class Evento implements EventoInterface{
         this.count_win = config.getBoolean("Evento.Count victory");
         this.bungeecord_enabled = aEventos.getInstance().getConfig().getBoolean("Bungeecord.Enabled");
         this.elimination = false;
+
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String strDate = dateFormat.format(date);
+
+        this.identifier = type.toString() + " " + strDate;
 
         switch(type) {
             case SPLEEF: case BATATA_QUENTE: case FIGHT: case KILLER: case SUMO: case QUIZ: case ANVIL:
@@ -225,7 +233,10 @@ public class Evento implements EventoInterface{
 
         aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
         aEventos.getTagManager().updateTagHolder(config);
+
         aEventos.updateTags();
+        aEventos.getCacheManager().updateCache();
+        InventoryManager.reload();
 
         PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(win);
@@ -236,11 +247,36 @@ public class Evento implements EventoInterface{
 
         if(EventoType.isEventoGuild(type)) return;
         if(!this.count_win) return;
-        if(this.elimination) return;
 
         List<String> winners = new ArrayList<>();
 
         for (Player p: players) {
+            this.win.add(p);
+            winners.add(p.getUniqueId().toString());
+            aEventos.getConnectionManager().insertUser(p.getUniqueId());
+            aEventos.getConnectionManager().addWin(config.getString("filename").substring(0, config.getString("filename").length() - 4), p.getUniqueId());
+            PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
+            Bukkit.getPluginManager().callEvent(win);
+        }
+
+        aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
+        aEventos.getTagManager().updateTagHolder(config);
+
+        aEventos.updateTags();
+        aEventos.getCacheManager().updateCache();
+        InventoryManager.reload();
+
+    }
+
+    public void setWinners(Set<Player> winners_list) {
+
+        if(EventoType.isEventoGuild(type)) return;
+        if(!this.count_win) return;
+        if(this.elimination) return;
+
+        List<String> winners = new ArrayList<>();
+
+        for (Player p: winners_list) {
             this.win.add(p);
             winners.add(p.getUniqueId().toString());
             aEventos.getConnectionManager().insertUser(p.getUniqueId());
@@ -294,7 +330,7 @@ public class Evento implements EventoInterface{
             if(this.empty_inventory) {
                 player.getInventory().clear();
                 if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
-                    InventorySerializer.deserialize(player);
+                    InventorySerializer.deserialize(player, this.identifier, false);
                 }
             }
 
@@ -367,7 +403,7 @@ public class Evento implements EventoInterface{
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(lose);
 
-        this.remove(p);
+        this.remove(p, true);
 
     }
 
@@ -394,7 +430,38 @@ public class Evento implements EventoInterface{
         if(this.empty_inventory) {
             p.getInventory().clear();
             if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
-                InventorySerializer.deserialize(p);
+                InventorySerializer.deserialize(p, this.identifier, false);
+            }
+        }
+
+        for(PotionEffect potion: p.getActivePotionEffects()) {
+            p.removePotionEffect(potion.getType());
+        }
+
+        if(!this.open && this.elimination && players.size() == 1) {
+            this.winner(players.get(0));
+        }
+
+        if(!this.open && players.size() == 0) {
+            List<String> broadcast_messages = config.getStringList("Messages.No winner");
+            for(String s : broadcast_messages) {
+                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+            }
+            this.stop();
+        }
+
+    }
+
+    public void remove(Player p, boolean leaved) {
+
+        players.remove(p);
+        spectators.remove(p);
+        this.teleport(p, "exit");
+
+        if(this.empty_inventory) {
+            p.getInventory().clear();
+            if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                InventorySerializer.deserialize(p, this.identifier, leaved);
             }
         }
 
@@ -456,6 +523,8 @@ public class Evento implements EventoInterface{
     public String getPermission() { return this.permission; }
 
     public EventoType getType() { return this.type; }
+
+    public String getIdentifier() { return this.identifier; }
 
     public boolean isElimination() { return this.elimination; }
 

@@ -126,7 +126,7 @@ public class EventoCommand implements CommandExecutor {
                     if(aEventos.getEventoManager().getEvento().requireEmptyInventory()) {
 
                         if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
-                            InventorySerializer.serialize(p);
+                            InventorySerializer.serialize(p, aEventos.getEventoManager().getEvento().getIdentifier());
                         }else {
                             if(Utils.isInventoryFull(p)) {
                                 sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));

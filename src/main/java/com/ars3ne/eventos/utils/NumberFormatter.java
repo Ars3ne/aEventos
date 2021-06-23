@@ -25,41 +25,44 @@
  *
  */
 
-package com.ars3ne.eventos.api;
+package com.ars3ne.eventos.utils;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+import com.ars3ne.eventos.aEventos;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-public interface EventoInterface {
+public class NumberFormatter {
 
-    void startCall();
-    void start();
-    void stop();
-    void removePlayers();
-    void winner(Player p);
-    void setWinner(Player p);
-    void setWinners();
+    private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+    private static final List<String> CHARS = aEventos.getInstance().getConfig().getStringList("Formatter.Letters");
 
-    void join(Player p);
-    void leave(Player p);
-    void remove(Player p);
-    void remove(Player p, boolean leaved);
-    void spectate(Player p);
+    public static String decimalFormat(double number) {
+        return DECIMAL_FORMAT.format(number);
+    }
 
-    List<Player> getPlayers();
-    List<Player> getSpectators();
-    YamlConfiguration getConfig();
-    String getPermission();
-    EventoType getType();
+    public static String letterFormat(double value) {
 
-    boolean isElimination();
-    boolean isHappening();
-    boolean isOpen();
-    boolean isSpectatorAllowed();
-    boolean requireEmptyInventory();
-    boolean countParticipation();
-    boolean countWin();
+        int index = 0;
+
+        double tmp;
+        while ((tmp = value / 1000) >= 1) {
+            value = tmp;
+            ++index;
+        }
+
+        return DECIMAL_FORMAT.format(value) + CHARS.get(index);
+
+    }
+
+    public static String parse(double value) {
+
+        if(aEventos.getInstance().getConfig().getString("Formatter.Type").equalsIgnoreCase("Decimal")) {
+            return decimalFormat(value);
+        }
+
+        return letterFormat(value);
+
+    }
 
 }

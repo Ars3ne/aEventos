@@ -54,8 +54,55 @@ public class InventoryConfigFile {
         try {
             config_file.createNewFile();
         } catch (IOException e) {
-            Bukkit.getConsoleSender().sendMessage("§c[aEventos] Ocorreu um erro ao criar o arquivo do inventário de um usuário.");
+
+            Bukkit.getConsoleSender().sendMessage("§c[aEventos] Ocorreu um erro ao salvar o inventário de um usuário. Cancelando evento...");
             e.printStackTrace();
+
+            YamlConfiguration evento_config;
+            evento_config = aEventos.getEventoManager().getEvento().getConfig();
+            aEventos.getEventoManager().getEvento().stop();
+
+            List<String> broadcast_messages = evento_config.getStringList("Messages.Cancelled");
+            for(String s : broadcast_messages) {
+                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", evento_config.getString("Evento.Title")));
+            }
+
+        }
+    }
+
+    public static void create(String name, String evento_identifier) {
+
+        File config_file = new File(aEventos.getInstance().getDataFolder() + "/playerdata/backup/" + evento_identifier + "/", name + ".yml");
+        if (config_file.exists()) return;
+
+        // Se a pasta backup não existe, então a crie.
+        File directory = new File(aEventos.getInstance().getDataFolder() + "/playerdata/backup/");
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+
+        // Se a pasta do evento não existe, então a crie.
+        File directory2 = new File(aEventos.getInstance().getDataFolder() + "/playerdata/backup/" + evento_identifier + "/");
+        if (! directory2.exists()){
+            directory2.mkdir();
+        }
+
+        try {
+            config_file.createNewFile();
+        } catch (IOException e) {
+
+            Bukkit.getConsoleSender().sendMessage("§c[aEventos] Ocorreu um erro ao salvar o inventário de um usuário. Cancelando evento...");
+            e.printStackTrace();
+
+            YamlConfiguration evento_config;
+            evento_config = aEventos.getEventoManager().getEvento().getConfig();
+            aEventos.getEventoManager().getEvento().stop();
+
+            List<String> broadcast_messages = evento_config.getStringList("Messages.Cancelled");
+            for(String s : broadcast_messages) {
+                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", evento_config.getString("Evento.Title")));
+            }
+
         }
     }
 
@@ -82,9 +129,24 @@ public class InventoryConfigFile {
         config.set("filename", filename);
     }
 
+    public static void save(YamlConfiguration config, String evento_identifier) throws IOException {
+        String filename = config.getString("filename");
+        File file = new File(aEventos.getInstance().getDataFolder() + "/playerdata/backup/" + evento_identifier, filename);
+        config.set("filename", null);
+        config.save(file);
+        config.set("filename", filename);
+    }
+
     public static void delete(YamlConfiguration config) {
         String filename = config.getString("filename");
         File file = new File(aEventos.getInstance().getDataFolder() + "/playerdata/", filename);
+        if(!file.exists()) return;
+        file.delete();
+    }
+
+    public static void delete(YamlConfiguration config, String evento_identifier) {
+        String filename = config.getString("filename");
+        File file = new File(aEventos.getInstance().getDataFolder() + "/playerdata/backup/" + evento_identifier + "/", filename);
         if(!file.exists()) return;
         file.delete();
     }

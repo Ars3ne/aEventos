@@ -89,9 +89,10 @@ public class Votacao extends EventoChat {
             Object[] keyset = valid_alternatives.keySet().toArray();
 
             YamlConfiguration config_evento = EventoConfigFile.get(alternatives.getKeys(false).toArray()[(int) keyset[random.nextInt(keyset.length)]].toString());
-            boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento);
-            if(!started) {
-                Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§"));
+            if(EventoType.isEventoChat(EventoType.getEventoType(config_evento.getString("Evento.Type")))) {
+                aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento), 20L);
+            }else {
+                aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento), 20L);
             }
 
         }else{
@@ -114,9 +115,10 @@ public class Votacao extends EventoChat {
             }
 
             YamlConfiguration config_evento = EventoConfigFile.get(alternatives.getKeys(false).toArray()[Collections.max(total_votes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey()].toString());
-            boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento);
-            if(!started) {
-                Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§"));
+            if(EventoType.isEventoChat(EventoType.getEventoType(config_evento.getString("Evento.Type")))) {
+                aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento), 20L);
+            }else {
+                aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config_evento.getString("Evento.Type")), config_evento), 20L);
             }
 
         }

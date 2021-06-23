@@ -29,6 +29,7 @@ package com.ars3ne.eventos.eventos.chat;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
+import com.ars3ne.eventos.utils.NumberFormatter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -49,8 +50,8 @@ public class Bolao extends EventoChat {
         super(config);
 
         this.config = config;
-        this.cost = config.getInt("Evento.Cost");
-        this.reward = config.getInt("Evento.Reward");
+        this.cost = config.getLong("Evento.Cost");
+        this.reward = config.getLong("Evento.Reward");
 
     }
 
@@ -114,7 +115,7 @@ public class Bolao extends EventoChat {
 
     @Override
     public void parseMessage(String s, int calls) {
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", aEventos.getInstance().getEconomy().format(this.reward)).replace("@cost", aEventos.getInstance().getEconomy().format(this.cost)).replace("@players", String.valueOf(players.size()));
+        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward)).replace("@cost", NumberFormatter.parse(this.cost)).replace("@players", String.valueOf(players.size()));
         aEventos.getInstance().getServer().broadcastMessage(s);
     }
 
@@ -127,7 +128,7 @@ public class Bolao extends EventoChat {
         }
 
         if(aEventos.getInstance().getEconomy().getBalance(p) < this.cost) {
-            p.sendMessage(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", aEventos.getInstance().getEconomy().format(this.cost)));
+            p.sendMessage(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost)));
             return;
         }
 

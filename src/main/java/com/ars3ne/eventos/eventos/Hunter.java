@@ -260,9 +260,6 @@ public class Hunter extends Evento {
 
         List<String> winners = new ArrayList<>();
 
-        // Adicionar vitória e dar a tag no LegendChat.
-        this.setWinners();
-
         // Encerre o evento.
         this.stop();
 
@@ -274,6 +271,9 @@ public class Hunter extends Evento {
             for (Player player : getSpectators()) {
                 player.sendMessage(config.getString("Messages.Win").replace("&", "§").replace("@team", this.blue_name).replace("@points", String.valueOf(blue_points)));
             }
+
+            // Adicionar vitória e dar a tag no LegendChat.
+            this.setWinners(blue_team.keySet());
 
             // Obtenha todos os jogadores restantes e os entregue as recompensas.
             for(Player p: blue_team.keySet()) {
@@ -294,6 +294,9 @@ public class Hunter extends Evento {
             for (Player player : getSpectators()) {
                 player.sendMessage(config.getString("Messages.Win").replace("&", "§").replace("@team", this.red_name).replace("@points", String.valueOf(red_points)));
             }
+
+            // Adicionar vitória e dar a tag no LegendChat.
+            this.setWinners(red_team.keySet());
 
             // Obtenha todos os jogadores restantes e os entregue as recompensas.
             for(Player p: red_team.keySet()) {

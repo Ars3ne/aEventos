@@ -86,6 +86,13 @@ public class AnvilListener implements Listener {
         e.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void EntityChangeBlock(EntityChangeBlockEvent e) {
+        if (e.getEntityType() == EntityType.FALLING_BLOCK && evento.getAnvils().contains(e.getBlock())) {
+            e.setCancelled(true);
+        }
+    }
+
     public void setEvento() {
         evento = (Anvil) aEventos.getEventoManager().getEvento();
     }

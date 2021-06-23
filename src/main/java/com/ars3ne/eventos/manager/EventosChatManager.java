@@ -47,6 +47,7 @@ public class EventosChatManager {
         }
 
         if(!verify(config)) return false;
+        if(evento != null) return false;
 
         switch(type) {
             case VOTACAO:

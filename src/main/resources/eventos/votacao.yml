@@ -71,3 +71,15 @@ Alternatives:
     Name: "Quiz"
   anvil:
     Name: "Anvil"
+  loteria:
+    Name: "Loteria"
+  bolao:
+    Name: "Bolão"
+  gladiador:
+    Name: "Gladiador"
+  matematica:
+    Name: "Matemática"
+  palavra:
+    Name: "Palavra"
+  fastclick:
+    Name: "FastClick"

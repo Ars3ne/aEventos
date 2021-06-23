@@ -29,6 +29,7 @@ package com.ars3ne.eventos.eventos.chat;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
+import com.ars3ne.eventos.utils.NumberFormatter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -55,7 +56,7 @@ public class FastClick extends EventoChat {
         super(config);
 
         this.config = config;
-        this.reward = config.getInt("Evento.Reward");
+        this.reward = config.getLong("Evento.Reward");
         this.clickable = config.getString("Messages.Clickable");
         this.not_clickable = config.getString("Messages.Not clickable");
         this.total_lines = config.getInt("Evento.Lines");
@@ -112,7 +113,12 @@ public class FastClick extends EventoChat {
     @Override
     public void parseMessage(String s, int calls) {
 
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", aEventos.getInstance().getEconomy().format(this.reward));
+        if(!this.isHappening()) {
+            this.stop();
+            return;
+        }
+
+        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward));
 
         for(int i = 1; i <= total_lines; i++) {
 
@@ -153,6 +159,11 @@ public class FastClick extends EventoChat {
     @Override
     public void parseCommand(Player p, String[] args) {
 
+        if(!this.isHappening()) {
+            this.stop();
+            return;
+        }
+
         try {
 
             int line = Integer.parseInt(args[0]);
@@ -162,12 +173,10 @@ public class FastClick extends EventoChat {
                 winner(p);
             }else {
                 p.sendMessage(config.getString("Messages.Wrong").replace("&", "§").replace("@name", config.getString("Evento.Title")));
-                return;
             }
 
         }catch(NumberFormatException ignored) {
             p.sendMessage(config.getString("Messages.Wrong").replace("&", "§").replace("@name", config.getString("Evento.Title")));
-            return;
         }
     }
 }

@@ -36,15 +36,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
+import java.util.List;
 
 public class InventorySerializer {
 
-    public static void serialize(Player p) {
+    public static void serialize(Player p, String evento_identifier) {
 
         if(aEventos.getEventoManager().getEvento() == null) return;
         if(!aEventos.getEventoManager().getEvento().requireEmptyInventory()) return;
 
         InventoryConfigFile.create(p.getUniqueId().toString());
+        InventoryConfigFile.create(p.getUniqueId().toString(), evento_identifier);
+
         YamlConfiguration config = InventoryConfigFile.get(p.getUniqueId().toString());
 
         // Salve o inventário do usuário para um arquivo.
@@ -62,19 +65,30 @@ public class InventorySerializer {
         }
 
         try {
-
             InventoryConfigFile.save(config);
+            InventoryConfigFile.save(config, evento_identifier);
             p.getInventory().clear();
             p.getInventory().setArmorContents(null);
 
         } catch (IOException e) {
-            Bukkit.getConsoleSender().sendMessage("§c[aEventos] Ocorreu um erro ao salvar o inventário de um usuário.");
+
+            Bukkit.getConsoleSender().sendMessage("§c[aEventos] Ocorreu um erro ao salvar o inventário de um usuário. Cancelando evento...");
             e.printStackTrace();
+
+            YamlConfiguration evento_config;
+            evento_config = aEventos.getEventoManager().getEvento().getConfig();
+            aEventos.getEventoManager().getEvento().stop();
+
+            List<String> broadcast_messages = evento_config.getStringList("Messages.Cancelled");
+            for(String s : broadcast_messages) {
+                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", evento_config.getString("Evento.Title")));
+            }
+
         }
 
     }
 
-    public static void deserialize(Player p) {
+    public static void deserialize(Player p, String evento_identifier, boolean leaved) {
 
         if(aEventos.getEventoManager().getEvento() == null) return;
         if(!aEventos.getEventoManager().getEvento().requireEmptyInventory()) return;
@@ -108,7 +122,7 @@ public class InventorySerializer {
 
         // Delete o arquivo do inventário.
         InventoryConfigFile.delete(config);
-
+        if(leaved) InventoryConfigFile.delete(config, evento_identifier);
     }
 
 }

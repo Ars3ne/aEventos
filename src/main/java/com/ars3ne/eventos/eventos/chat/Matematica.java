@@ -29,6 +29,7 @@ package com.ars3ne.eventos.eventos.chat;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
+import com.ars3ne.eventos.utils.NumberFormatter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -49,7 +50,7 @@ public class Matematica extends EventoChat {
         super(config);
 
         this.config = config;
-        this.reward = config.getInt("Evento.Reward");
+        this.reward = config.getLong("Evento.Reward");
 
         int account_type = ThreadLocalRandom.current().nextInt(0, 1 + 1);
 
@@ -115,7 +116,7 @@ public class Matematica extends EventoChat {
 
     @Override
     public void parseMessage(String s, int calls) {
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@sum", sum).replace("@name", config.getString("Evento.Title")).replace("@reward", aEventos.getInstance().getEconomy().format(this.reward));
+        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@sum", sum).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward));
         aEventos.getInstance().getServer().broadcastMessage(s);
     }
 

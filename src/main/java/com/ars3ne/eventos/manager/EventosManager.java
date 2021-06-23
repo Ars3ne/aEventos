@@ -44,6 +44,7 @@ public class EventosManager {
         }
 
         if(!verify(config)) return false;
+        if(evento != null) return false;
 
         switch(type) {
             case SIGN:

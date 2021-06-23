@@ -125,7 +125,7 @@ public class Anvil extends Evento {
             if(anvil.size() < cuboid.getTotalBlockSize() - 1) {
 
                 // Obtenha um bloco aleatório do cuboid.
-                Block anvil_block = cuboid.getRandomLocation().getBlock().getRelative(0, 1 ,0);
+                Block anvil_block = cuboid.getRandomLocation().getBlock().getRelative(0, 1,0);
                 if (anvil_block.getType() != Material.AIR || anvil.contains(anvil_block)) {
                     for(int i = 0; i < cuboid.getTotalBlockSize() - 1; i++) {
                         anvil_block = cuboid.getRandomLocation().getBlock();

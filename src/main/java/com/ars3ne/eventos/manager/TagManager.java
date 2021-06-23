@@ -97,6 +97,9 @@ public class TagManager {
             tags.add(config.getString("Rewards.Tag.Name"));
             lc_tag_holders.put(Bukkit.getOfflinePlayer(UUID.fromString(uuid)), tags);
         }
+
+        aEventos.updateTags();
+
     }
 
     public Map<String, String> getTags() {

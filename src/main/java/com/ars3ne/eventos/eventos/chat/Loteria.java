@@ -29,6 +29,7 @@ package com.ars3ne.eventos.eventos.chat;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
+import com.ars3ne.eventos.utils.NumberFormatter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -46,9 +47,9 @@ public class Loteria extends EventoChat {
         super(config);
 
         this.config = config;
-        this.cost = config.getInt("Evento.Cost");
+        this.cost = config.getLong("Evento.Cost");
         this.max_number = config.getInt("Evento.Max number");
-        this.reward = config.getInt("Evento.Reward");
+        this.reward = config.getLong("Evento.Reward");
 
         this.number = (int) (Math.floor(Math.random() * this.max_number ) + 1);
 
@@ -100,7 +101,7 @@ public class Loteria extends EventoChat {
 
     @Override
     public void parseMessage(String s, int calls) {
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", aEventos.getInstance().getEconomy().format(this.reward)).replace("@cost", aEventos.getInstance().getEconomy().format(this.cost)).replace("@max", String.valueOf(this.max_number));
+        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward)).replace("@cost", NumberFormatter.parse(this.cost)).replace("@max", String.valueOf(this.max_number));
         aEventos.getInstance().getServer().broadcastMessage(s);
     }
 
@@ -108,7 +109,7 @@ public class Loteria extends EventoChat {
     public void parseCommand(Player p, String[] args) {
 
         if(aEventos.getInstance().getEconomy().getBalance(p) < this.cost) {
-            p.sendMessage(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", aEventos.getInstance().getEconomy().format(this.cost)));
+            p.sendMessage(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost)));
             return;
         }
 

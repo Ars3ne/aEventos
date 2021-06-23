@@ -72,6 +72,7 @@ public class CacheManager {
         aEventos.getConnectionManager().getPlayersWins();
         aEventos.getConnectionManager().getPlayersParticipations();
 
+        updateTags();
     }
 
     public void updateTags() {
