@@ -263,8 +263,6 @@ public class ConnectionManager {
             if(results.next()) {
                 result = results.getString("wins");
             }else {
-                statement.close();
-                results.close();
                 result =  "{}";
             }
 
