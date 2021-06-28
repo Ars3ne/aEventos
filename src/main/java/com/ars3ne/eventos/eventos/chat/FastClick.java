@@ -145,14 +145,14 @@ public class FastClick extends EventoChat {
                     component.addExtra(click);
                 }
 
-                aEventos.getInstance().getServer().spigot().broadcast(component);
+                if(this.isHappening()) aEventos.getInstance().getServer().spigot().broadcast(component);
                 return;
 
             }
 
         }
 
-        aEventos.getInstance().getServer().broadcastMessage(s);
+        if(this.isHappening()) aEventos.getInstance().getServer().broadcastMessage(s);
 
     }
 

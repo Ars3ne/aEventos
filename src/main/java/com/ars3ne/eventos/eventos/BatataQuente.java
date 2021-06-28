@@ -209,13 +209,13 @@ public class BatataQuente extends Evento {
         }, (max_time - 5) * 20L, 20L);
 
         // Se o portador da batata for o mesmo depois do tempo limite, então o elimine e defina outro.
-        int finalCurrent_potato_holder_changes1 = current_potato_holder_changes;
+        int current_task_id = task;
         aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
 
             if(!isHappening()) return;
             if(!getPlayers().contains(p)) return;
-            if(potato_holder_changes != finalCurrent_potato_holder_changes1) return;
-            if(getPotatoHolder() == null) return;
+            if(getPotatoHolder() == null || getPotatoHolder() != p) return;
+            if(task != current_task_id) return;
 
             potato_holder.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
             potato_holder.getInventory().setHelmet(null);

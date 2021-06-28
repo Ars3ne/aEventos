@@ -119,6 +119,9 @@ public class ConversorConnectionManager {
 
             }
 
+            statement.close();
+            results.close();
+
             return true;
 
         }catch (SQLException e) {
@@ -154,6 +157,8 @@ public class ConversorConnectionManager {
 
             }
 
+            statement.close();
+            results.close();
             return true;
 
         }catch (SQLException e) {

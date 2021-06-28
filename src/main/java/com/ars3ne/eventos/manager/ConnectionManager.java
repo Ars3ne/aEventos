@@ -114,6 +114,10 @@ public class ConnectionManager {
             statement2.executeUpdate();
             statement3.executeUpdate();
 
+            statement.close();
+            statement2.close();
+            statement3.close();
+
         } catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível criar o banco de dados. Desativando plugin...");
             Bukkit.getConsoleSender().sendMessage(e.getMessage());
@@ -149,7 +153,11 @@ public class ConnectionManager {
                     insert.setString(1, name);
                     insert.setString(2, "[]");
                     insert.executeUpdate();
+                    insert.close();
                 }
+
+                statement.close();
+                results.close();
 
             }catch (SQLException e) {
 
@@ -183,7 +191,11 @@ public class ConnectionManager {
                     insert.setString(3, "[]");
                     insert.setString(4, "[]");
                     insert.executeUpdate();
+                    insert.close();
                 }
+
+                statement.close();
+                results.close();
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -218,8 +230,13 @@ public class ConnectionManager {
                     insert.setString(5, "{}");
                     insert.setString(6, "{}");
                     insert.executeUpdate();
+                    insert.close();
 
                 }
+
+                statement.close();
+                results.close();
+
             }catch (SQLException e) {
 
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -242,11 +259,18 @@ public class ConnectionManager {
                     .prepareStatement("SELECT wins FROM aeventos_users WHERE uuid=?");
             statement.setString(1,uuid.toString());
             ResultSet results = statement.executeQuery();
+            String result;
             if(results.next()) {
-                return results.getString("wins");
+                result = results.getString("wins");
             }else {
-                return "{}";
+                statement.close();
+                results.close();
+                result =  "{}";
             }
+
+            statement.close();
+            results.close();
+            return result;
 
         }catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as vitorias de um usuário. Desativando plugin...");
@@ -276,6 +300,7 @@ public class ConnectionManager {
                 update.setObject(1, json.toString());
                 update.setString(2, uuid.toString());
                 update.executeUpdate();
+                update.close();
 
             } catch (ParseException | SQLException e) {
 
@@ -310,6 +335,7 @@ public class ConnectionManager {
                 update.setInt(2, qtd);
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
+                update.close();
 
             } catch (ParseException | SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -330,11 +356,17 @@ public class ConnectionManager {
                     .prepareStatement("SELECT participations FROM aeventos_users WHERE uuid=?");
             statement.setString(1,uuid.toString());
             ResultSet results = statement.executeQuery();
+            String result;
+
             if(results.next()) {
-                return results.getString("participations");
+                result = results.getString("participations");
             }else {
-                return "{}";
+                result = "{}";
             }
+
+            statement.close();
+            results.close();
+            return result;
 
         }catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as participações de um usuário. Desativando plugin...");
@@ -364,6 +396,7 @@ public class ConnectionManager {
                 update.setObject(1, json.toString());
                 update.setString(2, uuid.toString());
                 update.executeUpdate();
+                update.close();
 
             } catch (ParseException | SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -396,6 +429,7 @@ public class ConnectionManager {
                 update.setInt(2, qtd);
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
+                update.close();
 
             } catch (ParseException | SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -416,11 +450,17 @@ public class ConnectionManager {
                     .prepareStatement("SELECT current_winners FROM aeventos_eventos WHERE name=?");
             statement.setString(1,name);
             ResultSet results = statement.executeQuery();
+
+            String result;
             if(results.next()) {
-                return results.getString("current_winners");
+                result = results.getString("current_winners");
             }else {
-                return "[]";
+                result = "[]";
             }
+
+            statement.close();
+            results.close();
+            return result;
 
         }catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter os vencedores de um evento. Desativando plugin...");
@@ -438,11 +478,16 @@ public class ConnectionManager {
                     .prepareStatement("SELECT current_winners FROM aeventos_eventos_guild WHERE name=?");
             statement.setString(1,name);
             ResultSet results = statement.executeQuery();
+            String result;
             if(results.next()) {
-                return results.getString("current_winners");
+                result = results.getString("current_winners");
             }else {
-                return "[]";
+                result = "[]";
             }
+
+            statement.close();
+            results.close();
+            return result;
 
         }catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter os vencedores de um evento. Desativando plugin...");
@@ -462,11 +507,16 @@ public class ConnectionManager {
                     .prepareStatement("SELECT total_kills FROM aeventos_eventos_guild WHERE name=?");
             statement.setString(1,name);
             ResultSet results = statement.executeQuery();
+            String result;
             if(results.next()) {
-                return gson.toJson(results.getString("total_kills"));
+                result = gson.toJson(results.getString("total_kills"));
             }else {
-                return "[]";
+                result = "[]";
             }
+
+            statement.close();
+            results.close();
+            return result;
 
         }catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao obter as kills de um evento. Desativando plugin...");
@@ -487,7 +537,7 @@ public class ConnectionManager {
                 update.setString(1, String.valueOf(winner));
                 update.setString(2, name);
                 update.executeUpdate();
-
+                update.close();
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
                     Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
@@ -514,6 +564,7 @@ public class ConnectionManager {
                 update.setString(3, String.valueOf(winner));
                 update.setString(4, name);
                 update.executeUpdate();
+                update.close();
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -538,6 +589,9 @@ public class ConnectionManager {
             ResultSet results = statement.executeQuery();
             if(results.next()) {
 
+                statement.close();
+                results.close();
+
                 JsonObject jsonObject = (new JsonParser()).parse(results.getString("wins")).getAsJsonObject();
 
                 Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
@@ -548,6 +602,8 @@ public class ConnectionManager {
                 return wins;
 
             }else {
+                statement.close();
+                results.close();
                 return null;
             }
 
@@ -572,6 +628,9 @@ public class ConnectionManager {
             ResultSet results = statement.executeQuery();
             if(results.next()) {
 
+                statement.close();
+                results.close();
+
                 JsonObject jsonObject = (new JsonParser()).parse(results.getString("participations")).getAsJsonObject();
 
                 Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
@@ -582,6 +641,8 @@ public class ConnectionManager {
                 return participations;
 
             }else {
+                statement.close();
+                results.close();
                 return null;
             }
 
@@ -603,6 +664,7 @@ public class ConnectionManager {
                 PreparedStatement statement = connection
                         .prepareStatement("SELECT uuid,wins FROM aeventos_users");
                 ResultSet results = statement.executeQuery();
+
                 while(results.next()) {
 
                     Map<String, Integer> wins = new HashMap<>();
@@ -618,6 +680,9 @@ public class ConnectionManager {
                     aEventos.getCacheManager().getPlayerWinsList().put(player, wins);
 
                 }
+
+                statement.close();
+                results.close();
 
                 aEventos.getCacheManager().calculateTopWins();
 
@@ -657,6 +722,9 @@ public class ConnectionManager {
 
                 }
 
+                statement.close();
+                results.close();
+
                 aEventos.getCacheManager().calculateTopParticipations();
 
             }catch (SQLException e) {
@@ -683,6 +751,7 @@ public class ConnectionManager {
                 update.setInt(2, wins);
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
+                update.close();
 
             } catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -708,6 +777,7 @@ public class ConnectionManager {
                 update.setInt(2, participations);
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
+                update.close();
 
             } catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
@@ -728,6 +798,9 @@ public class ConnectionManager {
             PreparedStatement statement = connection
                     .prepareStatement("SELECT id from aeventos_users WHERE id=1");
             ResultSet results = statement.executeQuery();
+
+            statement.close();
+            results.close();
             return !results.next();
 
         } catch (SQLException e) {

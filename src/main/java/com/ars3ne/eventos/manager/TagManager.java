@@ -45,6 +45,10 @@ public class TagManager {
     public void setup() {
         // Não estou orgulhoso dessa gambiarra, mas é o que temos para hoje.
         // Leia todos os arquivos de configuração de eventos e adicione as suas tags a lista.
+
+        lc_tags.clear();
+        lc_tag_holders.clear();
+
         for (File file : Objects.requireNonNull(EventoConfigFile.getAllFiles())) {
 
             if(file.getName().contains("old") || file.getName().contains("converted")) continue;

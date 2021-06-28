@@ -233,7 +233,6 @@ public class Evento implements EventoInterface{
 
         aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
         aEventos.getTagManager().updateTagHolder(config);
-
         aEventos.updateTags();
         aEventos.getCacheManager().updateCache();
         InventoryManager.reload();
@@ -261,7 +260,6 @@ public class Evento implements EventoInterface{
 
         aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
         aEventos.getTagManager().updateTagHolder(config);
-
         aEventos.updateTags();
         aEventos.getCacheManager().updateCache();
         InventoryManager.reload();
@@ -288,6 +286,8 @@ public class Evento implements EventoInterface{
         aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
         aEventos.getTagManager().updateTagHolder(config);
         aEventos.updateTags();
+        aEventos.getCacheManager().updateCache();
+        InventoryManager.reload();
 
     }
 
@@ -309,6 +309,9 @@ public class Evento implements EventoInterface{
 
         aEventos.getConnectionManager().setEventoGuildWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), guild_name, kills, winners);        aEventos.getTagManager().updateTagHolder(config);
         aEventos.updateTags();
+        aEventos.updateTags();
+        aEventos.getCacheManager().updateCache();
+        InventoryManager.reload();
 
     }
 
@@ -349,7 +352,6 @@ public class Evento implements EventoInterface{
         EventoStopEvent stop = new EventoStopEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(stop);
 
-        aEventos.getCacheManager().updateCache();
         aEventos.getEventoManager().startEvento(EventoType.NONE, null);
     }
 

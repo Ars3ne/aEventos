@@ -76,6 +76,7 @@ public class CacheManager {
     }
 
     public void updateTags() {
+        aEventos.updateTags();
         lc_tags = aEventos.getTagManager().getTags();
         lc_tag_holders = aEventos.getTagManager().getTagHolders();
     }
@@ -121,6 +122,8 @@ public class CacheManager {
                 List<String> lore = new ArrayList<>();
                 int total_wins = getPlayerWins(p) != null ? getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
                 int total_participations = getPlayerParticipations(p) != null ? getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
+
+                if(total_wins == 0) continue;
 
                 int player_top_wins_position = getPlayerTopWinsPosition(p);
                 int player_top_participations_position = getPlayerTopParticipationsPosition(p);
@@ -186,6 +189,8 @@ public class CacheManager {
                 List<String> lore = new ArrayList<>();
                 int total_wins = getPlayerWins(p) != null ? getPlayerWins(p).values().stream().reduce(0, Integer::sum) : 0;
                 int total_participations = getPlayerParticipations(p) != null ? getPlayerParticipations(p).values().stream().reduce(0, Integer::sum) : 0;
+
+                if(total_participations == 0) continue;
 
                 int player_top_wins_position = getPlayerTopWinsPosition(p);
                 int player_top_participations_position = getPlayerTopParticipationsPosition(p);
