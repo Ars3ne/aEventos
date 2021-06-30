@@ -76,7 +76,6 @@ public class CacheManager {
     }
 
     public void updateTags() {
-        aEventos.updateTags();
         lc_tags = aEventos.getTagManager().getTags();
         lc_tag_holders = aEventos.getTagManager().getTagHolders();
     }
