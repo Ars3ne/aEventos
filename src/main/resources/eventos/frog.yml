@@ -10,7 +10,6 @@ Evento:
   Permission: "aeventos.evento" # A permissão necessária para participar do evento.
   Count participation: true # Esse evento contará participação?
   Count victory: true # Esse evento contará vitória?
-  Levels: 20 # A quantidade de níveis que o Frog terá.
   Start: 30 # O tempo em segundos antes de começar.
   Time: 10 # O tempo em segundos que o nível terá.
   Snow: 6 # Tempo em segundos que a neve ficará.

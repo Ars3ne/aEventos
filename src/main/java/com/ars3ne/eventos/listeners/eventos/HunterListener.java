@@ -51,6 +51,9 @@ public class HunterListener implements Listener {
 
         Player p = (Player) e.getEntity();
         Arrow arrow = (Arrow) e.getDamager();
+
+        if(!(arrow.getShooter() instanceof Player)) return;
+
         Player shooter = (Player) arrow.getShooter();
 
         if(!evento.getPlayers().contains(p) || !evento.getPlayers().contains(shooter)) return;
@@ -90,7 +93,7 @@ public class HunterListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getWhoClicked())) return;
+        if (!evento.getPlayers().contains((Player) e.getWhoClicked())) return;
         e.setCancelled(true);
     }
 

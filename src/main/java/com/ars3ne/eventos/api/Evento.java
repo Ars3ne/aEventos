@@ -402,6 +402,13 @@ public class Evento implements EventoInterface{
             }
         }
 
+        if(spectators.contains(p)) {
+            spectators.remove(p);
+            p.getInventory().clear();
+            this.teleport(p, "exit");
+            return;
+        }
+
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
         Bukkit.getPluginManager().callEvent(lose);
 
