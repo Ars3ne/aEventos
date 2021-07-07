@@ -706,25 +706,34 @@ public class EventoCommand implements CommandExecutor {
 
                             }else {
 
-                                // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
-                                settings.set("Itens.Helmet", "");
-                                settings.set("Itens.Helmet.a", "shaark");
-                                settings.set("Itens.Chestplate", "");
-                                settings.set("Itens.Chestplate.a", "shaark");
-                                settings.set("Itens.Leggings", "");
-                                settings.set("Itens.Leggings.a", "shaark");
-                                settings.set("Itens.Boots", "");
-                                settings.set("Itens.Boots.a", "shaark");
+                                // Se o evento não for de times, então salve a armadura.
+                                switch(EventoType.getEventoType(settings.getString("Evento.Type"))) {
+                                    case PAINTBALL: case HUNTER: case NEXUS:
+                                        break;
+                                    default:
+                                        // O serializer não aceita uma section vazia por algum motivo, então eu sou obrigado a definir algo temporário apenas para não ficar vazia.
+                                        settings.set("Itens.Helmet", "");
+                                        settings.set("Itens.Helmet.a", "shaark");
+                                        settings.set("Itens.Chestplate", "");
+                                        settings.set("Itens.Chestplate.a", "shaark");
+                                        settings.set("Itens.Leggings", "");
+                                        settings.set("Itens.Leggings.a", "shaark");
+                                        settings.set("Itens.Boots", "");
+                                        settings.set("Itens.Boots.a", "shaark");
 
-                                if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Helmet"));
-                                if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Chestplate"));
-                                if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Leggings"));
-                                if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Boots"));
+                                        if(p.getInventory().getHelmet() != null) XItemStack.serialize(p.getInventory().getHelmet(), settings.getConfigurationSection("Itens.Helmet"));
+                                        if(p.getInventory().getChestplate() != null) XItemStack.serialize(p.getInventory().getChestplate(), settings.getConfigurationSection("Itens.Chestplate"));
+                                        if(p.getInventory().getLeggings() != null) XItemStack.serialize(p.getInventory().getLeggings(), settings.getConfigurationSection("Itens.Leggings"));
+                                        if(p.getInventory().getBoots() != null) XItemStack.serialize(p.getInventory().getBoots(), settings.getConfigurationSection("Itens.Boots"));
 
-                                settings.set("Itens.Helmet.a", null);
-                                settings.set("Itens.Chestplate.a", null);
-                                settings.set("Itens.Leggings.a", null);
-                                settings.set("Itens.Boots.a", null);
+                                        settings.set("Itens.Helmet.a", null);
+                                        settings.set("Itens.Chestplate.a", null);
+                                        settings.set("Itens.Leggings.a", null);
+                                        settings.set("Itens.Boots.a", null);
+
+                                        break;
+
+                                }
 
                                 settings.set("Itens.Inventory", "");
 

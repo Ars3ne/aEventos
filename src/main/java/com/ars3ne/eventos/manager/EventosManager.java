@@ -92,8 +92,12 @@ public class EventosManager {
             case GUERRA:
                 this.evento = new Guerra(config);
                 break;
+            case NEXUS:
+                this.evento = new Nexus(config);
+                break;
         }
 
+        assert this.evento != null;
         this.evento.startCall();
         return true;
 
@@ -104,7 +108,7 @@ public class EventosManager {
         boolean require_pos = false;
 
         switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
-            case CAMPO_MINADO: case SPLEEF: case FROG: case FIGHT: case PAINTBALL: case HUNTER: case QUIZ: case ANVIL:
+            case CAMPO_MINADO: case SPLEEF: case FROG: case FIGHT: case PAINTBALL: case HUNTER: case QUIZ: case ANVIL: case NEXUS:
                 require_pos = true;
                 break;
         }

@@ -49,6 +49,7 @@ public enum EventoType {
     MATEMATICA,
     PALAVRA,
     FAST_CLICK,
+    NEXUS,
     NONE;
 
     public static EventoType getEventoType(String type) {
@@ -95,6 +96,8 @@ public enum EventoType {
                 return EventoType.PALAVRA;
             case "fastclick":
                 return EventoType.FAST_CLICK;
+            case "nexus":
+                return EventoType.NEXUS;
             default:
                 return EventoType.NONE;
         }
@@ -144,6 +147,8 @@ public enum EventoType {
                 return "palavra";
             case FAST_CLICK:
                 return "fastclick";
+            case NEXUS:
+                return "nexus";
             default:
                 return "none";
         }
