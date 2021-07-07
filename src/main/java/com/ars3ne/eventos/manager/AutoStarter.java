@@ -39,6 +39,7 @@ public class AutoStarter {
 
     private BukkitTask task;
     private YamlConfiguration config;
+    private boolean start_cooldown = false;
 
     public void setup() {
 
@@ -76,10 +77,14 @@ public class AutoStarter {
                         config = EventoConfigFile.get(separated[1]);
 
                         if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
-                            if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) return;
+
+                            if(this.start_cooldown) return; // Se estiver em cooldown, retorne.
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+
+                            this.start_cooldown = true; // Defina o start_cooldown como true.
+                            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> this.start_cooldown = false, 220L);
+
                         }else {
-                            if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) return;
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
                         }
 
@@ -100,10 +105,14 @@ public class AutoStarter {
                         config = EventoConfigFile.get(separated[0]);
 
                         if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
-                            if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) return;
+
+                            if(this.start_cooldown) return; // Se estiver em cooldown, retorne.
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
+
+                            this.start_cooldown = true; // Defina o start_cooldown como true.
+                            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> this.start_cooldown = false, 220L);
+
                         }else {
-                            if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) return;
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
                         }
                     }
