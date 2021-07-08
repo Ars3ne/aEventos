@@ -66,6 +66,8 @@ public class Hunter extends Evento {
     private final HashMap<Player, Integer> blue_team = new HashMap<>();
     private final HashMap<Player, Integer> red_team = new HashMap<>();
     private final List<Player> captured_players = new ArrayList<>();
+    private final List<Player> invincible_players = new ArrayList<>();
+
     private int blue_points = 0;
     private int red_points = 0;
 
@@ -75,6 +77,7 @@ public class Hunter extends Evento {
     private final int kill_points;
     private final int max_points;
     private final int capture_time;
+    private final int invincibility_time;
 
     private final String blue_name;
     private final String red_name;
@@ -99,6 +102,7 @@ public class Hunter extends Evento {
         this.kill_points = config.getInt("Evento.Points");
         this.max_points = config.getInt("Evento.Max points");
         this.capture_time = config.getInt("Evento.Capture time");
+        this.invincibility_time = config.getInt("Evento.Invincibility");
 
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
@@ -567,6 +571,9 @@ public class Hunter extends Evento {
                 captured.teleport(red);
             }
 
+            // Adicione o jogador á lista de invencíveis e o remova depois de um tempo.
+            invincible_players.add(captured);
+            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> invincible_players.remove(captured), invincibility_time * 20L);
 
 
     }, capture_time * 20L);
@@ -576,17 +583,14 @@ public class Hunter extends Evento {
     public HashMap<Player, Integer> getBlueTeam() {
         return this.blue_team;
     }
-
     public HashMap<Player, Integer> getRedTeam() {
         return this.red_team;
     }
+    public List<Player> getCaptured() { return this.captured_players; }
+    public List<Player> getInvinciblePlayers() { return this.invincible_players; }
 
     public int getBluePoints() { return this.blue_points; }
-
     public int getRedPoints() { return this.red_points; }
-
-    public List<Player> getCaptured() { return this.captured_players; }
-
     public boolean isPvPEnabled() { return this.pvp_enabled; }
 
     private int getClanMembers(Player p) {

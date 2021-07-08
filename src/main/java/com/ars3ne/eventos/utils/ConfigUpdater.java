@@ -483,6 +483,25 @@ public class ConfigUpdater {
 
                     }
                     continue;
+                 case HUNTER:
+
+                    // Defina a configuração de invencibilidade, caso não esteja definida.
+                    if(!config.isSet("Evento.Invincibility")) {
+
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
+
+                        config.set("Evento.Invincibility", 5);
+
+                        try {
+                            EventoConfigFile.save(config);
+                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
+                            e.printStackTrace();
+                        }
+
+                    }
+                    continue;
                 default:
                     break;
 

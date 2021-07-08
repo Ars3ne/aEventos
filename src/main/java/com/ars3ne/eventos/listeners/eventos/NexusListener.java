@@ -134,6 +134,11 @@ public class NexusListener implements Listener {
                 return;
             }
 
+            if(evento.getInvinciblePlayers().contains(damaged) || evento.getInvinciblePlayers().contains(damager)) {
+                e.setCancelled(true);
+                return;
+            }
+
             if(!evento.isPvPEnabled()) {
                 e.setCancelled(true);
                 return;

@@ -62,6 +62,7 @@ public class HunterListener implements Listener {
 
         if(evento.getCaptured().contains(p) || evento.getCaptured().contains(shooter)) return;
         if(!evento.isPvPEnabled()) return;
+        if(evento.getInvinciblePlayers().contains(p) || evento.getInvinciblePlayers().contains(shooter)) return;
 
         if((evento.getBlueTeam().containsKey(p) && evento.getBlueTeam().containsKey(shooter))
                 || (evento.getRedTeam().containsKey(p) && evento.getRedTeam().containsKey(shooter))) {

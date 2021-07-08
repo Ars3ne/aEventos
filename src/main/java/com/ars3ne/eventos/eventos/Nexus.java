@@ -71,10 +71,11 @@ public class Nexus extends Evento {
     private final HashMap<Player, Integer> blue_team = new HashMap<>();
     private final HashMap<Player, Integer> red_team = new HashMap<>();
     private final List<Player> dead_players = new ArrayList<>();
+    private final List<Player> invincible_players = new ArrayList<>();
 
     private yClansAPI yclans_api;
 
-    private final int enable_pvp, health, respawn_interval, damage;
+    private final int enable_pvp, health, respawn_interval, damage, invincibility_time;
     private final String nexus_name;
     private int blue_nexus_health, red_nexus_health;
 
@@ -102,6 +103,7 @@ public class Nexus extends Evento {
         this.respawn_interval = config.getInt("Evento.Respawn time");
         this.damage = config.getInt("Evento.Damage");
         this.nexus_name = config.getString("Evento.Nexus name");
+        this.invincibility_time = config.getInt("Evento.Invincibility");
 
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue_spawn = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
@@ -394,6 +396,10 @@ public class Nexus extends Evento {
                 captured.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Inventory." + item)));
             }
 
+            // Adicione o jogador á lista de invencíveis e o remova depois de um tempo.
+            invincible_players.add(captured);
+            aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> invincible_players.remove(captured), invincibility_time * 20L);
+
         }, respawn_interval * 20L);
 
     }
@@ -573,6 +579,7 @@ public class Nexus extends Evento {
     public HashMap<Player, Integer> getBlueTeam() { return this.blue_team; }
     public HashMap<Player, Integer> getRedTeam() { return this.red_team; }
     public List<Player> getDeadPlayers() { return this.dead_players; }
+    public List<Player> getInvinciblePlayers() { return this.invincible_players; }
 
     public String getBlueTeamName() { return blue_name; }
     public String getRedTeamName() { return red_name; }

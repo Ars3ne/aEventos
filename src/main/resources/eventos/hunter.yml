@@ -16,6 +16,7 @@ Evento:
   Points: 1 # Quantos pontos um time ganhará ao capturar um jogador do time oposto?
   Max points: 30 # Caso um time obtenha essa quantidade de pontos, ele vence. Para desativar, basta definir como 0.
   Capture time: 5 # Quanto tempo, em segundos, um jogador capturado deve esperar para poder voltar a jogar?
+  Invincibility: 5 # Tempo em segundos que um jogador será invencível depois de ser respawnado.
 
 # Mensagens
 Messages:

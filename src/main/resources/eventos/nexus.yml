@@ -14,6 +14,7 @@ Evento:
   Red: "Time Vermelho" # O nome do time vermelho.
   Enable PvP: 10 # Tempo em segundos antes do PvP e do dano aos Nexus ser ativado.
   Respawn time: 5 # Tempo em segundos para um jogdador respawnar depois de ser morto.
+  Invincibility: 5 # Tempo em segundos que um jogador será invencível depois de ser respawnado.
   Health: 1000 # A quantidade de vida de um Nexus.
   Damage: 5 # A quantidade de dano que um Nexus receberá por hit.
   Nexus name: "&d&lNEXUS &f- @team_color&l@team_uppercase &f(&aHP: &f@health&f)" # O nome do Nexus. Caso queira o nome do time seja case sensitive, use a variável @team.
