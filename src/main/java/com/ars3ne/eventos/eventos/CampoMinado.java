@@ -236,14 +236,12 @@ public class CampoMinado extends Evento {
                     try{
 
                         // Elimine todos os jogadores dentro do cuboid.
+                        List<Player> eliminate = new ArrayList<>();
                         for (Player p : getPlayers()) {
 
                             if(cuboid.isInWithMargeY(p, 6)) {
                                 // Remova o jogador do evento e envie a mensagem de eliminação.
-                                p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                remove(p);
-                                PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                Bukkit.getPluginManager().callEvent(lose);
+                                eliminate.add(p);
                                 continue;
                             }
 
@@ -256,37 +254,25 @@ public class CampoMinado extends Evento {
                                     case EAST:
                                         // Se a direção do spawn for EAST, verifique se o usuário avançou no X.
                                         if(p.getLocation().getX() < config.getLong("Locations.Entrance.x") + cuboid.getXWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                     case WEST:
                                         // Se a direção do spawn for WEST, verifique se o usuário avançou no X.
                                         if(p.getLocation().getX() > config.getLong("Locations.Entrance.x") - cuboid.getXWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                     case SOUTH:
                                         // Se a direção do spawn for SOUTH, verifique se o usuário avançou no Z.
                                         if (p.getLocation().getZ() < config.getLong("Locations.Entrance.z") + cuboid.getZWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                     case NORTH:
                                         // Se a direção do spawn for NORTH, verifique se o usuário avançou no Z.
                                         if (p.getLocation().getZ() > config.getLong("Locations.Entrance.z") - cuboid.getZWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                 }
@@ -298,37 +284,25 @@ public class CampoMinado extends Evento {
                                     case EAST:
                                         // Se a direção do spawn for EAST, verifique se o usuário avançou no X.
                                         if(p.getLocation().getX() > config.getLong("Locations.Entrance.x") + cuboid.getXWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                     case WEST:
                                         // Se a direção do spawn for WEST, verifique se o usuário avançou no X.
                                         if(p.getLocation().getX() < config.getLong("Locations.Entrance.x") - cuboid.getXWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                     case SOUTH:
                                         // Se a direção do spawn for SOUTH, verifique se o usuário avançou no Z.
                                         if (p.getLocation().getZ() > config.getLong("Locations.Entrance.z") + cuboid.getZWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                     case NORTH:
                                         // Se a direção do spawn for NORTH, verifique se o usuário avançou no Z.
                                         if (p.getLocation().getZ() < config.getLong("Locations.Entrance.z") - cuboid.getZWidth()) {
-                                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
-                                            remove(p);
-                                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                                            Bukkit.getPluginManager().callEvent(lose);
+                                            eliminate.add(p);
                                         }
                                         break;
                                 }
@@ -336,9 +310,19 @@ public class CampoMinado extends Evento {
 
                         }
 
+                        for(Player p: eliminate) {
+                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                            remove(p);
+                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
+                            Bukkit.getPluginManager().callEvent(lose);
+                        }
+                        eliminate.clear();
+
                         level_happening = false;
 
-                    }catch(ConcurrentModificationException ignored) { }
+                    }catch(ConcurrentModificationException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
