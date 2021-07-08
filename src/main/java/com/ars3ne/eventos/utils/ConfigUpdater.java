@@ -381,7 +381,7 @@ public class ConfigUpdater {
                     SerializerConverter.convert(config);
                     continue;
                 case KILLER:
-
+                    // TODO: Talvez mudar isso para uma classe própia?
                     // Adicione a seção dos itens padrões.
                     if(config.getConfigurationSection("Itens") == null) {
 
@@ -438,7 +438,50 @@ public class ConfigUpdater {
                         }
 
                     }
+                    continue;
+                case SUMO:
+                    // Adicione a seção dos itens padrões.
+                    if(config.getConfigurationSection("Itens") == null) {
 
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
+
+                        // Armadura padrão.
+                        config.set("Itens.Enabled", true);
+
+                        // Capacete
+                        config.set("Itens.Helmet", null);
+                        config.set("Itens.Helmet.a", "shaark");
+                        config.set("Itens.Helmet.a", null);
+
+                        // Peitoral
+                        config.set("Itens.Chestplate", null);
+                        config.set("Itens.Chestplate.a", "shaark");
+                        config.set("Itens.Chestplate.a", null);
+
+                        // Calças
+                        config.set("Itens.Leggings", null);
+                        config.set("Itens.Leggings.a", "shaark");
+                        config.set("Itens.Leggings.a", null);
+
+                        // Botas
+                        config.set("Itens.Boots", null);
+                        config.set("Itens.Boots.a", "shaark");
+                        config.set("Itens.Boots.a", null);
+
+                        // Itens padrões do inventário.
+                        config.set("Itens.Inventory.0.material", "STICK");
+                        config.set("Itens.Inventory.0.damage", 0);
+                        config.set("Itens.Inventory.0.enchants.KNOCKBACK", 5);
+
+                        try {
+                            EventoConfigFile.save(config);
+                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
+                            e.printStackTrace();
+                        }
+
+                    }
                     continue;
                 default:
                     break;

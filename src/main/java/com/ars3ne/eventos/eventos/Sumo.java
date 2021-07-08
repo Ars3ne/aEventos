@@ -31,18 +31,15 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.SumoListener;
+import com.cryptomorin.xseries.XItemStack;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MFlag;
 import com.massivecraft.factions.entity.MPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import yclans.api.yClansAPI;
 import yclans.model.Clan;
 
@@ -61,10 +58,12 @@ public class Sumo extends Evento {
     private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
     private final HashMap<yclans.model.ClanPlayer, Clan> yclans_clans = new HashMap<>();
 
+    private final boolean defined_items;
     public Sumo(YamlConfiguration config) {
 
         super(config);
         this.config = config;
+        this.defined_items = config.getBoolean("Itens.Enabled");
 
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
             yclans_api = yClansAPI.yclansapi;
@@ -107,14 +106,20 @@ public class Sumo extends Evento {
             }
         }
 
-        // De o stick para os jogadores.
-        ItemStack stick = new ItemStack(Material.STICK, 1);
-        ItemMeta meta = stick.getItemMeta();
-        meta.addEnchant(Enchantment.KNOCKBACK, 5, true);
-        stick.setItemMeta(meta);
+        // Se os itens setados estão ativados, então os obtenha.
+        if(defined_items) {
+            for(Player p: getPlayers()) {
 
-        for(Player p: getPlayers()) {
-            p.getInventory().addItem(stick);
+                p.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Helmet")));
+                p.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Chestplate")));
+                p.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Leggings")));
+                p.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Boots")));
+
+                for(String item: config.getConfigurationSection("Itens.Inventory").getKeys(false)) {
+                    p.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Inventory." + item)));
+                }
+
+            }
         }
 
     }
@@ -149,6 +154,15 @@ public class Sumo extends Evento {
                 yclans_clans.get(clan_player).setFriendlyFireMember(false);
                 yclans_clans.get(clan_player).setFriendlyFireAlly(false);
             }
+        }
+
+        // Se os itens forem setados, então limpe o inventário do jogador.
+        if(defined_items) {
+            p.getInventory().clear();
+            p.getInventory().setHelmet(null);
+            p.getInventory().setChestplate(null);
+            p.getInventory().setLeggings(null);
+            p.getInventory().setBoots(null);
         }
 
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
@@ -195,6 +209,17 @@ public class Sumo extends Evento {
         for(yclans.model.ClanPlayer p: yclans_clans.keySet()) {
             p.getClan().setFriendlyFireMember(false);
             p.getClan().setFriendlyFireAlly(false);
+        }
+
+        // Se o evento for de itens setados, limpe o inventário dos jogadores.
+        if(defined_items) {
+            for(Player p: getPlayers()) {
+                p.getInventory().clear();
+                p.getInventory().setHelmet(null);
+                p.getInventory().setChestplate(null);
+                p.getInventory().setLeggings(null);
+                p.getInventory().setBoots(null);
+            }
         }
 
         // Remova o listener do evento e chame a função cancel.
