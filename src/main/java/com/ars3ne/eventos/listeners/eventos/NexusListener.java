@@ -32,10 +32,8 @@ import com.ars3ne.eventos.eventos.Nexus;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -149,20 +147,12 @@ public class NexusListener implements Listener {
                 e.setCancelled(true);
             }
 
+            if(((damaged.getHealth() - e.getFinalDamage()) <= 0)) {
+                e.setCancelled(true);
+                evento.eliminate(damaged);
+            }
         }
 
-    }
-
-    @EventHandler(priority = EventPriority.LOW)
-    public void onDeath(PlayerDeathEvent e) {
-
-        if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
-
-        // Limpe os drops e defina o jogador como o perdedor.
-        e.getDrops().clear();
-        e.setKeepLevel(true);
-        evento.eliminate(e.getEntity().getPlayer());
     }
 
     @EventHandler

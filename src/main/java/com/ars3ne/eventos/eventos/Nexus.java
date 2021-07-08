@@ -282,7 +282,6 @@ public class Nexus extends Evento {
 
         // Reviva o jogador morto.
         captured.getInventory().clear();
-        captured.spigot().respawn();
         captured.setFoodLevel(20);
         captured.setHealth(captured.getMaxHealth());
 
