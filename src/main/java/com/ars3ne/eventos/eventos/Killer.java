@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.KillerListener;
+import com.cryptomorin.xseries.XItemStack;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MFlag;
 import com.massivecraft.factions.entity.MPlayer;
@@ -53,6 +54,7 @@ public class Killer extends Evento {
 
     private final int enable_pvp, pickup_time;
     private boolean pvp_enabled = false;
+    private final boolean defined_items;
 
     private yClansAPI yclans_api;
 
@@ -66,6 +68,7 @@ public class Killer extends Evento {
         this.config = config;
         this.enable_pvp = config.getInt("Evento.Time");
         this.pickup_time = config.getInt("Evento.Pickup time");
+        this.defined_items = config.getBoolean("Itens.Enabled");
 
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
             yclans_api = yClansAPI.yclansapi;
@@ -79,6 +82,22 @@ public class Killer extends Evento {
         // Registre o listener do evento
         aEventos.getInstance().getServer().getPluginManager().registerEvents(listener, aEventos.getInstance());
         listener.setEvento();
+
+        // Se os itens setados estão ativados, então os obtenha.
+        if(defined_items) {
+            for(Player p: getPlayers()) {
+
+                p.getInventory().setHelmet(XItemStack.deserialize(config.getConfigurationSection("Itens.Helmet")));
+                p.getInventory().setChestplate(XItemStack.deserialize(config.getConfigurationSection("Itens.Chestplate")));
+                p.getInventory().setLeggings(XItemStack.deserialize(config.getConfigurationSection("Itens.Leggings")));
+                p.getInventory().setBoots(XItemStack.deserialize(config.getConfigurationSection("Itens.Boots")));
+
+                for(String item: config.getConfigurationSection("Itens.Inventory").getKeys(false)) {
+                    p.getInventory().setItem(Integer.parseInt(item), XItemStack.deserialize(config.getConfigurationSection("Itens.Inventory." + item)));
+                }
+
+            }
+        }
 
         // Se o servidor tiver SimpleClans, então ative o friendly fire.
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
@@ -184,6 +203,15 @@ public class Killer extends Evento {
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
         Bukkit.getPluginManager().callEvent(lose);
 
+        // Se os itens forem setados, então limpe o inventário do jogador.
+        if(defined_items) {
+            p.getInventory().clear();
+            p.getInventory().setHelmet(null);
+            p.getInventory().setChestplate(null);
+            p.getInventory().setLeggings(null);
+            p.getInventory().setBoots(null);
+        }
+
         this.remove(p);
     }
 
@@ -243,6 +271,17 @@ public class Killer extends Evento {
         simpleclans_clans.clear();
         massivefactions_factions.clear();
         yclans_clans.clear();
+
+        // Se o evento for de itens setados, limpe o inventário dos jogadores.
+        if(defined_items) {
+            for(Player p: getPlayers()) {
+                p.getInventory().clear();
+                p.getInventory().setHelmet(null);
+                p.getInventory().setChestplate(null);
+                p.getInventory().setLeggings(null);
+                p.getInventory().setBoots(null);
+            }
+        }
 
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);

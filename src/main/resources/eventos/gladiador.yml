@@ -32,7 +32,7 @@ Border:
   Damage: 2 # Quanto dano a borda deve dar?
   Delay: 10 # A borda deve começar a diminuir depois de quantos segundos do início do evento?
 
-Itens:
+Itens: # Itens definidos do evento. Você pode definir-los automaticamente com o comando /evento setup kit
   Enabled: false # Caso esteja ativado, o evento será com os itens setados abaixo. Lembre-se de ativar a opção "Empty inventory"!
   Helmet:
     material: "DIAMOND_HELMET"

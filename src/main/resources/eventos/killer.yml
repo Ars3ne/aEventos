@@ -13,6 +13,49 @@ Evento:
   Time: 30 # Tempo em segundos antes do PvP ser ativado.
   Pickup time: 20 # Tempo em segundos que o vencedor terá para pegar os drops.
 
+Itens: # Itens definidos do evento. Você pode definir-los automaticamente com o comando /evento setup kit
+  Enabled: false # Caso esteja ativado, o evento será com os itens setados abaixo. Lembre-se de ativar a opção "Empty inventory"!
+  Helmet:
+    material: "DIAMOND_HELMET"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Chestplate:
+    material: "DIAMOND_CHESTPLATE"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Leggings:
+    material: "DIAMOND_LEGGINGS"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Boots:
+    material: "DIAMOND_BOOTS"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Inventory:
+    0: # Posição do item no inventário.
+      material: "DIAMOND_SWORD"
+      damage: 0
+      enchants:
+        DAMAGE_ALL: 5
+    1: # Posição do item no inventário.
+      material: "GOLDEN_APPLE"
+      amount: 64
+      damage: 1 # Data do item.
+    2:
+      material: "POTION"
+      damage: 41 #  Data do item.
+      name: "&5Poção de Força"
+      level: 2
+      base-effect: "STRENGTH, false, false" # Efeito da poção, A poção é jogável?, Poção estendida?
+
 # Mensagens
 Messages:
   Broadcast:

@@ -380,6 +380,66 @@ public class ConfigUpdater {
                     LegacySerializerConverter.convertSpleef(config);
                     SerializerConverter.convert(config);
                     continue;
+                case KILLER:
+
+                    // Adicione a seção dos itens padrões.
+                    if(config.getConfigurationSection("Itens") == null) {
+
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
+
+                        // Armadura padrão.
+                        config.set("Itens.Enabled", false);
+
+                        // Capacete
+                        config.set("Itens.Helmet.material", "DIAMOND_HELMET");
+                        config.set("Itens.Helmet.damage", 0);
+                        config.set("Itens.Helmet.enchants.PROTECTION_ENVIRONMENTAL", 4);
+                        config.set("Itens.Helmet.enchants.DURABILITY", 4);
+
+                        // Peitoral
+                        config.set("Itens.Chestplate.material", "DIAMOND_CHESTPLATE");
+                        config.set("Itens.Chestplate.damage", 0);
+                        config.set("Itens.Chestplate.enchants.PROTECTION_ENVIRONMENTAL", 4);
+                        config.set("Itens.Chestplate.enchants.DURABILITY", 4);
+
+                        // Calças
+                        config.set("Itens.Leggings.material", "DIAMOND_LEGGINGS");
+                        config.set("Itens.Leggings.damage", 0);
+                        config.set("Itens.Leggings.enchants.PROTECTION_ENVIRONMENTAL", 4);
+                        config.set("Itens.Leggings.enchants.DURABILITY", 4);
+
+                        // Botas
+                        config.set("Itens.Boots.material", "DIAMOND_BOOTS");
+                        config.set("Itens.Boots.damage", 0);
+                        config.set("Itens.Boots.enchants.PROTECTION_ENVIRONMENTAL", 4);
+                        config.set("Itens.Boots.enchants.DURABILITY", 4);
+
+                        // Itens padrões do inventário.
+                        config.set("Itens.Inventory.0.material", "DIAMOND_SWORD");
+                        config.set("Itens.Inventory.0.damage", 0);
+                        config.set("Itens.Inventory.0.enchants.DAMAGE_ALL", 5);
+
+                        config.set("Itens.Inventory.1.material", "GOLDEN_APPLE");
+                        config.set("Itens.Inventory.1.amount", 64);
+                        config.set("Itens.Inventory.1.damage", 1);
+
+                        config.set("Itens.Inventory.2.material", "POTION");
+                        config.set("Itens.Inventory.2.damage", 41);
+                        config.set("Itens.Inventory.2.name", "&5Poção de Força");
+                        config.set("Itens.Inventory.2.level", 2);
+                        config.set("Itens.Inventory.2.base-effect", "STRENGTH, false, false");
+
+                        try {
+                            EventoConfigFile.save(config);
+                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    continue;
                 default:
                     break;
 
