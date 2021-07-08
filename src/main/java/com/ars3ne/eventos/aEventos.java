@@ -356,7 +356,6 @@ public class aEventos extends JavaPlugin {
 
     public static void updateTags() {
         tag_manager.setup();
-        cache.updateTags();
         cache.updateCache();
     }
 

@@ -536,6 +536,9 @@ public class ConnectionManager {
                 update.setString(2, name);
                 update.executeUpdate();
                 update.close();
+
+                aEventos.updateTags();
+
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
                     Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cOcorreu um erro ao definir o vencedor do evento. Desativando plugin...");
@@ -563,6 +566,8 @@ public class ConnectionManager {
                 update.setString(4, name);
                 update.executeUpdate();
                 update.close();
+
+                aEventos.updateTags();
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
