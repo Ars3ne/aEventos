@@ -114,7 +114,7 @@ public class Frog extends Evento {
                     remeaning_materials.put(block.getType(), block.getData());
                 }
 
-                if(XMaterial.isNewVersion()) remeaning_materials.put(block.getType(), (byte) 0);
+                if(XMaterial.isNewVersion() && !remeaning_materials.containsKey(block.getType())) remeaning_materials.put(block.getType(), (byte) 0);
 
             }else {
                 block.setType(Material.SNOW_BLOCK);
@@ -210,7 +210,6 @@ public class Frog extends Evento {
             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> {
 
                 if(!isHappening()) return;
-
                 remeaning_materials.remove(material_remove, material_data);
 
                 for(Block b: deleted_blocks.keySet()) {
