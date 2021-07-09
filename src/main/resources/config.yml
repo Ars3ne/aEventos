@@ -151,6 +151,7 @@ Messages:
   Give axe: "&3[Evento] &bClique com o botão esquerdo para definir a pos1, e com o direito para definir a pos2."
   Not needed: "&3[Evento] &bVocê não precisa do machado para definir posições nesse evento."
   Not needed kit: "&3[Evento] &bVocê não precisa definir o kit desse evento."
+  Multiple kits: "&3[Evento] &bVocê deve configurar os kits desse evento usando os comandos &l/evento setup kit normal &be&l /evento setup kit last&b."
   Not enough alternatives: "&3[Evento] &bO número mínimo de alternativas é maior que o número total de alternativas possíveis."
   Unknown argument: "&3[Evento] &bArgumento inválido. Digite &f/evento setup&b para ver a lista de argumentos."
   Missing dependency: "&3[Evento] &bEste evento não pode funcionar sem o plugin &f@dependency&b."
