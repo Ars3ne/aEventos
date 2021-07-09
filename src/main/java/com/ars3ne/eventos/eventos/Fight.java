@@ -237,6 +237,8 @@ public class Fight extends Evento {
                 this.remove(p);
             }
 
+        }else {
+            this.remove(p);
         }
 
 

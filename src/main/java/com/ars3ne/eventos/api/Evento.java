@@ -432,8 +432,14 @@ public class Evento implements EventoInterface{
 
     public void remove(Player p) {
 
+        if(spectators.contains(p)) {
+            spectators.remove(p);
+            p.getInventory().clear();
+            this.teleport(p, "exit");
+            return;
+        }
+
         players.remove(p);
-        spectators.remove(p);
         this.teleport(p, "exit");
 
         if(this.empty_inventory) {
@@ -463,8 +469,14 @@ public class Evento implements EventoInterface{
 
     public void remove(Player p, boolean leaved) {
 
+        if(spectators.contains(p)) {
+            spectators.remove(p);
+            p.getInventory().clear();
+            this.teleport(p, "exit");
+            return;
+        }
+
         players.remove(p);
-        spectators.remove(p);
         this.teleport(p, "exit");
 
         if(this.empty_inventory) {
