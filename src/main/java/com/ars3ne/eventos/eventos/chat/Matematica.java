@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos.chat;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.utils.NumberFormatter;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -76,7 +77,7 @@ public class Matematica extends EventoChat {
         // Pare o evento sem vencedores.
         List<String> broadcast_messages = config.getStringList("Messages.No winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@result", String.valueOf(result)).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@result", String.valueOf(result)).replace("@name", config.getString("Evento.Title"))));
         }
 
         stop();
@@ -94,7 +95,7 @@ public class Matematica extends EventoChat {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@result", String.valueOf(result)).replace("@name", config.getString("Evento.Title")).replace("@winner", p.getName()));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@result", String.valueOf(result)).replace("@name", config.getString("Evento.Title")).replace("@winner", p.getName())));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -116,7 +117,7 @@ public class Matematica extends EventoChat {
 
     @Override
     public void parseMessage(String s, int calls) {
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@sum", sum).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward));
+        s = IridiumColorAPI.process(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@sum", sum).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward)));
         aEventos.getInstance().getServer().broadcastMessage(s);
     }
 

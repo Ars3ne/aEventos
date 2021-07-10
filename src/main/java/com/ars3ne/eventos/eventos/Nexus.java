@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.NexusListener;
 import com.cryptomorin.xseries.XItemStack;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MFlag;
 import com.massivecraft.factions.entity.MPlayer;
@@ -122,13 +123,13 @@ public class Nexus extends Evento {
         red_nexus_health = this.health;
 
         blue_nexus = world.spawnEntity(blue_nexus_loc, EntityType.ENDER_CRYSTAL);
-        blue_nexus.setCustomName(nexus_name.replace("&", "§").replace("@team_color", "§9").replace("@team_uppercase", blue_name.toUpperCase()).replace("@team", blue_name).replace("@health", String.valueOf(blue_nexus_health)));
+        blue_nexus.setCustomName(IridiumColorAPI.process(nexus_name.replace("&", "§").replace("@team_color", "§9").replace("@team_uppercase", blue_name.toUpperCase()).replace("@team", blue_name).replace("@health", String.valueOf(blue_nexus_health))));
         blue_nexus.setMetadata("Nexus", new FixedMetadataValue(aEventos.getInstance(), true));
         blue_nexus.setMetadata("Blue", new FixedMetadataValue(aEventos.getInstance(), true));
         blue_nexus.setCustomNameVisible(true);
 
         red_nexus = world.spawnEntity(red_nexus_loc, EntityType.ENDER_CRYSTAL);
-        red_nexus.setCustomName(nexus_name.replace("&", "§").replace("@team_color", "§c").replace("@team_uppercase", red_name.toUpperCase()).replace("@team", red_name).replace("@health", String.valueOf(red_nexus_health)));
+        red_nexus.setCustomName(IridiumColorAPI.process(nexus_name.replace("&", "§").replace("@team_color", "§c").replace("@team_uppercase", red_name.toUpperCase()).replace("@team", red_name).replace("@health", String.valueOf(red_nexus_health))));
         red_nexus.setMetadata("Nexus", new FixedMetadataValue(aEventos.getInstance(), true));
         red_nexus.setMetadata("Red", new FixedMetadataValue(aEventos.getInstance(), true));
         red_nexus.setCustomNameVisible(true);
@@ -170,7 +171,7 @@ public class Nexus extends Evento {
 
             if(blue_team.containsKey(p)) {
                 for(String s: team_st) {
-                    p.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§9" + blue_name).replace("@time", String.valueOf(enable_pvp)));
+                    p.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§9" + blue_name).replace("@time", String.valueOf(enable_pvp))));
                 }
                 ItemStack helmet = new ItemStack(Material.LEATHER_HELMET, 1);
                 LeatherArmorMeta bl = (LeatherArmorMeta) helmet.getItemMeta();
@@ -200,7 +201,7 @@ public class Nexus extends Evento {
 
             if(red_team.containsKey(p)) {
                 for(String s: team_st) {
-                    p.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§c" + red_name).replace("@time", String.valueOf(enable_pvp)));
+                    p.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§c" + red_name).replace("@time", String.valueOf(enable_pvp))));
                 }
                 ItemStack helmet = new ItemStack(Material.LEATHER_HELMET, 1);
                 LeatherArmorMeta bl = (LeatherArmorMeta) helmet.getItemMeta();
@@ -266,12 +267,12 @@ public class Nexus extends Evento {
             List<String> enabled_st = config.getStringList("Messages.Enabled");
             for (Player player : getPlayers()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
         }, enable_pvp * 20L);
@@ -321,7 +322,7 @@ public class Nexus extends Evento {
         // Mande a mensagem para o jogador.
         List<String> died_st = config.getStringList("Messages.Died");
         for(String s: died_st) {
-            captured.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@time", String.valueOf(respawn_interval)));
+            captured.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@time", String.valueOf(respawn_interval))));
         }
 
         // Depois de alguns segundos, teleporte o capturado para o inicio.
@@ -417,12 +418,12 @@ public class Nexus extends Evento {
 
             for (Player player : getPlayers()) {
                 for(String s: destroyed) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.red_name).replace("@team2", this.blue_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.red_name).replace("@team2", this.blue_name)));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s: destroyed) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.red_name).replace("@team2", this.blue_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.red_name).replace("@team2", this.blue_name)));
                 }
             }
 
@@ -444,12 +445,12 @@ public class Nexus extends Evento {
 
             for (Player player : getPlayers()) {
                 for(String s: destroyed) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.blue_name).replace("@team2", this.red_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.blue_name).replace("@team2", this.red_name)));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s: destroyed) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.blue_name).replace("@team2", this.red_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", getConfig().getString("Evento.Title")).replace("@team1", this.blue_name).replace("@team2", this.red_name)));
                 }
             }
 
@@ -472,7 +473,7 @@ public class Nexus extends Evento {
         // Mande a mensagem de vitória para o servidor.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title"))));
         }
 
     }
@@ -482,10 +483,10 @@ public class Nexus extends Evento {
 
         if(getPlayers().contains(p)) {
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
         }
 

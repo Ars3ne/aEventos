@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.FallListener;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -89,7 +90,7 @@ public class Fall extends Evento {
         // Mande a mensagem de vitória para o servidor.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title"))));
         }
 
     }

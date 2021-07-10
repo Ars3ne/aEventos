@@ -29,6 +29,7 @@ package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.eventos.Sign;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -91,7 +92,7 @@ public class SignListener implements Listener {
 
                 // Salve o checkpoint.
                 checkpoints.put(e.getPlayer(), e.getClickedBlock().getLocation());
-                e.getPlayer().sendMessage(evento.getConfig().getString("Messages.Checkpoint saved").replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title")));
+                e.getPlayer().sendMessage(IridiumColorAPI.process(evento.getConfig().getString("Messages.Checkpoint saved").replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title"))));
 
             }
 
@@ -119,7 +120,7 @@ public class SignListener implements Listener {
             check.setYaw(p.getLocation().getYaw());
             check.setPitch(p.getLocation().getPitch());
             p.teleport(check);
-            p.sendMessage(evento.getConfig().getString("Messages.Checkpoint back").replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title")));
+            p.sendMessage(IridiumColorAPI.process(evento.getConfig().getString("Messages.Checkpoint back").replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title"))));
         }
 
         // Se não, mande-o para a entrada.
@@ -132,7 +133,7 @@ public class SignListener implements Listener {
             float yaw = p.getLocation().getYaw();
             float pitch = p.getLocation().getPitch();
             p.teleport(new Location(w, x, y, z, yaw, pitch));
-            p.sendMessage(evento.getConfig().getString("Messages.Back").replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title")));
+            p.sendMessage(IridiumColorAPI.process(evento.getConfig().getString("Messages.Back").replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title"))));
         }
 
     }

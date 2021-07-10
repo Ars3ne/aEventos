@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos.chat;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.utils.NumberFormatter;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -61,7 +62,7 @@ public class Sorteio extends EventoChat {
 
             List<String> broadcast_messages = config.getStringList("Messages.No winner");
             for(String s : broadcast_messages) {
-                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
 
             stop();
@@ -91,7 +92,7 @@ public class Sorteio extends EventoChat {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")).replace("@winner", p.getName()));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")).replace("@winner", p.getName())));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -110,7 +111,7 @@ public class Sorteio extends EventoChat {
 
     @Override
     public void parseMessage(String s, int calls) {
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost)).replace("@players", String.valueOf(players.size()));
+        s = IridiumColorAPI.process(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost)).replace("@players", String.valueOf(players.size())));
         aEventos.getInstance().getServer().broadcastMessage(s);
     }
 
@@ -118,19 +119,19 @@ public class Sorteio extends EventoChat {
     public void parseCommand(Player p, String[] args) {
 
         if(players.contains(p)) {
-            p.sendMessage(config.getString("Messages.Already joined").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Already joined").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             return;
         }
 
         if(aEventos.getInstance().getEconomy().getBalance(p) < this.cost) {
-            p.sendMessage(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost)));
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost))));
             return;
         }
 
         aEventos.getInstance().getEconomy().withdrawPlayer(p, this.cost);
 
         players.add(p);
-        p.sendMessage(config.getString("Messages.Joined").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+        p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Joined").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
 
     }
 

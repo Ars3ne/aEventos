@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos.chat;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.utils.NumberFormatter;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -72,7 +73,7 @@ public class FastClick extends EventoChat {
         // Pare o evento sem vencedores.
         List<String> broadcast_messages = config.getStringList("Messages.No winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
         }
 
         stop();
@@ -90,7 +91,7 @@ public class FastClick extends EventoChat {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")).replace("@winner", p.getName()));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")).replace("@winner", p.getName())));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -118,7 +119,7 @@ public class FastClick extends EventoChat {
             return;
         }
 
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward));
+        s = IridiumColorAPI.process(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward)));
 
         for(int i = 1; i <= total_lines; i++) {
 
@@ -126,7 +127,7 @@ public class FastClick extends EventoChat {
 
                 s = s.replace("@line" + i, "");
 
-                TextComponent component = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', s)));
+                TextComponent component = new TextComponent(TextComponent.fromLegacyText(IridiumColorAPI.process(ChatColor.translateAlternateColorCodes('&', s))));
 
                 for(int z = 1; z <= config.getInt("Evento.Quantity"); z++) {
 
@@ -152,7 +153,7 @@ public class FastClick extends EventoChat {
 
         }
 
-        if(this.isHappening()) aEventos.getInstance().getServer().broadcastMessage(s);
+        if(this.isHappening()) aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s));
 
     }
 
@@ -172,11 +173,11 @@ public class FastClick extends EventoChat {
             if(line == correct_line && index == correct_index) {
                 winner(p);
             }else {
-                p.sendMessage(config.getString("Messages.Wrong").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Wrong").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
 
         }catch(NumberFormatException ignored) {
-            p.sendMessage(config.getString("Messages.Wrong").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Wrong").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
         }
     }
 }

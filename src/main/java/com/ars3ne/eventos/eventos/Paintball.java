@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.PaintballListener;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MFlag;
 import com.massivecraft.factions.entity.MPlayer;
@@ -127,7 +128,7 @@ public class Paintball extends Evento {
 
             if(blue_team.contains(p)) {
                 for(String s: team_st) {
-                    p.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§9" + blue_name).replace("@time", String.valueOf(time)));
+                    p.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§9" + blue_name).replace("@time", String.valueOf(time))));
                 }
                 ItemStack helmet = new ItemStack(Material.LEATHER_HELMET, 1);
                 LeatherArmorMeta bl = (LeatherArmorMeta) helmet.getItemMeta();
@@ -156,7 +157,7 @@ public class Paintball extends Evento {
 
             if(red_team.contains(p)) {
                 for(String s: team_st) {
-                    p.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§c" + red_name).replace("@time", String.valueOf(time)));
+                    p.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@team", "§c" + red_name).replace("@time", String.valueOf(time))));
                 }
                 ItemStack helmet = new ItemStack(Material.LEATHER_HELMET, 1);
                 LeatherArmorMeta bl = (LeatherArmorMeta) helmet.getItemMeta();
@@ -224,12 +225,12 @@ public class Paintball extends Evento {
             List<String> enabled_st = config.getStringList("Messages.Enabled");
             for (Player player : getPlayers()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
         }, time * 20L);
@@ -263,7 +264,7 @@ public class Paintball extends Evento {
         // Mande a mensagem de vitória para o servidor.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title"))));
         }
 
     }
@@ -273,10 +274,10 @@ public class Paintball extends Evento {
 
         if(getPlayers().contains(p)) {
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
         }
 
@@ -356,12 +357,12 @@ public class Paintball extends Evento {
 
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + p.getName()).replace("@remeaning", "§9" + blue_team.size()).replace("@team", "§9" + blue_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + p.getName()).replace("@remeaning", "§9" + blue_team.size()).replace("@team", "§9" + blue_name)));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + p.getName()).replace("@remeaning", "§9" + blue_team.size()).replace("@team", "§9" + blue_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§9" + p.getName()).replace("@remeaning", "§9" + blue_team.size()).replace("@team", "§9" + blue_name)));
                 }
             }
         }
@@ -373,12 +374,12 @@ public class Paintball extends Evento {
 
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + p.getName()).replace("@remeaning", "§c" + red_team.size()).replace("@team", "§c" + red_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + p.getName()).replace("@remeaning", "§c" + red_team.size()).replace("@team", "§c" + red_name)));
                 }
             }
             for (Player player : getSpectators()) {
                 for(String s: eliminated_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + p.getName()).replace("@remeaning", "§c" + red_team.size()).replace("@team", "§c" + red_name));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@player", "§c" + p.getName()).replace("@remeaning", "§c" + red_team.size()).replace("@team", "§c" + red_name)));
                 }
             }
         }

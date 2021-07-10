@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.events.EventoStartedEvent;
 import com.ars3ne.eventos.api.events.EventoStartingEvent;
 import com.ars3ne.eventos.api.events.EventoStopEvent;
 import com.ars3ne.eventos.api.events.PlayerWinEvent;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -189,7 +190,7 @@ public class EventoChat implements EventoInterface{
     }
 
     public void parseMessage(String s, int calls) {
-        aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")));
+        aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title"))));
     }
 
     public void parseCommand(Player p, String[] args) {

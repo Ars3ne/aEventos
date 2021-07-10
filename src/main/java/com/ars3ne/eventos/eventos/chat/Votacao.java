@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.Utils;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -62,7 +63,7 @@ public class Votacao extends EventoChat {
         this.total_alternatives = config.getInt("Evento.Alternatives");
 
         if(total_alternatives > alternatives.getKeys(false).size()) {
-            Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not enough alternatives").replace("&", "§"));
+            Bukkit.getConsoleSender().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not enough alternatives").replace("&", "§")));
             stop();
         }
 
@@ -82,7 +83,7 @@ public class Votacao extends EventoChat {
 
             List<String> broadcast_messages = config.getStringList("Messages.No votes");
             for(String s : broadcast_messages) {
-                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
 
             Random random = new Random();
@@ -111,7 +112,7 @@ public class Votacao extends EventoChat {
 
             List<String> broadcast_messages = config.getStringList("Messages.Winner");
             for(String s : broadcast_messages) {
-                aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", name).replace("@name", config.getString("Evento.Title")));
+                aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", name).replace("@name", config.getString("Evento.Title"))));
             }
 
             YamlConfiguration config_evento = EventoConfigFile.get(alternatives.getKeys(false).toArray()[Collections.max(total_votes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey()].toString());

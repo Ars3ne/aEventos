@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.SignListener;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -62,7 +63,7 @@ public class Sign extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", getConfig().getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", getConfig().getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.

@@ -33,6 +33,7 @@ import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.SpleefListener;
 import com.ars3ne.eventos.utils.Cuboid;
 import com.cryptomorin.xseries.XItemStack;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -108,13 +109,13 @@ public class Spleef extends Evento {
         List<String> starting_level = config.getStringList("Messages.Enabling breaking");
         for (Player player : getPlayers()) {
             for(String s : starting_level) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
         for (Player player : getSpectators()) {
             for(String s : starting_level) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
@@ -127,13 +128,13 @@ public class Spleef extends Evento {
             List<String> break_blocks = config.getStringList("Messages.Breaking allowed");
             for (Player player : getPlayers()) {
                 for(String s : break_blocks) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : break_blocks) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
@@ -161,7 +162,7 @@ public class Spleef extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -220,7 +221,7 @@ public class Spleef extends Evento {
 
             // Se o jogador está parado a mais tempo do que o limite, elimine-o do evento.
             if (time >= (listener.getLastMove().get(p) + (inactive_time * 1000L))) {
-                p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
                 remove(p);
                 PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                 Bukkit.getPluginManager().callEvent(lose);
@@ -230,7 +231,7 @@ public class Spleef extends Evento {
 
             // Se o jogador está parado á metade do tempo limite, mande um aviso.
             if (time >= (listener.getLastMove().get(p) + (inactive_time / 2) * 1000L)) {
-                p.sendMessage(config.getString("Messages.Kick").replace("&", "§").replace("@time", String.valueOf(Math.abs((time - (listener.getLastMove().get(p) + (inactive_time + 1) * 1000L)) / 1000L))).replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Kick").replace("&", "§").replace("@time", String.valueOf(Math.abs((time - (listener.getLastMove().get(p) + (inactive_time + 1) * 1000L)) / 1000L))).replace("@name", config.getString("Evento.Title"))));
             }
 
         }

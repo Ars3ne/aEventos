@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.QuizListener;
 import com.ars3ne.eventos.utils.Cuboid;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -41,7 +42,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class Quiz extends Evento {
 
@@ -121,7 +125,7 @@ public class Quiz extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", getConfig().getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", getConfig().getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -164,7 +168,7 @@ public class Quiz extends Evento {
         // Mande a mensagem de vitória para o servidor.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title"))));
         }
 
     }
@@ -193,13 +197,13 @@ public class Quiz extends Evento {
             // Mande a pergunta para todos os participantes.
             for (Player player : getPlayers()) {
                 for(String s : question_broadcast) {
-                    player.sendMessage(s.replace("&", "§").replace("@currentquestion", String.valueOf(total_questions)).replace("@question", question_values.get(current_question)).replace("@name", this.config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@currentquestion", String.valueOf(total_questions)).replace("@question", question_values.get(current_question)).replace("@name", this.config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : question_broadcast) {
-                    player.sendMessage(s.replace("&", "§").replace("@currentquestion", String.valueOf(total_questions)).replace("@question", question_values.get(current_question)).replace("@name", this.config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@currentquestion", String.valueOf(total_questions)).replace("@question", question_values.get(current_question)).replace("@name", this.config.getString("Evento.Title"))));
                 }
             }
 
@@ -214,7 +218,7 @@ public class Quiz extends Evento {
                     for (Player p : getPlayers()) {
                         if (!true_cuboid.isInWithMargeY(p, 6) && !false_cuboid.isInWithMargeY(p, 6)) {
                             // Remova o jogador do evento e envie a mensagem de eliminação.
-                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                            p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
                             eliminate.add(p);
                             PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                             Bukkit.getPluginManager().callEvent(lose);
@@ -232,7 +236,7 @@ public class Quiz extends Evento {
                             for(Player p: getPlayers()) {
                                 if (false_cuboid.isInWithMargeY(p, 6)) {
                                     // Remova o jogador do evento e envie a mensagem de eliminação.
-                                    p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                                    p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
                                     eliminate.add(p);
                                     PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                                     Bukkit.getPluginManager().callEvent(lose);
@@ -245,7 +249,7 @@ public class Quiz extends Evento {
                             for(Player p: getPlayers()) {
                                 if (true_cuboid.isInWithMargeY(p, 6)) {
                                     // Remova o jogador do evento e envie a mensagem de eliminação.
-                                    p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                                    p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
                                     eliminate.add(p);
                                     PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                                     Bukkit.getPluginManager().callEvent(lose);
@@ -266,13 +270,13 @@ public class Quiz extends Evento {
                     // Mande a mensagem de início da próxima pergunta para todos os participantes.
                     for (Player player : getPlayers()) {
                         for(String s : next_question) {
-                            player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title")));
+                            player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title"))));
                         }
                     }
 
                     for (Player player : getSpectators()) {
                         for(String s : next_question) {
-                            player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title")));
+                            player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(delay)).replace("@name", config.getString("Evento.Title"))));
                         }
                     }
 

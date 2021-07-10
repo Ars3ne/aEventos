@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.commands.EventoCommand;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.utils.EventoConfigFile;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -125,20 +126,20 @@ public class EventoListener implements Listener {
 
             if(e.getLine(1).equalsIgnoreCase("vitoria")) {
 
-                e.setLine(0, setup.get(e.getPlayer()).getStringList("Messages.Sign").get(0).replace("&", "§"));
-                e.setLine(1, setup.get(e.getPlayer()).getStringList("Messages.Sign").get(1).replace("&", "§"));
-                e.setLine(2, setup.get(e.getPlayer()).getStringList("Messages.Sign").get(2).replace("&", "§"));
-                e.setLine(3, setup.get(e.getPlayer()).getStringList("Messages.Sign").get(3).replace("&", "§"));
+                e.setLine(0, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Sign").get(0).replace("&", "§")));
+                e.setLine(1, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Sign").get(1).replace("&", "§")));
+                e.setLine(2, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Sign").get(2).replace("&", "§")));
+                e.setLine(3, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Sign").get(3).replace("&", "§")));
 
             }
 
             if(e.getLine(1).equalsIgnoreCase("checkpoint")) {
 
                 if(setup.get(e.getPlayer()).getStringList("Messages.Checkpoint") == null) return;
-                e.setLine(0, setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(0).replace("&", "§"));
-                e.setLine(1, setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(1).replace("&", "§"));
-                e.setLine(2, setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(2).replace("&", "§"));
-                e.setLine(3, setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(3).replace("&", "§"));
+                e.setLine(0, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(0).replace("&", "§")));
+                e.setLine(1, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(1).replace("&", "§")));
+                e.setLine(2, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(2).replace("&", "§")));
+                e.setLine(3, IridiumColorAPI.process(setup.get(e.getPlayer()).getStringList("Messages.Checkpoint").get(3).replace("&", "§")));
 
             }
         }
@@ -174,11 +175,11 @@ public class EventoListener implements Listener {
                     EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
-                    e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                    e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                     ex.printStackTrace();
                 }
 
-                e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos1 "));
+                e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos1 ")));
 
             }
 
@@ -193,11 +194,11 @@ public class EventoListener implements Listener {
                     EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
-                    e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                    e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                     ex.printStackTrace();
                 }
 
-                e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos2 "));
+                e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos2 ")));
 
             }
         }
@@ -220,11 +221,11 @@ public class EventoListener implements Listener {
                     EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
-                    e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                    e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                     ex.printStackTrace();
                 }
 
-                e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 "));
+                e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 ")));
 
             }
 
@@ -239,11 +240,11 @@ public class EventoListener implements Listener {
                     EventoConfigFile.save(settings);
                     setup.replace(e.getPlayer(), settings);
                 } catch (IOException ex) {
-                    e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                    e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                     ex.printStackTrace();
                 }
 
-                e.getPlayer().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
+                e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 ")));
 
             }
         }

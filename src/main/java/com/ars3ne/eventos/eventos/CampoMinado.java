@@ -33,6 +33,7 @@ import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.CampoMinadoListener;
 import com.ars3ne.eventos.utils.Cuboid;
 import com.ars3ne.eventos.utils.Utils;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -146,7 +147,7 @@ public class CampoMinado extends Evento {
         // Mande a mensagem de vitória para o servidor.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@name", config.getString("Evento.Title"))));
         }
 
     }
@@ -187,13 +188,13 @@ public class CampoMinado extends Evento {
             List<String> starting_level = config.getStringList("Messages.Starting level");
             for (Player player : getPlayers()) {
                 for(String s : starting_level) {
-                    player.sendMessage(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@time", String.valueOf(delay)).replace("@name", this.config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@time", String.valueOf(delay)).replace("@name", this.config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : starting_level) {
-                    player.sendMessage(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@time", String.valueOf(delay)).replace("@name", this.config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@time", String.valueOf(delay)).replace("@name", this.config.getString("Evento.Title"))));
                 }
             }
 
@@ -207,13 +208,13 @@ public class CampoMinado extends Evento {
                     List<String> starting_level1 = config.getStringList("Messages.Next level");
                     for (Player player : getPlayers()) {
                         for(String s : starting_level1) {
-                            player.sendMessage(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@name", config.getString("Evento.Title")));
+                            player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@name", config.getString("Evento.Title"))));
                         }
                     }
 
                     for (Player player : getSpectators()) {
                         for(String s : starting_level1) {
-                            player.sendMessage(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@name", config.getString("Evento.Title")));
+                            player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@level", String.valueOf(level)).replace("@name", config.getString("Evento.Title"))));
                         }
                     }
 
@@ -311,7 +312,7 @@ public class CampoMinado extends Evento {
                         }
 
                         for(Player p: eliminate) {
-                            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+                            p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
                             remove(p);
                             PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
                             Bukkit.getPluginManager().callEvent(lose);

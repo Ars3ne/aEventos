@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.KillerListener;
 import com.cryptomorin.xseries.XItemStack;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MFlag;
 import com.massivecraft.factions.entity.MPlayer;
@@ -132,13 +133,13 @@ public class Killer extends Evento {
 
         for (Player player : getPlayers()) {
             for(String s : starting_st) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
         for (Player player : getSpectators()) {
             for(String s : starting_st) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
@@ -154,13 +155,13 @@ public class Killer extends Evento {
 
             for (Player player : getPlayers()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
@@ -172,10 +173,10 @@ public class Killer extends Evento {
     public void leave(Player p) {
         if(getPlayers().contains(p)) {
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
         }
 
@@ -221,7 +222,7 @@ public class Killer extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", getConfig().getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", getConfig().getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -230,7 +231,7 @@ public class Killer extends Evento {
         // Mande uma mensagem para o vencedor sobre o tempo para pegar os drops.
         List<String> pickup_st = config.getStringList("Messages.Pickup");
         for(String s: pickup_st) {
-            p.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(pickup_time)).replace("@name", config.getString("Evento.Title")));
+            p.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(pickup_time)).replace("@name", config.getString("Evento.Title"))));
         }
 
         // Depois do tempo especificado na config, encerre o evento.

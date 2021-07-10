@@ -30,6 +30,7 @@ package com.ars3ne.eventos.eventos.chat;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoChat;
 import com.ars3ne.eventos.utils.NumberFormatter;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -61,7 +62,7 @@ public class Loteria extends EventoChat {
         // Pare o evento sem vencedores.
         List<String> broadcast_messages = config.getStringList("Messages.No winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@number", String.valueOf(this.number)));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@number", String.valueOf(this.number))));
         }
 
         stop();
@@ -79,7 +80,7 @@ public class Loteria extends EventoChat {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")).replace("@number", String.valueOf(this.number)));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")).replace("@number", String.valueOf(this.number))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -101,7 +102,7 @@ public class Loteria extends EventoChat {
 
     @Override
     public void parseMessage(String s, int calls) {
-        s = s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward)).replace("@cost", NumberFormatter.parse(this.cost)).replace("@max", String.valueOf(this.max_number));
+        s = IridiumColorAPI.process(s.replace("&", "§").replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title")).replace("@reward", NumberFormatter.parse(this.reward)).replace("@cost", NumberFormatter.parse(this.cost)).replace("@max", String.valueOf(this.max_number)));
         aEventos.getInstance().getServer().broadcastMessage(s);
     }
 
@@ -109,7 +110,7 @@ public class Loteria extends EventoChat {
     public void parseCommand(Player p, String[] args) {
 
         if(aEventos.getInstance().getEconomy().getBalance(p) < this.cost) {
-            p.sendMessage(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost)));
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.No money").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@cost", NumberFormatter.parse(this.cost))));
             return;
         }
 
@@ -118,7 +119,7 @@ public class Loteria extends EventoChat {
             int player_number = Integer.parseInt(args[0]);
 
             if(player_number <= 0 || player_number > this.max_number) {
-                p.sendMessage(config.getString("Messages.Invalid").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@max", String.valueOf(this.max_number)));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Invalid").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@max", String.valueOf(this.max_number))));
                 return;
             }
 
@@ -127,11 +128,11 @@ public class Loteria extends EventoChat {
             if(player_number == this.number) {
                 winner(p);
             }else {
-                p.sendMessage(config.getString("Messages.Lose").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@number", String.valueOf(player_number)));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Lose").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@number", String.valueOf(player_number))));
             }
 
         }catch(NumberFormatException e) {
-            p.sendMessage(config.getString("Messages.Invalid").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@max", String.valueOf(this.max_number)));
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Invalid").replace("&", "§").replace("@name", config.getString("Evento.Title")).replace("@max", String.valueOf(this.max_number))));
         }
 
     }

@@ -30,6 +30,7 @@ package com.ars3ne.eventos.manager;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.utils.EventoConfigFile;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -59,7 +60,7 @@ public class TagManager {
             if (config.getConfigurationSection("Rewards.Tag") == null) continue;
             if (!config.getBoolean("Rewards.Tag.Enabled")) continue;
 
-            lc_tags.put(config.getString("Rewards.Tag.Name"), config.getString("Rewards.Tag.Style").replace("&", "§"));
+            lc_tags.put(config.getString("Rewards.Tag.Name"), IridiumColorAPI.process(config.getString("Rewards.Tag.Style").replace("&", "§")));
 
             String holder;
 

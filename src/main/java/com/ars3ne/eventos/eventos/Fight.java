@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.FightListener;
 import com.cryptomorin.xseries.XItemStack;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MFlag;
 import com.massivecraft.factions.entity.MPlayer;
@@ -142,7 +143,7 @@ public class Fight extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -199,11 +200,11 @@ public class Fight extends Evento {
 
         if(getPlayers().contains(p)) {
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
 
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
 
             // Desative o friendly-fire do jogador.
@@ -253,13 +254,13 @@ public class Fight extends Evento {
         List<String> next_st = config.getStringList("Messages.Next fight");
         for (Player player : getPlayers()) {
             for(String s : next_st) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(interval)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(interval)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
         for (Player player : getSpectators()) {
             for(String s : next_st) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(interval)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(interval)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
@@ -283,13 +284,13 @@ public class Fight extends Evento {
             List<String> fight_st = config.getStringList("Messages.Fight");
             for (Player player : getPlayers()) {
                 for(String s : fight_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@player1", fighter1.getName()).replace("@player2", fighter2.getName()).replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@player1", fighter1.getName()).replace("@player2", fighter2.getName()).replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : fight_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@player1", fighter1.getName()).replace("@player2", fighter2.getName()).replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@player1", fighter1.getName()).replace("@player2", fighter2.getName()).replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
@@ -388,13 +389,13 @@ public class Fight extends Evento {
             List<String> nowinner_st = config.getStringList("Messages.Fight no winner");
             for (Player player : getPlayers()) {
                 for(String s : nowinner_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : nowinner_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
@@ -440,12 +441,12 @@ public class Fight extends Evento {
             if(p == fighter1) {
                 for (Player player : getPlayers()) {
                     for(String s : winner_st) {
-                        player.sendMessage(s.replace("&", "§").replace("@winner", fighter2.getName()).replace("@name", config.getString("Evento.Title")));
+                        player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", fighter2.getName()).replace("@name", config.getString("Evento.Title"))));
                     }
                 }
                 for (Player player : getSpectators()) {
                     for(String s : winner_st) {
-                        player.sendMessage(s.replace("&", "§").replace("@winner", fighter2.getName()).replace("@name", config.getString("Evento.Title")));
+                        player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", fighter2.getName()).replace("@name", config.getString("Evento.Title"))));
                     }
                 }
 
@@ -456,12 +457,12 @@ public class Fight extends Evento {
             }else {
                 for (Player player : getPlayers()) {
                     for(String s : winner_st) {
-                        player.sendMessage(s.replace("&", "§").replace("@winner", fighter1.getName()).replace("@name", config.getString("Evento.Title")));
+                        player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", fighter1.getName()).replace("@name", config.getString("Evento.Title"))));
                     }
                 }
                 for (Player player : getSpectators()) {
                     for(String s : winner_st) {
-                        player.sendMessage(s.replace("&", "§").replace("@winner", fighter1.getName()).replace("@name", config.getString("Evento.Title")));
+                        player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", fighter1.getName()).replace("@name", config.getString("Evento.Title"))));
                     }
                 }
 

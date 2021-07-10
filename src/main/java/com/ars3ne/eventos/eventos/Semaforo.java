@@ -31,6 +31,7 @@ import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.listeners.eventos.SemaforoListener;
 import com.cryptomorin.xseries.XMaterial;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -100,7 +101,7 @@ public class Semaforo extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -137,13 +138,13 @@ public class Semaforo extends Evento {
         List<String> green_st = config.getStringList("Messages.Green");
         for (Player player : getPlayers()) {
             for(String s : green_st) {
-                player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
         }
 
         for (Player player : getSpectators()) {
             for(String s : green_st) {
-                player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             }
         }
 
@@ -176,13 +177,13 @@ public class Semaforo extends Evento {
             List<String> yellow_st = config.getStringList("Messages.Yellow");
             for (Player player : getPlayers()) {
                 for(String s : yellow_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : yellow_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
@@ -218,13 +219,13 @@ public class Semaforo extends Evento {
             List<String> red_st = config.getStringList("Messages.Red");
             for (Player player : getPlayers()) {
                 for(String s : red_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : red_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 

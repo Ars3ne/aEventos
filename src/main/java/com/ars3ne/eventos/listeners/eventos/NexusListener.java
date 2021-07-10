@@ -29,6 +29,7 @@ package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.eventos.Nexus;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -69,7 +70,7 @@ public class NexusListener implements Listener {
                 if(evento.getBlueTeam().containsKey(player)) {
                     List<String> same_hit = evento.getConfig().getStringList("Messages.Same hit");
                     for(String s: same_hit) {
-                        player.sendMessage(s.replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title")));
+                        player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title"))));
                     }
                     return;
                 }
@@ -83,7 +84,7 @@ public class NexusListener implements Listener {
                 }else {
                     // Se não, então atualize o nome e a vida do nexus.
                     evento.setBlueNexusHealth(new_health);
-                    crystal.setCustomName(evento.getNexusName().replace("&", "§").replace("@team_color", "§9").replace("@team_uppercase", evento.getBlueTeamName().toUpperCase()).replace("@team", evento.getBlueTeamName()).replace("@health", String.valueOf(new_health)));
+                    crystal.setCustomName(IridiumColorAPI.process(evento.getNexusName().replace("&", "§").replace("@team_color", "§9").replace("@team_uppercase", evento.getBlueTeamName().toUpperCase()).replace("@team", evento.getBlueTeamName()).replace("@health", String.valueOf(new_health))));
                 }
 
             }else {
@@ -92,7 +93,7 @@ public class NexusListener implements Listener {
                 if(evento.getRedTeam().containsKey(player)) {
                     List<String> same_hit = evento.getConfig().getStringList("Messages.Same hit");
                     for(String s: same_hit) {
-                        player.sendMessage(s.replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title")));
+                        player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", evento.getConfig().getString("Evento.Title"))));
                     }
                     return;
                 }
@@ -106,7 +107,7 @@ public class NexusListener implements Listener {
                 }else {
                     // Se não, então atualize o nome e a vida do nexus.
                     evento.setRedNexusHealth(new_health);
-                    crystal.setCustomName(evento.getNexusName().replace("&", "§").replace("@team_color", "§c").replace("@team_uppercase", evento.getRedTeamName().toUpperCase()).replace("@team", evento.getRedTeamName()).replace("@health", String.valueOf(new_health)));
+                    crystal.setCustomName(IridiumColorAPI.process(evento.getNexusName().replace("&", "§").replace("@team_color", "§c").replace("@team_uppercase", evento.getRedTeamName().toUpperCase()).replace("@team", evento.getRedTeamName()).replace("@health", String.valueOf(new_health))));
                 }
 
             }

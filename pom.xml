@@ -41,6 +41,10 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
+            <id>savagelabs</id>
+            <url>https://nexus.savagelabs.net/repository/maven-releases/</url>
+        </repository>
+        <repository>
             <id>local-maven-repo</id>
             <url>file:///${project.basedir}/local-maven-repo</url>
         </repository>
@@ -128,6 +132,12 @@
             <version>8.0.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.iridium</groupId>
+            <artifactId>IridiumColorAPI</artifactId>
+            <version>1.0.4</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -145,6 +155,10 @@
                         <relocation>
                             <pattern>com.henryfabio.minecraft.inventoryapi</pattern>
                             <shadedPattern>com.ars3ne.eventos.shaded.inventoryapi</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.iridium.iridiumcolorapi</pattern>
+                            <shadedPattern>com.ars3ne.eventos.shaded.iridiumcolorapi</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

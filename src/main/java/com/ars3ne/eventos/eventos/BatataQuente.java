@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.listeners.eventos.BatataQuenteListener;
 import com.cryptomorin.xseries.XMaterial;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Firework;
@@ -82,7 +83,7 @@ public class BatataQuente extends Evento {
         // Mande a mensagem de vitória.
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", p.getName()).replace("@name", config.getString("Evento.Title"))));
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
@@ -121,11 +122,11 @@ public class BatataQuente extends Evento {
 
         if(getPlayers().contains(p)) {
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
 
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
         }
 
@@ -181,17 +182,17 @@ public class BatataQuente extends Evento {
         List<String> potato_st = config.getStringList("Messages.Potato");
         for (Player player : getPlayers()) {
             for(String s : potato_st) {
-                player.sendMessage(s.replace("&", "§").replace("@player", potato_holder.getName()).replace("@name", this.config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@player", potato_holder.getName()).replace("@name", this.config.getString("Evento.Title"))));
             }
         }
 
         for (Player player : getSpectators()) {
             for(String s : potato_st) {
-                player.sendMessage(s.replace("&", "§").replace("@player", potato_holder.getName()).replace("@name", this.config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@player", potato_holder.getName()).replace("@name", this.config.getString("Evento.Title"))));
             }
         }
 
-        potato_holder.sendMessage(config.getString("Messages.Potato holder").replace("@time", String.valueOf(max_time)).replace("@name", this.config.getString("Evento.Title")).replace("&", "§"));
+        potato_holder.sendMessage(IridiumColorAPI.process(config.getString("Messages.Potato holder").replace("@time", String.valueOf(max_time)).replace("@name", this.config.getString("Evento.Title")).replace("&", "§")));
 
         int finalCurrent_potato_holder_changes = current_potato_holder_changes;
         task = Bukkit.getScheduler().scheduleSyncRepeatingTask(aEventos.getInstance(), new Runnable() {
@@ -202,7 +203,7 @@ public class BatataQuente extends Evento {
                 if(!isHappening()) Bukkit.getScheduler().cancelTask(task);
                 if(potato_holder_changes != finalCurrent_potato_holder_changes) Bukkit.getScheduler().cancelTask(task);
                 if(run <= 1) Bukkit.getScheduler().cancelTask(task);
-                p.sendMessage(config.getString("Messages.Potato explode").replace("&", "§").replace("@time", String.valueOf(run)).replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Potato explode").replace("&", "§").replace("@time", String.valueOf(run)).replace("@name", config.getString("Evento.Title"))));
                 run-=1;
             }
 
@@ -217,7 +218,7 @@ public class BatataQuente extends Evento {
             if(potato_holder_changes != finalCurrent_potato_holder_changes1) return;
             if(getPotatoHolder() == null) return;
 
-            potato_holder.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+            potato_holder.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
             potato_holder.getInventory().setHelmet(null);
             remove(potato_holder);
 

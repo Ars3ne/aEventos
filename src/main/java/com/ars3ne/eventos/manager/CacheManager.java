@@ -30,6 +30,7 @@ package com.ars3ne.eventos.manager;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.MenuConfigFile;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -128,7 +129,7 @@ public class CacheManager {
                 int player_top_participations_position = getPlayerTopParticipationsPosition(p);
 
                 for(String s: config.getStringList("Menu.Items.Player.Lore")) {
-                    lore.add(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§"));
+                    lore.add(IridiumColorAPI.process(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§")));
                 }
 
                 if(config.getBoolean("Eventos.Enabled")) {
@@ -151,13 +152,13 @@ public class CacheManager {
 
                             if(config.getBoolean("Eventos.Only with wins") && wins == 0 && participations == 0) continue;
                             has_win_or_victory = true;
-                            lore.add(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§"));
+                            lore.add(IridiumColorAPI.process(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§")));
 
                         }
                     }
 
                     if(!has_win_or_victory) {
-                        lore.add(config.getString("Eventos.Empty").replace("&", "§"));
+                        lore.add(IridiumColorAPI.process(config.getString("Eventos.Empty").replace("&", "§")));
                     }
 
                     if(config.getBoolean("Eventos.New line")) lore.add("");
@@ -195,7 +196,7 @@ public class CacheManager {
                 int player_top_participations_position = getPlayerTopParticipationsPosition(p);
 
                 for(String s: config.getStringList("Menu.Items.Player.Lore")) {
-                    lore.add(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§"));
+                    lore.add(IridiumColorAPI.process(s.replace("@position", String.valueOf(position)).replace("@total_wins", String.valueOf(total_wins)).replace("@total_participations", String.valueOf(total_participations)).replace("@wins_position", String.valueOf(player_top_wins_position)).replace("@participations_position", String.valueOf(player_top_participations_position)).replace("&", "§")));
                 }
 
                 if(config.getBoolean("Eventos.Enabled")) {
@@ -218,13 +219,13 @@ public class CacheManager {
 
                             if(config.getBoolean("Eventos.Only with wins") && wins == 0 && participations == 0) continue;
                             has_win_or_victory = true;
-                            lore.add(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§"));
+                            lore.add(IridiumColorAPI.process(config.getString("Eventos.Format").replace("@evento_name", separated[1]).replace("@evento_wins", String.valueOf(wins)).replace("@evento_participations", String.valueOf(participations)).replace("&", "§")));
 
                         }
                     }
 
                     if(!has_win_or_victory) {
-                        lore.add(config.getString("Eventos.Empty").replace("&", "§"));
+                        lore.add(IridiumColorAPI.process(config.getString("Eventos.Empty").replace("&", "§")));
                     }
 
                     if(config.getBoolean("Eventos.New line")) lore.add("");

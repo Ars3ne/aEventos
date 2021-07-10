@@ -35,6 +35,7 @@ import com.ars3ne.eventos.manager.InventorySerializer;
 import com.ars3ne.eventos.utils.EventoConfigFile;
 import com.ars3ne.eventos.utils.Utils;
 import com.cryptomorin.xseries.XItemStack;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -78,12 +79,12 @@ public class EventoCommand implements CommandExecutor {
                     if(sender.hasPermission("aeventos.admin")) {
                         List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.DefaultAdmin");
                         for(String s : broadcast_messages) {
-                            sender.sendMessage(s.replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(s.replace("&", "§")));
                         }
                     }else {
                         List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.Default");
                         for(String s : broadcast_messages) {
-                            sender.sendMessage(s.replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(s.replace("&", "§")));
                         }
                     }
 
@@ -92,32 +93,32 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o executor não é um player, mande um erro.
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§")));
                         return true;
                     }
                     Player p = (Player) sender;
 
                     // Se o evento está fechado, retorne um erro.
                     if(!aEventos.getEventoManager().getEvento().isOpen()) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Closed").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Closed").replace("&", "§")));
                         return true;
                     }
 
                     // Se o jogador não tem a permissão para participar do evento, retorne um erro.
                     if(!p.hasPermission(aEventos.getEventoManager().getEvento().getPermission())) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§")));
                         return true;
                     }
 
                     // Se o usuário já está no evento, retorne um erro.
                     if(aEventos.getEventoManager().getEvento().getPlayers().contains(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Already joined").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Already joined").replace("&", "§")));
                         return true;
                     }
 
                     // Se o usuário já está no modo espectador, retorne um erro.
                     if(aEventos.getEventoManager().getEvento().getSpectators().contains(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Already spectator").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Already spectator").replace("&", "§")));
                         return true;
                     }
 
@@ -129,7 +130,7 @@ public class EventoCommand implements CommandExecutor {
                             InventorySerializer.serialize(p, aEventos.getEventoManager().getEvento().getIdentifier());
                         }else {
                             if(Utils.isInventoryFull(p)) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§")));
                                 return true;
                             }
                         }
@@ -147,20 +148,20 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o executor não é um player, mande um erro.
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§")));
                         return true;
                     }
                     Player p = (Player) sender;
 
                     // Se não está acontecendo um evento, mande um erro.
                     if(aEventos.getEventoManager().getEvento() == null) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§")));
                         return true;
                     }
 
                     // Se o usuário não está no evento, retorne um erro.
                     if(!aEventos.getEventoManager().getEvento().getPlayers().contains(p) && !aEventos.getEventoManager().getEvento().getSpectators().contains(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not joined").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not joined").replace("&", "§")));
                         return true;
                     }
 
@@ -173,50 +174,50 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o executor não é um player, mande um erro.
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§")));
                         return true;
                     }
                     Player p = (Player) sender;
 
                     // Se não está acontecendo um evento, mande um erro.
                     if(aEventos.getEventoManager().getEvento() == null) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§")));
                         return true;
                     }
 
                     // Se o jogador não tem a permissão para assistir no modo espectador, retorne um erro.
                     if(!p.hasPermission("aeventos.spectator")) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
                         return true;
                     }
 
                     // Se o jogador não tem a permissão para participar do evento, retorne um erro.
                     if(!p.hasPermission(aEventos.getEventoManager().getEvento().getPermission())) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§")));
                         return true;
                     }
 
                     // Se o modo espectador está desativado no evento, retorne um erro.
                     if(!aEventos.getEventoManager().getEvento().isSpectatorAllowed()) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No spectator").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No spectator").replace("&", "§")));
                         return true;
                     }
 
                     // Se o usuário já está no evento, retorne um erro.
                     if(aEventos.getEventoManager().getEvento().getPlayers().contains(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Already joined").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Already joined").replace("&", "§")));
                         return true;
                     }
 
                     // Se o usuário já está no modo espectador, retorne um erro.
                     if(aEventos.getEventoManager().getEvento().getSpectators().contains(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Already spectator").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Already spectator").replace("&", "§")));
                         return true;
                     }
 
                     // Se o usuário não está com o inventário vazio, retorne um erro.
                     if(Utils.isInventoryFull(p)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Empty inventory").replace("&", "§")));
                         return true;
                     }
 
@@ -229,13 +230,13 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o usuário não tem a permissão, mande um erro.
                     if(!sender.hasPermission("aeventos.admin")) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
                         return true;
                     }
 
                     // Se não está acontecendo um evento, mande um erro.
                     if(aEventos.getEventoManager().getEvento() == null && aEventos.getEventoChatManager().getEvento() == null) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§")));
                         return true;
                     }
 
@@ -257,7 +258,7 @@ public class EventoCommand implements CommandExecutor {
 
                     List<String> broadcast_messages = config.getStringList("Messages.Cancelled");
                     for(String s : broadcast_messages) {
-                        aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                        aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                     }
 
                     return true;
@@ -268,7 +269,7 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o usuário não tem a permissão, mande um erro.
                     if(!sender.hasPermission("aeventos.admin")) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
                         return true;
                     }
 
@@ -277,7 +278,7 @@ public class EventoCommand implements CommandExecutor {
                     aEventos.getCacheManager().updateCache();
                     InventoryManager.reload();
 
-                    sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Reloaded").replace("&", "§"));
+                    sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Reloaded").replace("&", "§")));
                     return true;
 
                 }
@@ -287,25 +288,25 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o usuário não tem a permissão, mande um erro.
                     if(!sender.hasPermission("aeventos.admin")) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
                         return true;
                     }
 
                     // Se existe apenas um argumento, mande um erro.
                     if(args.length == 1) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "iniciar <evento>"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "iniciar <evento>")));
                         return true;
                     }
 
                     // Se já está acontecendo um evento, mande um erro.
                     if(aEventos.getEventoManager().getEvento() != null || aEventos.getEventoChatManager().getEvento() != null) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Already happening").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Already happening").replace("&", "§")));
                         return true;
                     }
 
                     // Tente obter o evento para ser iniciado. Se for inválido, mande um erro.
                     if(!EventoConfigFile.exists(args[1].toLowerCase())) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§")));
                         return true;
                     }
 
@@ -315,12 +316,12 @@ public class EventoCommand implements CommandExecutor {
                     if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
                         boolean started = aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
                         if(!started) {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing dependency").replace("&", "§").replace("@dependency", "Vault"));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing dependency").replace("&", "§").replace("@dependency", "Vault")));
                         }
                     }else {
                         boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
                         if(!started) {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§").replace("@name", args[1].toLowerCase()));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§").replace("@name", args[1].toLowerCase())));
                         }
                     }
 
@@ -330,25 +331,25 @@ public class EventoCommand implements CommandExecutor {
 
                     // Se o usuário não tem a permissão, mande um erro.
                     if (!sender.hasPermission("aeventos.admin")) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
                         return true;
                     }
 
                     // Se existe apenas um argumento, mande um erro.
                     if (args.length == 1) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "criarconfig <evento>"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "criarconfig <evento>")));
                         return true;
                     }
 
                     // Se a resource não existir, mande um erro.
                     if (aEventos.getInstance().getResource("eventos/" + args[1].toLowerCase() + ".yml") == null) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§")));
                         return true;
                     }
 
                     // Se o arquivo de configuração já existir, mande um erro.
                     if (EventoConfigFile.exists(args[1].toLowerCase())) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration already exists").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Configuration already exists").replace("&", "§")));
                         return true;
                     }
 
@@ -356,21 +357,21 @@ public class EventoCommand implements CommandExecutor {
                     EventoConfigFile.create(args[1].toLowerCase());
                     aEventos.updateTags();
 
-                    sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Configuration created").replace("&", "§").replace("@file", args[1].toLowerCase() + ".yml"));
+                    sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Configuration created").replace("&", "§").replace("@file", args[1].toLowerCase() + ".yml")));
                     return true;
 
                 }else if(args[0].equalsIgnoreCase("setup")) {
 
                     // Se o executor não é um player, mande um erro.
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§")));
                         return true;
                     }
                     Player p = (Player) sender;
 
                     // Se o usuário não tem a permissão, mande um erro.
                     if(!sender.hasPermission("aeventos.admin")) {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
                         return true;
                     }
 
@@ -380,10 +381,10 @@ public class EventoCommand implements CommandExecutor {
                         if(setup.containsKey(p)) {
                             List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.Setup");
                             for(String s : broadcast_messages) {
-                                sender.sendMessage(s.replace("&", "§").replace("@name", setup.get(p).getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", setup.get(p).getString("Evento.Title"))));
                             }
                         }else {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("@args", "setup <evento>").replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("@args", "setup <evento>").replace("&", "§")));
                         }
 
                         return true;
@@ -407,11 +408,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                             return true;
                         }
 
@@ -428,11 +429,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                             return true;
                         }
 
@@ -449,11 +450,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                             return true;
                         }
 
@@ -470,11 +471,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                             return true;
                         }
 
@@ -482,7 +483,7 @@ public class EventoCommand implements CommandExecutor {
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
                             if(!setup.get(p).isSet("Locations.Pos1")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
@@ -514,7 +515,7 @@ public class EventoCommand implements CommandExecutor {
                                 p.getInventory().addItem(hoe);
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Give axe").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Give axe").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                             return true;
 
                         }
@@ -523,7 +524,7 @@ public class EventoCommand implements CommandExecutor {
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
                             if(!setup.get(p).isSet("Locations.Pos1")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
@@ -536,11 +537,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos1 "));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos1 ")));
                             return true;
 
                         }
@@ -549,7 +550,7 @@ public class EventoCommand implements CommandExecutor {
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
                             if(!setup.get(p).isSet("Locations.Pos1")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
@@ -562,11 +563,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos2 "));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos2 ")));
                             return true;
 
                         }
@@ -575,7 +576,7 @@ public class EventoCommand implements CommandExecutor {
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
                             if(!setup.get(p).isSet("Locations.Pos3")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
@@ -588,11 +589,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 "));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 ")));
                             return true;
 
                         }
@@ -601,7 +602,7 @@ public class EventoCommand implements CommandExecutor {
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
                             if(!setup.get(p).isSet("Locations.Pos3")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
@@ -614,11 +615,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 ")));
                             return true;
 
                         }
@@ -628,13 +629,13 @@ public class EventoCommand implements CommandExecutor {
                             // Se o evento não possui itens, retorne.
 
                             if(!setup.get(p).isSet("Itens")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not needed kit").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed kit").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
                             if(args.length == 2) {
                                 if(setup.get(p).isSet("Itens.Normal")) {
-                                    sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Multiple kits").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                    sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Multiple kits").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                     return true;
                                 }
                             }
@@ -758,11 +759,11 @@ public class EventoCommand implements CommandExecutor {
                                 EventoConfigFile.save(settings);
                                 setup.replace(p, settings);
                             } catch (IOException e) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", ""));
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Saved kit").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 "));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved kit").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 ")));
                             return true;
                             
                         }
@@ -770,19 +771,19 @@ public class EventoCommand implements CommandExecutor {
                         else if(args[1].equalsIgnoreCase("sair")) {
                             // Remova o usuário da lista de setup.
                             setup.remove(p);
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Exit setup").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Exit setup").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                             return true;
                         }
 
                         else {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Unknown argument").replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Unknown argument").replace("&", "§")));
                             return true;
                         }
 
                     }else {
                         // Se não, tente achar o evento e adicione o usuário á lista. Se for inválido, mande um erro.
                         if(!EventoConfigFile.exists(args[1].toLowerCase())) {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§")));
                             return true;
                         }
 
@@ -792,7 +793,7 @@ public class EventoCommand implements CommandExecutor {
 
                         List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.Setup");
                         for(String s : broadcast_messages) {
-                            sender.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                            sender.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                         }
 
                         return true;
@@ -804,7 +805,7 @@ public class EventoCommand implements CommandExecutor {
                     if(aEventos.getEventoChatManager().getEvento() != null) {
 
                         if (!(sender instanceof Player)) {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Console").replace("&", "§")));
                             return true;
                         }
 
@@ -812,14 +813,14 @@ public class EventoCommand implements CommandExecutor {
 
                         // Se o jogador não tem a permissão para participar do evento, retorne um erro.
                         if(!p.hasPermission(aEventos.getEventoChatManager().getEvento().getPermission())) {
-                            sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§"));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not allowed").replace("&", "§")));
                             return true;
                         }
 
                         aEventos.getEventoChatManager().getEvento().parseCommand(p, args);
 
                     }else {
-                        sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Unknown command").replace("&", "§"));
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Unknown command").replace("&", "§")));
                     }
                     return true;
                 }

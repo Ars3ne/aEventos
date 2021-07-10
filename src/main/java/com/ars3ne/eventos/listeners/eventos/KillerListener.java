@@ -30,6 +30,7 @@ package com.ars3ne.eventos.listeners.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.eventos.Killer;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,7 +64,7 @@ public class KillerListener implements Listener {
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
         // Remova o jogador do evento.
-        e.getEntity().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+        e.getEntity().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
         evento.remove(e.getEntity());
         evento.leaveBungeecord(e.getEntity());
         PlayerLoseEvent lose = new PlayerLoseEvent(e.getEntity(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());

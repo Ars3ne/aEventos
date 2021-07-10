@@ -30,6 +30,7 @@ package com.ars3ne.eventos.listeners.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.eventos.Anvil;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -63,7 +64,7 @@ public class AnvilListener implements Listener {
 
             // Se o jogador estiver no mesmo bloco da bigorna, então o elimine.
             if(Math.round(p.getLocation().getX()) != e.getBlock().getX() || Math.round(p.getLocation().getY()) != e.getBlock().getY() || Math.round(p.getLocation().getZ()) != e.getBlock().getZ() ) continue;
-            p.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§"));
+            p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
             evento.remove(p);
             PlayerLoseEvent lose = new PlayerLoseEvent(p, evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
             Bukkit.getPluginManager().callEvent(lose);

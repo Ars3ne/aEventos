@@ -35,6 +35,7 @@ import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.listeners.eventos.GuerraListener;
 import com.cryptomorin.xseries.XItemStack;
 import com.cryptomorin.xseries.messages.ActionBar;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
@@ -125,7 +126,7 @@ public class Guerra extends Evento {
 
                 List<String> no_guild = config.getStringList("Messages.No guilds");
                 for(String s : no_guild) {
-                    Bukkit.broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    Bukkit.broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
                 stop();
                 return;
@@ -143,7 +144,7 @@ public class Guerra extends Evento {
             if(getTotalGuilds() < this.min_guilds) {
                 List<String> no_guild = config.getStringList("Messages.No guilds");
                 for(String s : no_guild) {
-                    Bukkit.broadcastMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    Bukkit.broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
                 stop();
                 return;
@@ -184,13 +185,13 @@ public class Guerra extends Evento {
 
         for (Player player : getPlayers()) {
             for(String s : starting_st) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
         for (Player player : getSpectators()) {
             for(String s : starting_st) {
-                player.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title")));
+                player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(enable_pvp)).replace("@name", config.getString("Evento.Title"))));
             }
         }
 
@@ -209,14 +210,14 @@ public class Guerra extends Evento {
                 if (player_iterator.hasNext()) {
                     do {
                         Player player = player_iterator.next();
-                        ActionBar.sendActionBar(player, config.getString("Actionbar.Enabling PvP").replace("&", "§").replace("@time", String.valueOf(enable_pvp - run)));
+                        ActionBar.sendActionBar(player, IridiumColorAPI.process(config.getString("Actionbar.Enabling PvP").replace("&", "§").replace("@time", String.valueOf(enable_pvp - run))));
                     } while (player_iterator.hasNext());
                 }
                 Iterator<Player> spectator_iterator = getSpectators().iterator();
                 if (spectator_iterator.hasNext()) {
                     do {
                         Player player = spectator_iterator.next();
-                        ActionBar.sendActionBar(player, config.getString("Actionbar.Enabling PvP").replace("&", "§").replace("@time", String.valueOf(enable_pvp - run)));
+                        ActionBar.sendActionBar(player, IridiumColorAPI.process(config.getString("Actionbar.Enabling PvP").replace("&", "§").replace("@time", String.valueOf(enable_pvp - run))));
                     } while (spectator_iterator.hasNext());
                 }
 
@@ -237,13 +238,13 @@ public class Guerra extends Evento {
 
             for (Player player : getPlayers()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
             for (Player player : getSpectators()) {
                 for(String s : enabled_st) {
-                    player.sendMessage(s.replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                    player.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 }
             }
 
@@ -256,11 +257,11 @@ public class Guerra extends Evento {
                 if(!isPvPEnabled()) Bukkit.getScheduler().cancelTask(task2);
 
                 for(Player player: getPlayers()) {
-                    ActionBar.sendActionBar(player, config.getString("Actionbar.Normal").replace("&", "§").replace("@guilds", String.valueOf(getTotalGuilds())).replace("@enemies", String.valueOf(getEnemiesTotal(player))).replace("@remeaning", String.valueOf(getPlayers().size())));
+                    ActionBar.sendActionBar(player, IridiumColorAPI.process(config.getString("Actionbar.Normal").replace("&", "§").replace("@guilds", String.valueOf(getTotalGuilds())).replace("@enemies", String.valueOf(getEnemiesTotal(player))).replace("@remeaning", String.valueOf(getPlayers().size()))));
                 }
 
                 for(Player player: getSpectators()) {
-                    ActionBar.sendActionBar(player, config.getString("Actionbar.Spectator").replace("&", "§").replace("@guilds", String.valueOf(getTotalGuilds())).replace("@enemies", String.valueOf(getEnemiesTotal(player))).replace("@remeaning", String.valueOf(getPlayers().size())));
+                    ActionBar.sendActionBar(player, IridiumColorAPI.process(config.getString("Actionbar.Spectator").replace("&", "§").replace("@guilds", String.valueOf(getTotalGuilds())).replace("@enemies", String.valueOf(getEnemiesTotal(player))).replace("@remeaning", String.valueOf(getPlayers().size()))));
                 }
 
             }, 0L, 40L);
@@ -291,28 +292,28 @@ public class Guerra extends Evento {
         // Se o jogador não está em um clan ou facção, retorne.
         if(hook.equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
             if(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) == null) {
-                p.sendMessage(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 return;
             }
         }
 
         if(hook.equalsIgnoreCase("massivefactions")) {
             if(!MPlayer.get(p).hasFaction()) {
-                p.sendMessage(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 return;
             }
         }
 
         if(hook.equalsIgnoreCase("yclans")) {
             if(yclans_api == null || yclans_api.getPlayer(p) == null || !yclans_api.getPlayer(p).hasClan()) {
-                p.sendMessage(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 return;
             }
         }
 
         // Se o clã do jogador já bateu o limite de jogadores máximo, retorne.
         if(getTotalGuildPlayers(p) > this.max_players) {
-            p.sendMessage(config.getString("Messages.Maximum").replace("&", "§").replace("@name", config.getString("Evento.Title")));
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Maximum").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
             return;
         }
 
@@ -325,11 +326,11 @@ public class Guerra extends Evento {
         }
 
         for (Player player : getPlayers()) {
-            player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Joined").replace("&", "§").replace("@player", p.getName()));
+            player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Joined").replace("&", "§").replace("@player", p.getName())));
         }
 
         for (Player player : getSpectators()) {
-            player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Joined").replace("&", "§").replace("@player", p.getName()));
+            player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Joined").replace("&", "§").replace("@player", p.getName())));
         }
 
         PlayerJoinEvent join = new PlayerJoinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
@@ -342,10 +343,10 @@ public class Guerra extends Evento {
 
         if(getPlayers().contains(p)) {
             for (Player player : getPlayers()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
             for (Player player : getSpectators()) {
-                player.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName()));
+                player.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Leave").replace("&", "§").replace("@player", p.getName())));
             }
         }
 
@@ -428,7 +429,7 @@ public class Guerra extends Evento {
         for(Player p: getPlayers()) {
 
             for(String s: pickup_st) {
-                p.sendMessage(s.replace("&", "§").replace("@time", String.valueOf(pickup_time)).replace("@name", config.getString("Evento.Title")));
+                p.sendMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@time", String.valueOf(pickup_time)).replace("@name", config.getString("Evento.Title"))));
             }
 
             // Adicione o nome á lista de vencedores.
@@ -439,7 +440,7 @@ public class Guerra extends Evento {
         List<String> broadcast_messages = this.config.getStringList("Messages.Winner");
         for(String s : broadcast_messages) {
             assert winner_guild != null;
-            aEventos.getInstance().getServer().broadcastMessage(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@guild", winner_guild).replace("@name", config.getString("Evento.Title")));
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", String.join(", ", winners)).replace("@guild", winner_guild).replace("@name", config.getString("Evento.Title"))));
         }
 
         // Mande a actionbar para os jogadores e espectadores.
@@ -453,7 +454,7 @@ public class Guerra extends Evento {
                 if(!actionbar_enabled) Bukkit.getScheduler().cancelTask(task3);
 
                 for(Player player: getPlayers()) {
-                    ActionBar.sendActionBar(player, config.getString("Actionbar.Pickup").replace("&", "§").replace("@time", String.valueOf(pickup_time - run)));
+                    ActionBar.sendActionBar(player, IridiumColorAPI.process(config.getString("Actionbar.Pickup").replace("&", "§").replace("@time", String.valueOf(pickup_time - run))));
                 }
 
                 run+=1;
