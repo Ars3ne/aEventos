@@ -345,7 +345,8 @@ public class Evento implements EventoInterface{
         }
 
         for (Player player : spectators) {
-            player.getInventory().clear();
+            // TODO: Corrigir erro.
+            //player.getInventory().clear();
             this.teleport(player, "exit");
         }
 
