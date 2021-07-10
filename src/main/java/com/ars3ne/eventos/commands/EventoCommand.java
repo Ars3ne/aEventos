@@ -632,10 +632,13 @@ public class EventoCommand implements CommandExecutor {
                                 return true;
                             }
 
-                            if(setup.get(p).isSet("Itens.Normal")) {
-                                sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Multiple kits").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
-                                return true;
+                            if(args.length == 2) {
+                                if(setup.get(p).isSet("Itens.Normal")) {
+                                    sender.sendMessage(aEventos.getInstance().getConfig().getString("Messages.Multiple kits").replace("&", "§").replace("@name", settings.getString("Evento.Title")));
+                                    return true;
+                                }
                             }
+
 
                             if(args.length >= 3) {
 
