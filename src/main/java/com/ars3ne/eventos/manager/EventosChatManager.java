@@ -68,6 +68,9 @@ public class EventosChatManager {
             case FAST_CLICK:
                 this.evento = new FastClick(config);
                 break;
+            case SORTEIO:
+                this.evento = new Sorteio(config);
+                break;
         }
 
         aEventos.getInstance().getServer().getPluginManager().registerEvents(listener, aEventos.getInstance());

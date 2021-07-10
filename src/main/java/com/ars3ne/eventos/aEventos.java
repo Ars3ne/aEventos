@@ -169,6 +169,7 @@ public class aEventos extends JavaPlugin {
             EventoConfigFile.create("palavra");
             EventoConfigFile.create("fastclick");
             EventoConfigFile.create("nexus");
+            EventoConfigFile.create("sorteio");
 
         }
 
