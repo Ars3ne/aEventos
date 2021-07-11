@@ -51,6 +51,7 @@ public enum EventoType {
     FAST_CLICK,
     NEXUS,
     SORTEIO,
+    THOR,
     NONE;
 
     public static EventoType getEventoType(String type) {
@@ -101,6 +102,8 @@ public enum EventoType {
                 return EventoType.NEXUS;
             case "sorteio":
                 return EventoType.SORTEIO;
+            case "thor":
+                return EventoType.THOR;
             default:
                 return EventoType.NONE;
         }
@@ -154,6 +157,8 @@ public enum EventoType {
                 return "nexus";
             case SORTEIO:
                 return "sorteio";
+            case THOR:
+                return "thor";
             default:
                 return "none";
         }
