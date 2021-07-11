@@ -58,15 +58,29 @@ public class HunterListener implements Listener {
 
         if(!evento.getPlayers().contains(p) || !evento.getPlayers().contains(shooter)) return;
 
-        e.setCancelled(true);
+        if(evento.getCaptured().contains(p) || evento.getCaptured().contains(shooter)) {
+            e.setCancelled(true);
+            return;
+        }
 
-        if(evento.getCaptured().contains(p) || evento.getCaptured().contains(shooter)) return;
-        if(!evento.isPvPEnabled()) return;
-        if(evento.getInvinciblePlayers().contains(p) || evento.getInvinciblePlayers().contains(shooter)) return;
+        if(!evento.isPvPEnabled()) {
+            e.setCancelled(true);
+            return;
+        }
+
+        if(evento.getInvinciblePlayers().contains(p) || evento.getInvinciblePlayers().contains(shooter)) {
+            e.setCancelled(true);
+            return;
+        }
 
         if((evento.getBlueTeam().containsKey(p) && evento.getBlueTeam().containsKey(shooter))
                 || (evento.getRedTeam().containsKey(p) && evento.getRedTeam().containsKey(shooter))) {
+            e.setCancelled(true);
             return;
+        }
+
+        if(((p.getHealth() - e.getFinalDamage()) <= 0)) {
+            e.setCancelled(true);
         }
 
         evento.eliminate(p, shooter);
