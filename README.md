@@ -3,7 +3,7 @@
 O ``aEventos`` é um plugin para servidores de Minecraft que traz vários eventos automáticos de forma fácil e rápida. O plugin foi testado apenas na 1.8.X, mas possui suporte para as versões mais recentes.
 
 ## Eventos:
-O plugin conta atualmente com ``21`` eventos no total, sendo ``15`` presenciais:
+O plugin conta atualmente com ``24`` eventos no total, sendo ``17`` presenciais:
 * Sign (Você ganha o evento ao clicar na placa. Com uma configuração, também pode ser usado para Parkour.)
 * Campo Minado
 * Spleef
@@ -19,14 +19,17 @@ O plugin conta atualmente com ``21`` eventos no total, sendo ``15`` presenciais:
 * Quiz
 * Anvil
 * Guerra (Gladiador)
+* Nexus
+* Thor
 
-e ``6`` no chat:
+e ``7`` no chat:
 * Votação
 * Loteria
 * Bolão
 * Matemática
 * Palavra
 * FastClick
+* Sorteio
 
 ## Comandos:
 |Comando         |Descrição                      |Permissão                    |
@@ -144,6 +147,15 @@ A partir da versão v1.4.1, o plugin possui placeholders na PlaceholderAPI. Aqui
 - %aeventos_wins_[NOME DO ARQUIVO DE CONFIGURAÇÃO]% - Mostra o total de vitórias que o jogador teve no evento específico.
 - %aeventos_participations_[NOME DO ARQUIVO DE CONFIGURAÇÃO]% - Mostra o total de participações que o jogador teve no evento específico.
 - %aeventos_tag_[NOME DA TAG]% - Mostra a tag do evento, caso o jogador á possua.<br>Substitua o "[NOME DA TAG]" pelo nome que está na configuração ``Rewards.Tag.Name``.
+
+## Suporte para RGB:
+
+A partir da versão v1.5.0, o plugin possui suporte para RGB. Veja as tags abaixo:
+
+- Para usar uma cor sólida, use ``<SOLID:FF0080>Colorido!``
+- Para fazer um gradiente, use ``<GRADIENT:2C08BA>Gradiente!</GRADIENT:028A97>``
+- Para fazer um texto colorido, use ``<RAINBOW1>Arco-íris!</RAINBOW>``. O número "1" depois da primeira tag representa a saturação.
+
 
 ## Créditos:
 
