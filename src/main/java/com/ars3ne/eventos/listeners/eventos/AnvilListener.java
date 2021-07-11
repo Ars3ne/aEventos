@@ -43,6 +43,9 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnvilListener implements Listener {
 
     private Anvil evento;
@@ -58,18 +61,25 @@ public class AnvilListener implements Listener {
         if(!evento.getAnvils().contains(e.getBlock())) return;
 
         fb.setDropItem(false);
+        fb.remove();
         if(e.getBlock().getType() != Material.ANVIL) e.getBlock().setType(Material.ANVIL);
 
+        List<Player> eliminate = new ArrayList<>();
         for(Player p: evento.getPlayers()) {
 
             // Se o jogador estiver no mesmo bloco da bigorna, então o elimine.
-            if(Math.round(p.getLocation().getX()) != e.getBlock().getX() || Math.round(p.getLocation().getY()) != e.getBlock().getY() || Math.round(p.getLocation().getZ()) != e.getBlock().getZ() ) continue;
+            if(Math.floor(p.getLocation().getX()) != e.getBlock().getX() || Math.floor(p.getLocation().getY()) != e.getBlock().getY() || Math.floor(p.getLocation().getZ()) != e.getBlock().getZ() ) continue;
+            eliminate.add(p);
+
+        }
+
+        for(Player p: eliminate) {
             p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
             evento.remove(p);
             PlayerLoseEvent lose = new PlayerLoseEvent(p, evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
             Bukkit.getPluginManager().callEvent(lose);
-
         }
+        eliminate.clear();
 
     }
 

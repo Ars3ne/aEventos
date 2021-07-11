@@ -129,8 +129,8 @@ public class Anvil extends Evento {
                 Block anvil_block = cuboid.getRandomLocation().getBlock().getRelative(0, 1,0);
                 if (anvil_block.getType() != Material.AIR || anvil.contains(anvil_block)) {
                     for(int i = 0; i < cuboid.getTotalBlockSize() - 1; i++) {
-                        anvil_block = cuboid.getRandomLocation().getBlock();
-                        if(anvil_block.getType() == Material.AIR) break;
+                        anvil_block = cuboid.getRandomLocation().getBlock().getRelative(0, 1,0);
+                        if(anvil_block.getType() == Material.AIR && !anvil.contains(anvil_block)) break;
                     }
                 }
 
