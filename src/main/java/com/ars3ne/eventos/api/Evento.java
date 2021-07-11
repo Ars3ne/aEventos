@@ -79,7 +79,7 @@ public class Evento implements EventoInterface{
         this.elimination = false;
 
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = dateFormat.format(date);
 
         this.identifier = type.toString() + " " + strDate;
