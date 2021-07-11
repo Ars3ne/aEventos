@@ -38,10 +38,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.File;
+import java.sql.*;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -51,12 +49,23 @@ public class ConnectionManager {
 
     private final JSONParser parser = new JSONParser();
 
+    private Connection sqlite_connection;
+    private final boolean is_sqlite = !aEventos.getInstance().getConfig().getBoolean("MySQL.Enabled");
+
     public ConnectionManager() {
         pool = new ConnectionPoolManager();
     }
 
     public void close() {
-        pool.closePool();
+
+        if(is_sqlite) {
+            try {
+                sqlite_connection.close();
+            } catch (SQLException ignored) { }
+        }else {
+            pool.closePool();
+        }
+
     }
 
     public boolean setup(){
@@ -68,7 +77,11 @@ public class ConnectionManager {
 
         try {
 
-            conn = pool.getConnection();
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             if(aEventos.getInstance().getConfig().getBoolean("MySQL.Enabled")) {
 
@@ -92,9 +105,9 @@ public class ConnectionManager {
             e.printStackTrace();
             return false;
         }finally {
-            pool.close(conn, ps, null);
-            pool.close(conn, ps2, null);
-            pool.close(conn, ps3, null);
+            pool.close(is_sqlite, conn, ps, null);
+            pool.close(is_sqlite, conn, ps2, null);
+            pool.close(is_sqlite, conn, ps3, null);
         }
 
         return true;
@@ -106,7 +119,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement statement = conn
                         .prepareStatement("SELECT name FROM aeventos_eventos WHERE name=?");
@@ -122,7 +140,7 @@ public class ConnectionManager {
                     insert.close();
                 }
 
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
 
@@ -140,7 +158,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement statement = conn
                         .prepareStatement("SELECT name FROM aeventos_eventos_guild WHERE name=?");
@@ -158,7 +181,7 @@ public class ConnectionManager {
                     insert.close();
                 }
 
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -174,7 +197,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement statement = conn
                         .prepareStatement("SELECT username FROM aeventos_users WHERE uuid=?");
@@ -196,7 +224,7 @@ public class ConnectionManager {
 
                 }
 
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
 
@@ -213,7 +241,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT wins FROM aeventos_users WHERE uuid=?");
@@ -226,7 +259,7 @@ public class ConnectionManager {
                 result =  "{}";
             }
 
-            pool.close(conn, statement, results);
+            pool.close(is_sqlite, conn, statement, results);
             return result;
 
         }catch (SQLException e) {
@@ -243,7 +276,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 JSONObject json = (JSONObject) parser.parse(getWins(uuid));
 
@@ -259,7 +297,7 @@ public class ConnectionManager {
                 update.setString(2, uuid.toString());
                 update.executeUpdate();
 
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
 
@@ -277,7 +315,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 JSONObject json = (JSONObject) parser.parse(getWins(uuid));
 
@@ -294,7 +337,7 @@ public class ConnectionManager {
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
 
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -308,7 +351,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT participations FROM aeventos_users WHERE uuid=?");
@@ -322,7 +370,7 @@ public class ConnectionManager {
                 result = "{}";
             }
 
-            pool.close(conn, statement, results);
+            pool.close(is_sqlite, conn, statement, results);
             return result;
 
         }catch (SQLException e) {
@@ -339,7 +387,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
 
@@ -355,7 +408,7 @@ public class ConnectionManager {
                 update.setString(2, uuid.toString());
                 update.executeUpdate();
 
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -371,7 +424,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
 
@@ -388,7 +446,7 @@ public class ConnectionManager {
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
 
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -402,7 +460,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT current_winners FROM aeventos_eventos WHERE name=?");
@@ -416,7 +479,7 @@ public class ConnectionManager {
                 result = "[]";
             }
 
-            pool.close(conn, statement, results);
+            pool.close(is_sqlite, conn, statement, results);
             return result;
 
         }catch (SQLException e) {
@@ -430,7 +493,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT current_winners FROM aeventos_eventos_guild WHERE name=?");
@@ -443,7 +511,7 @@ public class ConnectionManager {
                 result = "[]";
             }
 
-            pool.close(conn, statement, results);
+            pool.close(is_sqlite, conn, statement, results);
             return result;
 
         }catch (SQLException e) {
@@ -459,7 +527,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT total_kills FROM aeventos_eventos_guild WHERE name=?");
@@ -472,7 +545,7 @@ public class ConnectionManager {
                 result = "[]";
             }
 
-            pool.close(conn, statement, results);
+            pool.close(is_sqlite, conn, statement, results);
             return result;
 
         }catch (SQLException e) {
@@ -488,7 +561,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement update = conn
                         .prepareStatement("UPDATE aeventos_eventos SET current_winners=? WHERE name=?");
@@ -497,7 +575,7 @@ public class ConnectionManager {
                 update.executeUpdate();
 
                 aEventos.updateTags();
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -515,7 +593,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement update = conn
                         .prepareStatement("UPDATE aeventos_eventos_guild SET current_guild_winner=?,total_kills=?,current_winners=? WHERE name=?");
@@ -526,7 +609,7 @@ public class ConnectionManager {
                 update.executeUpdate();
 
                 aEventos.updateTags();
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -542,7 +625,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT wins FROM aeventos_users WHERE uuid=?");
@@ -558,11 +646,11 @@ public class ConnectionManager {
                     wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                 }
 
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
                 return wins;
 
             }else {
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
                 return null;
             }
 
@@ -580,7 +668,12 @@ public class ConnectionManager {
 
         try {
 
-            Connection conn = pool.getConnection();
+            Connection conn;
+            if(is_sqlite) {
+                conn = getSQLiteConnection();
+            }else {
+                conn = pool.getConnection();
+            }
 
             PreparedStatement statement = conn
                     .prepareStatement("SELECT participations FROM aeventos_users WHERE uuid=?");
@@ -595,11 +688,11 @@ public class ConnectionManager {
                     participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                 }
 
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
                 return participations;
 
             }else {
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
                 return null;
             }
 
@@ -617,7 +710,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement statement = conn
                         .prepareStatement("SELECT uuid,wins FROM aeventos_users");
@@ -640,7 +738,7 @@ public class ConnectionManager {
                 }
 
                 aEventos.getCacheManager().calculateTopWins();
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -656,7 +754,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement statement = conn
                         .prepareStatement("SELECT uuid,participations FROM aeventos_users");
@@ -678,7 +781,7 @@ public class ConnectionManager {
                 }
 
                 aEventos.getCacheManager().calculateTopParticipations();
-                pool.close(conn, statement, results);
+                pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -694,7 +797,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement update = conn
                         .prepareStatement("UPDATE aeventos_users SET wins=?,total_wins=? WHERE uuid=?");
@@ -703,7 +811,7 @@ public class ConnectionManager {
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
 
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             } catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -719,7 +827,12 @@ public class ConnectionManager {
 
             try {
 
-                Connection conn = pool.getConnection();
+                Connection conn;
+                if(is_sqlite) {
+                    conn = getSQLiteConnection();
+                }else {
+                    conn = pool.getConnection();
+                }
 
                 PreparedStatement update = conn
                         .prepareStatement("UPDATE aeventos_users SET participations=?,total_participations=? WHERE uuid=?");
@@ -728,7 +841,7 @@ public class ConnectionManager {
                 update.setString(3, uuid.toString());
                 update.executeUpdate();
 
-                pool.close(conn, update, null);
+                pool.close(is_sqlite, conn, update, null);
 
             } catch (SQLException e) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
@@ -750,7 +863,7 @@ public class ConnectionManager {
 
             boolean has_results = results.next();
 
-            pool.close(conn, statement, results);
+            pool.close(is_sqlite, conn, statement, results);
             return has_results;
 
         } catch (SQLException e) {
@@ -758,5 +871,21 @@ public class ConnectionManager {
         }
 
         return true;
+    }
+
+    private Connection getSQLiteConnection() {
+
+            if(sqlite_connection == null) {
+                try {
+                    Class.forName("org.sqlite.JDBC");
+                    File database_file = new File(aEventos.getInstance().getDataFolder(), "storage.db");
+                    sqlite_connection = DriverManager.getConnection("jdbc:sqlite:" + database_file);
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        return sqlite_connection;
     }
 }

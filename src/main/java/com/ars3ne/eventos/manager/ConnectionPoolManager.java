@@ -31,7 +31,6 @@ import com.ars3ne.eventos.aEventos;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,30 +71,28 @@ public class ConnectionPoolManager {
         HikariConfig config = new HikariConfig();
 
         if(aEventos.getInstance().getConfig().getBoolean("MySQL.Enabled")) {
+
             config.setDriverClassName("com.mysql.jdbc.Driver");
             config.setJdbcUrl("jdbc:mysql://" + hostname + ":" + port + "/" + database);
-        }else {
-            File database_file = new File(aEventos.getInstance().getDataFolder(), "storage.db");
-            config.setDriverClassName("org.sqlite.JDBC");
-            config.setJdbcUrl("jdbc:sqlite:" + database_file);
+
+            config.setUsername(username);
+            config.setPassword(password);
+            config.setMinimumIdle(minimumConnections);
+            config.setMaximumPoolSize(maximumConnections);
+            config.setConnectionTimeout(connectionTimeout);
+            config.setConnectionTestQuery("SELECT 1");
+
+            dataSource = new HikariDataSource(config);
+
         }
-
-        config.setUsername(username);
-        config.setPassword(password);
-        config.setMinimumIdle(minimumConnections);
-        config.setMaximumPoolSize(maximumConnections);
-        config.setConnectionTimeout(connectionTimeout);
-        config.setConnectionTestQuery("SELECT 1");
-
-        dataSource = new HikariDataSource(config);
     }
 
     public java.sql.Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
 
-    public void close(java.sql.Connection conn, PreparedStatement ps, ResultSet res) {
-        if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
+    public void close(boolean is_sqlite, java.sql.Connection conn, PreparedStatement ps, ResultSet res) {
+        if (!is_sqlite && conn != null) try { conn.close(); } catch (SQLException ignored) {}
         if (ps != null) try { ps.close(); } catch (SQLException ignored) {}
         if (res != null) try { res.close(); } catch (SQLException ignored) {}
     }
