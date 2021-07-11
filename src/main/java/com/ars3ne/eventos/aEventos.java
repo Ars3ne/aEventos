@@ -52,7 +52,7 @@ import java.util.Collections;
 
 public class aEventos extends JavaPlugin {
 
-    private static final ConnectionManager connection = new ConnectionManager();
+    private static ConnectionManager connection;
     private static final EventosManager manager = new EventosManager();
     private static final EventosChatManager chat_manager = new EventosChatManager();
     private static final TagManager tag_manager = new TagManager();
@@ -86,6 +86,9 @@ public class aEventos extends JavaPlugin {
         }
 
         setupConfig();
+
+        connection = new ConnectionManager();
+
         if(connection.setup()) {
 
             if(conversor()) return;
