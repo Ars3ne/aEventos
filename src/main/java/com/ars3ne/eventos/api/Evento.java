@@ -33,10 +33,7 @@ import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.manager.InventoryManager;
 import com.ars3ne.eventos.manager.InventorySerializer;
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -407,6 +404,9 @@ public class Evento implements EventoInterface{
         if(spectators.contains(p)) {
             spectators.remove(p);
             p.getInventory().clear();
+            if(aEventos.getInstance().getConfig().getBoolean("Spectator gamemode")) {
+                p.setGameMode(GameMode.SURVIVAL);
+            }
             this.teleport(p, "exit");
             return;
         }
@@ -437,6 +437,9 @@ public class Evento implements EventoInterface{
         if(spectators.contains(p)) {
             spectators.remove(p);
             p.getInventory().clear();
+            if(aEventos.getInstance().getConfig().getBoolean("Spectator gamemode")) {
+                p.setGameMode(GameMode.SURVIVAL);
+            }
             this.teleport(p, "exit");
             return;
         }
@@ -474,6 +477,9 @@ public class Evento implements EventoInterface{
         if(spectators.contains(p)) {
             spectators.remove(p);
             p.getInventory().clear();
+            if(aEventos.getInstance().getConfig().getBoolean("Spectator gamemode")) {
+                p.setGameMode(GameMode.SURVIVAL);
+            }
             this.teleport(p, "exit");
             return;
         }
@@ -509,6 +515,9 @@ public class Evento implements EventoInterface{
     public void spectate(Player p) {
         p.getInventory().clear();
         p.setFoodLevel(20);
+        if(aEventos.getInstance().getConfig().getBoolean("Spectator gamemode")) {
+            p.setGameMode(GameMode.SPECTATOR);
+        }
         spectators.add(p);
         this.teleport(p, "spectator");
     }
