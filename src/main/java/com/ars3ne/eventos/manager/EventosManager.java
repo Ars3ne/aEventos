@@ -27,10 +27,14 @@
 
 package com.ars3ne.eventos.manager;
 
+import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.Evento;
 import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.eventos.*;
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public class EventosManager {
 
@@ -114,6 +118,22 @@ public class EventosManager {
             case CAMPO_MINADO: case SPLEEF: case FROG: case FIGHT: case PAINTBALL: case HUNTER: case QUIZ: case ANVIL: case NEXUS: case THOR:
                 require_pos = true;
                 break;
+        }
+
+        if(config.isSet("Itens.Enabled")) {
+
+            if(config.getBoolean("Itens.Enabled") && !config.getBoolean("Evento.Empty inventory")) {
+
+                Bukkit.getConsoleSender().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Require empty inventory")));
+
+                for(Player p: Bukkit.getOnlinePlayers()) {
+                    if(!p.hasPermission("aeventos.admin")) continue;
+                    p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Require empty inventory")));
+                }
+
+                return false;
+            }
+
         }
 
         // Se alguma das localizações não está definida, cancele o evento e mande uma mensagem para o console.

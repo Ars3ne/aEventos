@@ -156,6 +156,7 @@ Messages:
   Not enough alternatives: "&3[Evento] &bO número mínimo de alternativas é maior que o número total de alternativas possíveis."
   Unknown argument: "&3[Evento] &bArgumento inválido. Digite &f/evento setup&b para ver a lista de argumentos."
   Missing dependency: "&3[Evento] &bEste evento não pode funcionar sem o plugin &f@dependency&b."
+  Require empty inventory: '&3[Evento] &bVocê precisa ativar a opção &f"Evento.Empty Inventory" &bnas configurações do evento para poder usar os itens setados.'
 
   Default:
     - "&3[Evento] &bLista de Comandos:"
