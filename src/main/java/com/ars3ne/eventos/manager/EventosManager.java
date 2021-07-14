@@ -120,6 +120,24 @@ public class EventosManager {
                 break;
         }
 
+        switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
+            case SPLEEF: case BATATA_QUENTE: case GUERRA: case KILLER: case SEMAFORO: case FIGHT: case PAINTBALL: case HUNTER: case NEXUS: case SUMO:
+
+                if(!config.getBoolean("Evento.Empty inventory")) {
+
+                    Bukkit.getConsoleSender().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Require empty inventory")));
+
+                    for(Player p: Bukkit.getOnlinePlayers()) {
+                        if(!p.hasPermission("aeventos.admin")) continue;
+                        p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Require empty inventory")));
+                    }
+
+                    return false;
+
+                }
+                break;
+        }
+
         if(config.isSet("Itens.Enabled")) {
 
             if(config.getBoolean("Itens.Enabled") && !config.getBoolean("Evento.Empty inventory")) {
