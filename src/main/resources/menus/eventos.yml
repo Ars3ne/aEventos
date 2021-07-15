@@ -232,3 +232,25 @@ Menu:
           - ""
           - "&7Horário: &fTodos os dias!"
           - ""
+      nexus: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eNexus"
+        Material: PLAYER_HEAD
+        Custom head: true
+        Head data: "f748139ee6cff744c7e89593f6b90d46044d07ee5e63828fbe9531fb66df9b8f"
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
+      thor: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eThor"
+        Material: STONE_AXE
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""

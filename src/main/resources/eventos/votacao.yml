@@ -83,3 +83,7 @@ Alternatives:
     Name: "Palavra"
   fastclick:
     Name: "FastClick"
+  nexus:
+    Name: "Nexus"
+  thor:
+    Name: "Thor"
