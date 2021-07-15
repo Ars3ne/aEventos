@@ -214,6 +214,28 @@ public class Evento implements EventoInterface{
 
     }
 
+    public void forceStart() {
+
+        Evento.this.open = false;
+
+        List<String> broadcast_messages = config.getStringList("Messages.Start");
+        for(String s : broadcast_messages) {
+            aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@name", config.getString("Evento.Title"))));
+        }
+
+        for (Player player : players) {
+            Evento.this.teleport(player, "entrance");
+        }
+
+        if(Evento.this.bungeecord_enabled && config.getString("Locations.Server") != null && !config.getString("Locations.Server").equals("null")){
+            BungeecordHook.startingEvento(type.toString(), config.getString("filename").substring(0, config.getString("filename").length() - 4));
+        }
+
+        start();
+        EventoStartedEvent start = new EventoStartedEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
+        Bukkit.getPluginManager().callEvent(start);
+
+    }
     public void winner(Player p) {
 
     }

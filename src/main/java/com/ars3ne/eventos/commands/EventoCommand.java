@@ -327,6 +327,40 @@ public class EventoCommand implements CommandExecutor {
 
                     return true;
 
+                }else if(args[0].equalsIgnoreCase("forcestart")) {
+
+                    // Se o usuário não tem a permissão, mande um erro.
+                    if (!sender.hasPermission("aeventos.admin")) {
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
+                        return true;
+                    }
+
+                    // Se não está acontecendo um evento, mande um erro.
+                    if(aEventos.getEventoManager().getEvento() == null) {
+
+                        // Se não estiver acontecendo um evento em chat no momento, retorne.
+                        if(aEventos.getEventoChatManager().getEvento() == null) {
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§")));
+                        }else {
+                            // Inicie o evento em chat.
+                            aEventos.getEventoChatManager().getEvento().forceStart();
+                        }
+                        return true;
+
+                    }
+
+                    // Se o evento está fechado, retorne um erro.
+                    if(!aEventos.getEventoManager().getEvento().isOpen()) {
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Closed").replace("&", "§")));
+                        return true;
+                    }
+
+
+                    // Force a inicialização do evento.
+                    aEventos.getEventoManager().getEvento().forceStart();
+
+                    return true;
+
                 }else if(args[0].equalsIgnoreCase("criarconfig")) {
 
                     // Se o usuário não tem a permissão, mande um erro.

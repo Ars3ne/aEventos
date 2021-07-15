@@ -170,6 +170,7 @@ Messages:
     - "&b/evento sair &f- Sair do evento"
     - "&c/evento iniciar <evento> &4- Inicia um evento"
     - "&c/evento parar &4- Cancela o evento atual"
+    - "&c/evento forcestart &4- Força o evento atual a iniciar antes das chamadas acabarem."
     - "&c/evento setup <evento> &4- Configura um evento"
     - "&c/evento criarconfig <evento> &4- Crie um arquivo de configuração de exemplo."
     - "&c/evento reload &4- Recarregue as configurações"

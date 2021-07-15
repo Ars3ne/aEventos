@@ -36,6 +36,7 @@ public interface EventoInterface {
 
     void startCall();
     void start();
+    void forceStart();
     void stop();
     void removePlayers();
     void winner(Player p);

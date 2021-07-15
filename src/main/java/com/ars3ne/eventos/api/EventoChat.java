@@ -128,6 +128,15 @@ public class EventoChat implements EventoInterface{
 
     }
 
+    public void forceStart() {
+
+        start();
+
+        EventoStartedEvent start = new EventoStartedEvent(config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
+        Bukkit.getPluginManager().callEvent(start);
+
+    }
+
     public void winner(Player p) {
 
     }
