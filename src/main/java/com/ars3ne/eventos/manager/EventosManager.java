@@ -115,7 +115,7 @@ public class EventosManager {
         boolean require_pos = false;
 
         switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
-            case CAMPO_MINADO: case SPLEEF: case FROG: case FIGHT: case PAINTBALL: case HUNTER: case QUIZ: case ANVIL: case NEXUS: case THOR:
+            case CAMPO_MINADO: case SPLEEF: case FROG: case FIGHT: case PAINTBALL: case HUNTER: case QUIZ: case ANVIL: case NEXUS:
                 require_pos = true;
                 break;
         }
