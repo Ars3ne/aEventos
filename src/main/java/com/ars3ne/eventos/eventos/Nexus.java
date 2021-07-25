@@ -118,6 +118,12 @@ public class Nexus extends Evento {
         Location blue_nexus_loc = new Location(world, config.getDouble("Locations.Pos3.x"), config.getDouble("Locations.Pos3.y"), config.getDouble("Locations.Pos3.z"));
         Location red_nexus_loc = new Location(world, config.getDouble("Locations.Pos4.x"), config.getDouble("Locations.Pos4.y"), config.getDouble("Locations.Pos4.z"));
 
+        // Remova os Nexus já existentes, se eles ainda não foram removidos.
+        for(Entity entity: world.getEntities()) {
+            if(entity.getType() != EntityType.ENDER_CRYSTAL) continue;
+            if(entity.hasMetadata("Nexus")) entity.remove();
+        }
+
         // Invoque os nexus.
         blue_nexus_health = this.health;
         red_nexus_health = this.health;

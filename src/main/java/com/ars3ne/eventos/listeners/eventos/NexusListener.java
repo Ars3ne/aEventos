@@ -35,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -175,6 +176,18 @@ public class NexusListener implements Listener {
         if(evento == null) return;
         if (!evento.getPlayers().contains((Player) e.getWhoClicked())) return;
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+
+        if(evento == null) return;
+        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
+        if (evento.getDeadPlayers().contains(e.getEntity()) || evento.getDeadPlayers().contains(e.getEntity().getKiller())) return;
+        if (evento.getInvinciblePlayers().contains(e.getEntity()) || evento.getInvinciblePlayers().contains(e.getEntity().getKiller())) return;
+
+        evento.eliminate(e.getEntity());
+
     }
 
     public void setEvento() {
