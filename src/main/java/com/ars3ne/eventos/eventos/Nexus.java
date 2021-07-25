@@ -517,6 +517,8 @@ public class Nexus extends Evento {
             }
         }
 
+        blue_team.remove(p);
+        red_team.remove(p);
         if(blue_team.size() == 0) win("red");
         if(red_team.size() == 0) win("blue");
 

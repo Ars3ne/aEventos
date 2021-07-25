@@ -121,6 +121,7 @@ public class Paintball extends Evento {
         ItemStack bow = new ItemStack(Material.BOW, 1);
         ItemMeta meta = bow.getItemMeta();
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addEnchant(Enchantment.DURABILITY, 5, true);
         bow.setItemMeta(meta);
 
         // De itens aos jogadores.

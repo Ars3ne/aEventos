@@ -141,6 +141,7 @@ public class Hunter extends Evento {
         ItemStack bow = new ItemStack(Material.BOW, 1);
         ItemMeta meta = bow.getItemMeta();
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addEnchant(Enchantment.DURABILITY, 5, true);
         bow.setItemMeta(meta);
 
         // De itens aos jogadores.
@@ -357,6 +358,9 @@ public class Hunter extends Evento {
                 yclans_clans.get(clan_player).setFriendlyFireAlly(false);
             }
         }
+
+        blue_team.remove(p);
+        red_team.remove(p);
 
         if(blue_team.size() == 0) win("red");
         if(red_team.size() == 0) win("blue");
