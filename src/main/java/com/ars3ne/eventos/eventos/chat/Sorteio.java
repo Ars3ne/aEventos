@@ -44,6 +44,7 @@ public class Sorteio extends EventoChat {
 
     private final List<Player> players = new ArrayList<>();
     private final long cost;
+    private boolean has_winner = false;
 
     public Sorteio(YamlConfiguration config) {
 
@@ -77,7 +78,12 @@ public class Sorteio extends EventoChat {
 
     @Override
     public void stop() {
-        players.clear(); // Pareçe redundante, mas não é.
+        if(!has_winner) {
+            for(Player p: players) {
+                aEventos.getInstance().getEconomy().depositPlayer(p, cost);
+            }
+        }
+        players.clear(); // Parece redundante, mas não é.
         removePlayers();
     }
 
@@ -96,6 +102,7 @@ public class Sorteio extends EventoChat {
         }
 
         // Adicionar vitória e dar a tag no LegendChat.
+        has_winner = true;
         this.setWinner(p);
 
         // Encerre o evento.
