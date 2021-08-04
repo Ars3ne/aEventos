@@ -141,7 +141,7 @@ Messages:
   Invalid event: "&3[Evento] &bO evento fornecido é inválido."
   Missing arguments: "&3[Evento] &bUso correto: &f/evento @args"
   Reloaded: "&3[Evento] &bConfigurações recarregadas com sucesso!"
-  Unknown command: "&3[Evento] &bComando desconhecido. Digite &f/evento &bpara ver a lista de comandos."
+  Unknown command: "&3[Evento] &bComando desconhecido. Digite &f/evento ajuda &bpara ver a lista de comandos."
   Configuration already exists: "&3[Evento] &bEste arquivo de configuração já existe!"
   Configuration created: "&3[Evento] &bArquivo de configuração &f@file &bcriado com sucesso!"
   Saved: "&3[Evento] &bPosição &f@pos&bdefinida com sucesso!"

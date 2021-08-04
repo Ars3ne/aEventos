@@ -369,6 +369,23 @@ public class EventoCommand implements CommandExecutor {
 
                     return true;
 
+                }else if(args[0].equalsIgnoreCase("ajuda") || args[0].equalsIgnoreCase("help")) {
+
+                    // Se tiver a permissão de admin, então mande os comandos de admin.
+                    if(sender.hasPermission("aeventos.admin")) {
+                        List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.DefaultAdmin");
+                        for(String s : broadcast_messages) {
+                            sender.sendMessage(IridiumColorAPI.process(s.replace("&", "§")));
+                        }
+                    }else {
+                        List<String> broadcast_messages = aEventos.getInstance().getConfig().getStringList("Messages.Default");
+                        for(String s : broadcast_messages) {
+                            sender.sendMessage(IridiumColorAPI.process(s.replace("&", "§")));
+                        }
+                    }
+
+                    return true;
+
                 }else if(args[0].equalsIgnoreCase("criarconfig")) {
 
                     // Se o usuário não tem a permissão, mande um erro.
