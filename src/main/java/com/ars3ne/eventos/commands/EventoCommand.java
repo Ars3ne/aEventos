@@ -33,6 +33,7 @@ import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.manager.InventoryManager;
 import com.ars3ne.eventos.manager.InventorySerializer;
 import com.ars3ne.eventos.utils.EventoConfigFile;
+import com.ars3ne.eventos.utils.NumberFormatter;
 import com.ars3ne.eventos.utils.Utils;
 import com.cryptomorin.xseries.XItemStack;
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
@@ -314,7 +315,14 @@ public class EventoCommand implements CommandExecutor {
                     YamlConfiguration config = EventoConfigFile.get(args[1].toLowerCase());
 
                     if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
-                        boolean started = aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
+
+                        // Se existem três argumentos, então inicie o evento com o valor especificado.
+                        double reward = -1;
+                        if(args.length == 3) {
+                            reward = NumberFormatter.parseLetter(args[2]);
+                        }
+
+                        boolean started = aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config, reward);
                         if(!started) {
                             sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing dependency").replace("&", "§").replace("@dependency", "Vault")));
                         }

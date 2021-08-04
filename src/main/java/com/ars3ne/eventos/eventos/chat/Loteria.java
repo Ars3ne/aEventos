@@ -41,16 +41,17 @@ public class Loteria extends EventoChat {
     private final YamlConfiguration config;
 
     private final int number, max_number;
-    private final long reward, cost;
+    private final double cost;
+    private double reward = getReward();
 
     public Loteria(YamlConfiguration config) {
 
         super(config);
 
         this.config = config;
-        this.cost = config.getLong("Evento.Cost");
+        this.cost = config.getDouble("Evento.Cost");
         this.max_number = config.getInt("Evento.Max number");
-        this.reward = config.getLong("Evento.Reward");
+        if(this.reward == -1) this.reward = config.getDouble("Evento.Reward");
 
         this.number = (int) (Math.floor(Math.random() * this.max_number ) + 1);
 

@@ -46,7 +46,7 @@ public class FastClick extends EventoChat {
 
     private final String clickable;
     private final String not_clickable;
-    private final long reward;
+    private double reward = getReward();
     private final int total_lines;
 
     private final int correct_line;
@@ -57,7 +57,7 @@ public class FastClick extends EventoChat {
         super(config);
 
         this.config = config;
-        this.reward = config.getLong("Evento.Reward");
+        if(this.reward == -1) this.reward = config.getDouble("Evento.Reward");
         this.clickable = config.getString("Messages.Clickable");
         this.not_clickable = config.getString("Messages.Not clickable");
         this.total_lines = config.getInt("Evento.Lines");

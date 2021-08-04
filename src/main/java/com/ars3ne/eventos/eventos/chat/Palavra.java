@@ -43,14 +43,14 @@ public class Palavra extends EventoChat {
 
     private final String word;
 
-    private final long reward;
+    private double reward = getReward();
 
     public Palavra(YamlConfiguration config) {
 
         super(config);
 
         this.config = config;
-        this.reward = config.getLong("Evento.Reward");
+        if(this.reward == -1) this.reward = config.getDouble("Evento.Reward");
 
         List<String> words = config.getStringList("Words");
         Random random = new Random();

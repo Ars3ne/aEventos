@@ -43,16 +43,16 @@ public class Bolao extends EventoChat {
     private final YamlConfiguration config;
 
     private final List<Player> players = new ArrayList<>();
-    private long reward;
-    private final long cost;
+    private double reward = getReward();
+    private final double cost;
 
     public Bolao(YamlConfiguration config) {
 
         super(config);
 
         this.config = config;
-        this.cost = config.getLong("Evento.Cost");
-        this.reward = config.getLong("Evento.Reward");
+        this.cost = config.getDouble("Evento.Cost");
+        if(this.reward == -1) this.reward = config.getDouble("Evento.Reward");
 
     }
 

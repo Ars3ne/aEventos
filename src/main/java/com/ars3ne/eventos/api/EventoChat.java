@@ -48,14 +48,20 @@ public class EventoChat implements EventoInterface{
     private final boolean count_participation;
     private final boolean count_win;
     private final String permission;
-
     private final YamlConfiguration config;
+    private final double reward;
 
     public EventoChat(YamlConfiguration config) {
 
         this.config = config;
         type = EventoType.getEventoType(config.getString("Evento.Type"));
         this.permission = config.getString("Evento.Permission");
+
+        if(config.isSet("custom_reward")) {
+            reward = config.getDouble("custom_reward");
+        }else {
+            reward = -1;
+        }
 
         switch(type) {
             case VOTACAO:
@@ -252,4 +258,5 @@ public class EventoChat implements EventoInterface{
         return this.count_win;
     }
 
+    public double getReward() { return this.reward; }
 }

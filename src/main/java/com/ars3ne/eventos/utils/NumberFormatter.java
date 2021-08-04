@@ -31,11 +31,14 @@ import com.ars3ne.eventos.aEventos;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NumberFormatter {
 
     private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final List<String> CHARS = aEventos.getInstance().getConfig().getStringList("Formatter.Letters");
+    private static final Pattern REGEX_PATTERN = Pattern.compile("^(\\d+\\.?\\d*)(\\D+)");
 
     public static String decimalFormat(double number) {
         return DECIMAL_FORMAT.format(number);
@@ -63,6 +66,31 @@ public class NumberFormatter {
 
         return letterFormat(value);
 
+    }
+
+    public static double parseLetter(String letter) {
+
+        Matcher matcher = REGEX_PATTERN.matcher(letter);
+        if (!matcher.find()) {
+            try {
+                return Double.parseDouble(letter);
+            }catch(NumberFormatException ignored) {
+                return -1;
+            }
+        }
+
+        double amount = Double.parseDouble(matcher.group(1));
+        String suffix = matcher.group(2);
+
+        int index = CHARS.indexOf(suffix.toUpperCase());
+
+        double value = amount * Math.pow(1000, index);
+        return isNumberInvalid(value) ? 0 : value;
+
+    }
+
+    private static boolean isNumberInvalid(double value) {
+        return value < 0  || Double.isInfinite(value) || Double.isNaN(value);
     }
 
 }

@@ -80,6 +80,11 @@ public class EventosChatManager {
 
     }
 
+    public boolean startEvento(EventoType type, YamlConfiguration config, double reward) {
+        config.set("custom_reward", reward);
+        return startEvento(type, config);
+    }
+
     private boolean verify(YamlConfiguration config) {
 
         switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
