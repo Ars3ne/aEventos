@@ -12,9 +12,9 @@ Messages:
   Broadcast:
     - ""
     - "&3[@name] &bVote em qual evento você quer que inicie agora!"
-    - "&3[@name] &b* &f@alternative1"
-    - "&3[@name] &b* &f@alternative2"
-    - "&3[@name] &b* &f@alternative3"
+    - "&3[@name] &b* &f@alternative1 &b- &f@votes &bvotos (&f@percentage&b%)"
+    - "&3[@name] &b* &f@alternative2 &b- &f@votes &bvotos (&f@percentage&b%)"
+    - "&3[@name] &b* &f@alternative3 &b- &f@votes &bvotos (&f@percentage&b%)"
     - "&3[@name] &bChamadas restantes: &f@broadcasts"
     - ""
   Voted: "&3[@name] &bVocê votou no evento &f@alternative&b!"
@@ -23,7 +23,7 @@ Messages:
   Winner:
     - ""
     - "&3[@name] &bA votação foi encerrada!"
-    - "&3[@name] &bO evento vencedor foi &f@winner&b!"
+    - "&3[@name] &bCom &f@votes &bvotos (&f@percentage&b%), o evento vencedor foi &f@winner&b!"
     - ""
   No votes:
     - ""

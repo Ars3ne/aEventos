@@ -49,7 +49,6 @@ public class Votacao extends EventoChat {
 
     private final HashMap<Integer, String> valid_alternatives = new HashMap<>();
     private final HashMap<Player, Integer> votes =  new HashMap<>();
-
     private final YamlConfiguration config;
     private final ConfigurationSection alternatives;
 
@@ -109,10 +108,12 @@ public class Votacao extends EventoChat {
             }
 
             String name = valid_alternatives.get(Collections.max(total_votes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey());
+            int winner_votes = total_votes.get( (int) Utils.getKeysByValue(valid_alternatives, name).toArray()[0] );
+            float percent = (winner_votes * 100.0f) / votes.size();
 
             List<String> broadcast_messages = config.getStringList("Messages.Winner");
             for(String s : broadcast_messages) {
-                aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", name).replace("@name", config.getString("Evento.Title"))));
+                aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@winner", name).replace("@votes", String.valueOf(winner_votes)).replace("@percentage", String.valueOf(Math.floor(percent))).replace("@name", config.getString("Evento.Title"))));
             }
 
             YamlConfiguration config_evento = EventoConfigFile.get(alternatives.getKeys(false).toArray()[Collections.max(total_votes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey()].toString());
@@ -141,11 +142,16 @@ public class Votacao extends EventoChat {
 
             if(s.contains("@alternative" + i)) {
 
-                s = s.replace("@alternative" + i, (String) valid_alternatives.values().toArray()[i - 1]);
+                int evento_id = (int) Utils.getKeysByValue(valid_alternatives, (String) valid_alternatives.values().toArray()[i - 1]).toArray()[0];
+                int current_votes = Utils.getKeysByValue(votes, evento_id).size();
+                float vote_percentage = (current_votes * 100.0f) / votes.size();
+                if(votes.size() == 0) vote_percentage = 0;
+
+                s = s.replace("@alternative" + i, (String) valid_alternatives.values().toArray()[i - 1]).replace("@votes", String.valueOf(current_votes)).replace("@percentage", String.valueOf(Math.floor(vote_percentage)));
 
                 TextComponent component = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', s)));
                 component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(config.getString("Messages.Hover").replace("&", "§").replace("@alternative", (String) valid_alternatives.values().toArray()[i - 1])).create()));
-                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/evento " + Utils.getKeysByValue(valid_alternatives, (String) valid_alternatives.values().toArray()[i - 1]).toArray()[0]));
+                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/evento " + evento_id));
 
                 aEventos.getInstance().getServer().spigot().broadcast(component);
                 return;
