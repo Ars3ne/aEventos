@@ -95,6 +95,8 @@ public class Bolao extends EventoChat {
     @Override
     public void leave(Player p) {
         players.remove(p);
+        this.reward = this.reward - this.cost;
+        aEventos.getInstance().getEconomy().depositPlayer(p, cost);
     }
 
     @Override
@@ -150,5 +152,8 @@ public class Bolao extends EventoChat {
         p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Joined").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
 
     }
+
+    @Override
+    public List<Player> getPlayers() { return this.players; }
 
 }

@@ -37,6 +37,7 @@ import com.ars3ne.eventos.utils.NumberFormatter;
 import com.ars3ne.eventos.utils.Utils;
 import com.cryptomorin.xseries.XItemStack;
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -384,6 +385,65 @@ public class EventoCommand implements CommandExecutor {
                         }
                     }
 
+                    return true;
+
+                }else if(args[0].equalsIgnoreCase("kick")) {
+
+                    // Se o usuário não tem a permissão, mande um erro.
+                    if(!sender.hasPermission("aeventos.admin")) {
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No permission").replace("&", "§")));
+                        return true;
+                    }
+
+                    // Se existe apenas um argumento, mande um erro.
+                    if(args.length == 1) {
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing arguments").replace("&", "§").replace("@args", "kick <jogador>")));
+                        return true;
+                    }
+
+                    // Se o jogador alvo não está online, retorne.
+                    Player target = Bukkit.getPlayerExact(args[1]);
+                    if(target == null) {
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Offline").replace("&", "§")));
+                        return true;
+                    }
+
+                    // Se não está acontecendo um evento, mande um erro.
+                    if(aEventos.getEventoManager().getEvento() == null) {
+
+                        // Se não estiver acontecendo um evento em chat no momento, retorne.
+                        if(aEventos.getEventoChatManager().getEvento() == null) {
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.No event").replace("&", "§")));
+                        }else {
+
+                            // Se o jogador não está no evento, retorne.
+                            if (!aEventos.getEventoChatManager().getEvento().getPlayers().contains(target)) {
+                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Player not joined").replace("&", "§")));
+                                return true;
+                            }
+
+                            // Expulse o jogador do evento.
+                            aEventos.getEventoChatManager().getEvento().leave(target);
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Player kicked").replace("&", "§")));
+                            target.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Kicked").replace("&", "§")));
+                            return true;
+
+                        }
+
+                    }else {
+
+                        // Se o jogador não está no evento, retorne.
+                        if (!aEventos.getEventoManager().getEvento().getPlayers().contains(target)) {
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Player not joined").replace("&", "§")));
+                            return true;
+                        }
+
+                        // Expulse o jogador do evento.
+                        aEventos.getEventoManager().getEvento().leave(target);
+                        sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Player kicked").replace("&", "§")));
+                        target.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Kicked").replace("&", "§")));
+
+                    }
                     return true;
 
                 }else if(args[0].equalsIgnoreCase("criarconfig")) {

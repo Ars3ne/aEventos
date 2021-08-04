@@ -29,7 +29,7 @@ AutoStart:
   Enabled: true
   Times:
     # Formato: (dia)-<nome do arquivo de configuração do evento>-<horário>
-    # O dia é opicional, porém o nome do arquivo de configuração e o horário são obrigatórios. O nome do dia deve estar em inglês ou em português.
+    # O dia é opcional, porém o nome do arquivo de configuração e o horário são obrigatórios. O nome do dia deve estar em inglês ou em português.
     # Caso o dia não esteja presente, o evento acontecerá todos os dias no horário especificado.
 
     - "parkour-20:30"
@@ -44,6 +44,7 @@ Hook: "simpleclans" # Qual plugin de clã ou facção o plugin deve usar? Opçõ
 
 Bungeecord:
   # Informações importantes:
+  # O modo Bungeecord está em fase experimental. Bugs podem e vão ocorrer.
   # A configuração do evento deve existir em todos os servidores que o evento será inicializado.
   # O servidor tem que possuir ao menos um jogador online para o evento ser inicializado. O plugin tentará iniciar novamente o evento depois do primeiro jogador entrar, mas não é garantido que irá funcionar.
   # O número de jogadores no evento não é mostrado corretamente em todos os servidores. Recomendamos que você remova o número das mensagens dos eventos.
@@ -157,20 +158,28 @@ Messages:
   Unknown argument: "&3[Evento] &bArgumento inválido. Digite &f/evento setup&b para ver a lista de argumentos."
   Missing dependency: "&3[Evento] &bEste evento não pode funcionar sem o plugin &f@dependency&b."
   Require empty inventory: '&3[Evento] &bVocê precisa ativar a opção &f"Evento.Empty Inventory" &bnas configurações do evento para poder usar os itens setados.'
+  Offline: '&3[Evento] &bO jogador especificado está offline ou não existe.'
+  Player not joined: '&3[Evento] &bO jogador especificado não está no evento.'
+  Player kicked: '&3[Evento] &bJogador expulso com sucesso.'
+  Kicked: '&3[Evento] &bVocê foi expulso do evento.'
 
   Default:
     - "&3[Evento] &bLista de Comandos:"
     - "&b/evento &f- Entrar no evento"
     - "&b/evento assistir &f- Entrar no camarote"
     - "&b/evento sair &f- Sair do evento"
+    - "&b/evento ajuda &f- Mostra a lista de comandos"
+
   DefaultAdmin:
     - "&3[Evento] &bLista de Comandos:"
     - "&b/evento &f- Entrar no evento"
     - "&b/evento assistir &f- Entrar no camarote do evento"
     - "&b/evento sair &f- Sair do evento"
+    - "&b/evento ajuda &f- Mostra a lista de comandos"
     - "&c/evento iniciar <evento> &4- Inicia um evento"
     - "&c/evento parar &4- Cancela o evento atual"
     - "&c/evento forcestart &4- Força o evento atual a iniciar antes das chamadas acabarem."
+    - "&c/evento kick <jogador> &4- Expulsa um jogador do evento."
     - "&c/evento setup <evento> &4- Configura um evento"
     - "&c/evento criarconfig <evento> &4- Crie um arquivo de configuração de exemplo."
     - "&c/evento reload &4- Recarregue as configurações"

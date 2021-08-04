@@ -182,4 +182,14 @@ public class Votacao extends EventoChat {
         }
 
     }
+
+    @Override
+    public void leave(Player p) {
+        votes.remove(p);
+    }
+
+    @Override
+    public List<Player> getPlayers() {
+        return new ArrayList<>(votes.keySet());
+    }
 }
