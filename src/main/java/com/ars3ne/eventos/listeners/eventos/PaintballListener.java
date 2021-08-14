@@ -56,6 +56,8 @@ public class PaintballListener implements Listener {
 
         Player shooter = (Player) arrow.getShooter();
 
+        if(!evento.getPlayers().contains(p) || !evento.getPlayers().contains(shooter)) return;
+
         if(!evento.isPvPEnabled()) {
             e.setCancelled(true);
             return;
