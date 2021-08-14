@@ -195,6 +195,9 @@ public class ConnectionManager {
 
         Bukkit.getScheduler().runTaskAsynchronously(aEventos.getInstance(), () -> {
 
+            if(aEventos.getCacheManager().getPlayerTopWinsList().containsKey(Bukkit.getOfflinePlayer(uuid))) return;
+            if(aEventos.getCacheManager().getTopParticipations().containsKey(Bukkit.getOfflinePlayer(uuid))) return;
+
             try {
 
                 Connection conn;
@@ -204,27 +207,18 @@ public class ConnectionManager {
                     conn = pool.getConnection();
                 }
 
-                PreparedStatement statement = conn
-                        .prepareStatement("SELECT username FROM aeventos_users WHERE uuid=?");
-                statement.setString(1,uuid.toString());
+                PreparedStatement insert = conn
+                        .prepareStatement("INSERT INTO aeventos_users (username, uuid, total_wins, total_participations, wins, participations) VALUES (?,?,?,?,?,?)");
+                insert.setString(1, Bukkit.getOfflinePlayer(uuid).getName());
+                insert.setString(2, uuid.toString());
+                insert.setInt(3, 0);
+                insert.setInt(4, 0);
+                insert.setString(5, "{}");
+                insert.setString(6, "{}");
+                insert.executeUpdate();
+                insert.close();
 
-                ResultSet results = statement.executeQuery();
-                if(!results.next()) {
-
-                    PreparedStatement insert = conn
-                            .prepareStatement("INSERT INTO aeventos_users (username, uuid, total_wins, total_participations, wins, participations) VALUES (?,?,?,?,?,?)");
-                    insert.setString(1, Bukkit.getOfflinePlayer(uuid).getName());
-                    insert.setString(2, uuid.toString());
-                    insert.setInt(3, 0);
-                    insert.setInt(4, 0);
-                    insert.setString(5, "{}");
-                    insert.setString(6, "{}");
-                    insert.executeUpdate();
-                    insert.close();
-
-                }
-
-                pool.close(is_sqlite, conn, statement, results);
+                pool.close(is_sqlite, conn, null, null);
 
             }catch (SQLException e) {
 
@@ -730,6 +724,7 @@ public class ConnectionManager {
 
                     Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
                     for(Map.Entry<String,JsonElement> entry : entrySet){
+                        if(jsonObject.get(entry.getKey()) == null) continue;
                         wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                     }
 
@@ -773,6 +768,7 @@ public class ConnectionManager {
 
                     Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
                     for(Map.Entry<String,JsonElement> entry : entrySet){
+                        if(jsonObject.get(entry.getKey()) == null) continue;
                         participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                     }
 
