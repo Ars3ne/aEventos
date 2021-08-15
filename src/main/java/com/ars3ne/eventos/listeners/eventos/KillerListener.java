@@ -62,7 +62,12 @@ public class KillerListener implements Listener {
     public void onDeath(PlayerDeathEvent e) {
 
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
+        if (!evento.getPlayers().contains(e.getEntity())) return;
+
+        if(e.getEntity().getKiller() != null) {
+            if (!evento.getPlayers().contains(e.getEntity().getKiller())) return;
+        }
+
         // Remova o jogador do evento.
         e.getEntity().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
         evento.remove(e.getEntity());
