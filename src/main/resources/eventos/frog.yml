@@ -20,7 +20,7 @@ Messages:
     - ""
     - "&3[@name] &bIniciando evento &f@name"
     - "&3[@name] &bPara participar, digite &f/evento"
-    - "&3[@name] &bPrêmio: &2$&f12,345.67"
+    - "&3[@name] &bPrêmio: &2$&f@money"
     - "&3[@name] &bJogadores no evento: &f@players"
     - "&3[@name] &bChamadas restantes: &f@broadcasts"
     - ""
@@ -58,6 +58,7 @@ Rewards:
     Enabled: false # Ativar a tag do evento?
     Name: "aeventos_frog" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_frog}
     Style: "&a[Frog] " # A aparência da tag.
+  Money: 1000 # A quantidade de dinheiro que o jogador ganhará ao vencer o evento. (Requer Vault)
   Commands: # Lista de comandos que serão executados no(s) vencedor(es).
     - "give @winner diamond 1"
 

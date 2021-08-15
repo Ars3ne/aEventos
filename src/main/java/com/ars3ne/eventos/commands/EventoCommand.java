@@ -315,20 +315,21 @@ public class EventoCommand implements CommandExecutor {
                     // Inicie o evento.
                     YamlConfiguration config = EventoConfigFile.get(args[1].toLowerCase());
 
-                    if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
+                    // Se existem três argumentos, então inicie o evento com o valor especificado.
+                    double reward = -1;
+                    if(args.length == 3) {
+                        reward = NumberFormatter.parseLetter(args[2]);
+                    }
 
-                        // Se existem três argumentos, então inicie o evento com o valor especificado.
-                        double reward = -1;
-                        if(args.length == 3) {
-                            reward = NumberFormatter.parseLetter(args[2]);
-                        }
+                    if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
 
                         boolean started = aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config, reward);
                         if(!started) {
                             sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Missing dependency").replace("&", "§").replace("@dependency", "Vault")));
                         }
+
                     }else {
-                        boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config);
+                        boolean started = aEventos.getEventoManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config, reward);
                         if(!started) {
                             sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not configurated").replace("&", "§").replace("@name", args[1].toLowerCase())));
                         }

@@ -32,6 +32,7 @@ import com.ars3ne.eventos.api.events.*;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.manager.InventoryManager;
 import com.ars3ne.eventos.manager.InventorySerializer;
+import com.ars3ne.eventos.utils.NumberFormatter;
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -58,6 +59,7 @@ public class Evento implements EventoInterface{
     private final boolean count_participation;
     private final boolean count_win;
     private final boolean bungeecord_enabled;
+    private double money;
     private final String permission;
     private final String identifier;
 
@@ -85,6 +87,12 @@ public class Evento implements EventoInterface{
             case SPLEEF: case BATATA_QUENTE: case FIGHT: case KILLER: case SUMO: case QUIZ: case ANVIL: case THOR:
                 this.elimination = true;
                 break;
+        }
+
+        if(config.isSet("custom_reward")) {
+            money = config.getDouble("custom_reward");
+        }else {
+            money = config.getDouble("Rewards.Money");
         }
 
     }
@@ -131,7 +139,7 @@ public class Evento implements EventoInterface{
 
                     List<String> broadcast_messages = config.getStringList("Messages.Broadcast");
                     for(String s : broadcast_messages) {
-                        aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@players", String.valueOf(Evento.this.players.size())).replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title"))));
+                        aEventos.getInstance().getServer().broadcastMessage(IridiumColorAPI.process(s.replace("&", "§").replace("@players", String.valueOf(Evento.this.players.size())).replace("@broadcasts", String.valueOf(calls)).replace("@name", config.getString("Evento.Title"))).replace("@money", NumberFormatter.letterFormat(money)));
                     }
 
                     calls--;
@@ -242,6 +250,8 @@ public class Evento implements EventoInterface{
 
     public void setWinner(Player p) {
 
+        if(aEventos.getInstance().getEconomy() != null) aEventos.getInstance().getEconomy().depositPlayer(p, this.money);
+
         if(!this.count_win) return;
 
         List<String> winners = new ArrayList<>();
@@ -276,6 +286,7 @@ public class Evento implements EventoInterface{
             aEventos.getConnectionManager().addWin(config.getString("filename").substring(0, config.getString("filename").length() - 4), p.getUniqueId());
             PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
             Bukkit.getPluginManager().callEvent(win);
+            if(aEventos.getInstance().getEconomy() != null) aEventos.getInstance().getEconomy().depositPlayer(p, this.money);
         }
 
         aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
@@ -301,6 +312,7 @@ public class Evento implements EventoInterface{
             aEventos.getConnectionManager().addWin(config.getString("filename").substring(0, config.getString("filename").length() - 4), p.getUniqueId());
             PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
             Bukkit.getPluginManager().callEvent(win);
+            if(aEventos.getInstance().getEconomy() != null) aEventos.getInstance().getEconomy().depositPlayer(p, this.money);
         }
 
         aEventos.getConnectionManager().setEventoWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), winners);
@@ -325,6 +337,7 @@ public class Evento implements EventoInterface{
             aEventos.getConnectionManager().addWin(config.getString("filename").substring(0, config.getString("filename").length() - 4), p.getUniqueId());
             PlayerWinEvent win = new PlayerWinEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), type);
             Bukkit.getPluginManager().callEvent(win);
+            if(aEventos.getInstance().getEconomy() != null) aEventos.getInstance().getEconomy().depositPlayer(p, this.money);
         }
 
         aEventos.getConnectionManager().setEventoGuildWinner(config.getString("filename").substring(0, config.getString("filename").length() - 4), guild_name, kills, winners);        aEventos.getTagManager().updateTagHolder(config);

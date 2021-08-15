@@ -368,6 +368,18 @@ public class ConfigUpdater {
                 }
             }
 
+            // Se o evento for de chat e a configuração da variável de recompensa não existir, adicione-a.
+            if(!EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
+                if (config.isSet("Rewards.Money")) continue;
+                config.set("Rewards.Money", 1000);
+                try {
+                    EventoConfigFile.save(config);
+                } catch (IOException e) {
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível atualizar o arquivo de configuração.");
+                    e.printStackTrace();
+                }
+            }
+
             // Converter itens.
 
             switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
@@ -381,7 +393,7 @@ public class ConfigUpdater {
                     SerializerConverter.convert(config);
                     continue;
                 case KILLER:
-                    // TODO: Talvez mudar isso para uma classe própia?
+                    // TODO: Talvez mudar isso para uma classe propria?
                     // Adicione a seção dos itens padrões.
                     if(config.getConfigurationSection("Itens") == null) {
 

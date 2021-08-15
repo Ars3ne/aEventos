@@ -110,6 +110,11 @@ public class EventosManager {
 
     }
 
+    public boolean startEvento(EventoType type, YamlConfiguration config, double reward) {
+        if(reward != -1) config.set("custom_reward", reward);
+        return startEvento(type, config);
+    }
+
     private boolean verify(YamlConfiguration config) {
 
         boolean require_pos = false;

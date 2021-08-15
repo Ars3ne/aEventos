@@ -24,7 +24,7 @@ Messages:
     - ""
     - "&3[@name] &bIniciando evento &f@name"
     - "&3[@name] &bPara participar, digite &f/evento"
-    - "&3[@name] &bPrêmio: &2$&f10.485,96 &b+ &6[Hunter]"
+    - "&3[@name] &bPrêmio: &2$&f@money &b+ &6[Hunter]"
     - "&3[@name] &bJogadores no evento: &f@players"
     - "&3[@name] &bChamadas restantes: &f@broadcasts"
     - ""
@@ -72,6 +72,7 @@ Rewards:
     Enabled: true # Ativar a tag do evento?
     Name: "aeventos_hunter" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_hunter}
     Style: "&6[Hunter] " # A aparência da tag.
+  Money: 1000 # A quantidade de dinheiro que o jogador ganhará ao vencer o evento. (Requer Vault)
   Commands: # Lista de comandos que serão executados no vencedor.
     - "give @winner diamond 1"
 
