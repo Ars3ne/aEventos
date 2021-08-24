@@ -724,7 +724,7 @@ public class ConnectionManager {
 
                     Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
                     for(Map.Entry<String,JsonElement> entry : entrySet){
-                        if(jsonObject.get(entry.getKey()) == null) continue;
+                        if(jsonObject.get(entry.getKey()) == null || jsonObject.get(entry.getKey()).isJsonNull()) continue;
                         wins.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                     }
 
@@ -768,7 +768,7 @@ public class ConnectionManager {
 
                     Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
                     for(Map.Entry<String,JsonElement> entry : entrySet){
-                        if(jsonObject.get(entry.getKey()) == null) continue;
+                        if(jsonObject.get(entry.getKey()) == null || jsonObject.get(entry.getKey()).isJsonNull()) continue;
                         participations.put(entry.getKey(), jsonObject.get(entry.getKey()).getAsInt());
                     }
 
