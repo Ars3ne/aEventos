@@ -62,7 +62,8 @@ public class AutoStarter {
                 String[] separated = s.split("-");
                 if(separated.length == 3) {
 
-                    if(day != getDay(separated[0])) return;
+                    if(day != getDay(separated[0])) continue;
+
                     if (hour == getHour(separated[2].split(":")[0])
                             && minute == getMinute(separated[2].split(":")[1])
                             && cal.get(Calendar.SECOND) <= 10) {
@@ -70,7 +71,7 @@ public class AutoStarter {
                         // Se o evento não existe, envie um erro para o console.
                         if(!EventoConfigFile.exists(separated[1])) {
                             Bukkit.getConsoleSender().sendMessage(aEventos.getInstance().getConfig().getString("Messages.Invalid event").replace("&", "§"));
-                            return;
+                            continue;
                         }
 
                         // Inicie o evento.
@@ -78,7 +79,7 @@ public class AutoStarter {
 
                         if(EventoType.isEventoChat(EventoType.getEventoType(config.getString("Evento.Type")))) {
 
-                            if(this.start_cooldown) return; // Se estiver em cooldown, retorne.
+                            if(this.start_cooldown) continue; // Se estiver em cooldown, retorne.
                             aEventos.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> aEventos.getEventoChatManager().startEvento(EventoType.getEventoType(config.getString("Evento.Type")), config), 20L);
 
                             this.start_cooldown = true; // Defina o start_cooldown como true.
