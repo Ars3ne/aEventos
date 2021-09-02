@@ -40,6 +40,7 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -66,7 +67,8 @@ public class Nexus extends Evento {
     private final NexusListener listener = new NexusListener();
 
     private final Location blue_spawn, red_spawn;
-    private final Entity blue_nexus, red_nexus;
+    private final EnderCrystal blue_nexus;
+    private final EnderCrystal red_nexus;
 
     private final HashMap<Player, Integer> blue_team = new HashMap<>();
     private final HashMap<Player, Integer> red_team = new HashMap<>();
@@ -127,13 +129,13 @@ public class Nexus extends Evento {
         blue_nexus_health = this.health;
         red_nexus_health = this.health;
 
-        blue_nexus = world.spawnEntity(blue_nexus_loc, EntityType.ENDER_CRYSTAL);
+        blue_nexus = (EnderCrystal) world.spawnEntity(blue_nexus_loc, EntityType.ENDER_CRYSTAL);
         blue_nexus.setCustomName(IridiumColorAPI.process(nexus_name.replace("&", "§").replace("@team_color", "§9").replace("@team_uppercase", blue_name.toUpperCase()).replace("@team", blue_name).replace("@health", String.valueOf(blue_nexus_health))));
         blue_nexus.setMetadata("Nexus", new FixedMetadataValue(aEventos.getInstance(), true));
         blue_nexus.setMetadata("Blue", new FixedMetadataValue(aEventos.getInstance(), true));
         blue_nexus.setCustomNameVisible(true);
 
-        red_nexus = world.spawnEntity(red_nexus_loc, EntityType.ENDER_CRYSTAL);
+        red_nexus = (EnderCrystal) world.spawnEntity(red_nexus_loc, EntityType.ENDER_CRYSTAL);
         red_nexus.setCustomName(IridiumColorAPI.process(nexus_name.replace("&", "§").replace("@team_color", "§c").replace("@team_uppercase", red_name.toUpperCase()).replace("@team", red_name).replace("@health", String.valueOf(red_nexus_health))));
         red_nexus.setMetadata("Nexus", new FixedMetadataValue(aEventos.getInstance(), true));
         red_nexus.setMetadata("Red", new FixedMetadataValue(aEventos.getInstance(), true));
