@@ -86,6 +86,8 @@ public final class EventoTopInventory extends PagedInventory {
 
             for(OfflinePlayer p: aEventos.getCacheManager().getTopWinsMenuItems().keySet()) {
 
+                if(p == null) continue;
+
                 ItemStack item = XMaterial.PLAYER_HEAD.parseItem();
                 assert item != null;
                 SkullMeta meta = (SkullMeta) item.getItemMeta();

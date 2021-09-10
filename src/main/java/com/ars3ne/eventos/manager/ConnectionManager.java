@@ -144,7 +144,7 @@ public class ConnectionManager {
 
             }catch (SQLException e) {
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
 
             }
 
@@ -184,7 +184,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -222,7 +222,7 @@ public class ConnectionManager {
 
             }catch (SQLException e) {
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
 
             }
 
@@ -295,7 +295,7 @@ public class ConnectionManager {
 
             } catch (ParseException | SQLException e) {
 
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
 
             }
 
@@ -334,7 +334,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -405,7 +405,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -443,7 +443,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             } catch (ParseException | SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -572,7 +572,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             }catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -606,7 +606,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             }catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -736,7 +736,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -780,7 +780,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, statement, results);
 
             }catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -810,7 +810,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             } catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
@@ -840,7 +840,7 @@ public class ConnectionManager {
                 pool.close(is_sqlite, conn, update, null);
 
             } catch (SQLException e) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(aEventos.getInstance(), () -> Bukkit.getConsoleSender().sendMessage(e.getMessage()), 20L);
+                Bukkit.getConsoleSender().sendMessage(e.getMessage());
             }
 
         });
