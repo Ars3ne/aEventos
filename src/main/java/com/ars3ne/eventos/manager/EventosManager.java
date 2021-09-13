@@ -126,7 +126,7 @@ public class EventosManager {
         }
 
         switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
-            case SPLEEF: case BATATA_QUENTE: case GUERRA: case KILLER: case SEMAFORO: case FIGHT: case PAINTBALL: case HUNTER: case NEXUS: case SUMO:
+            case BATATA_QUENTE: case SEMAFORO: case PAINTBALL: case HUNTER:
 
                 if(!config.getBoolean("Evento.Empty inventory")) {
 
