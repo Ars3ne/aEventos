@@ -13,7 +13,7 @@ Evento:
   Time: 5 # Tempo em segundos de intervalo entre as lutas.
   Fight time: 180 # Tempo máximo em segundos que uma luta pode ter.
 
-Itnms:
+Itens:
   # Você pode configurar esta seção o comando /evento setup kit <normal/last>
   # Itens para todas as lutas, exceto a final.
   Normal:
