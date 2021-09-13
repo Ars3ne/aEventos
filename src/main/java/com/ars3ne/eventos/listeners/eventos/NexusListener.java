@@ -51,15 +51,15 @@ public class NexusListener implements Listener {
 
         if(e.getEntity() instanceof EnderCrystal) {
 
+            EnderCrystal crystal = (EnderCrystal) e.getEntity();
+            if(!crystal.hasMetadata("Nexus")) return;
+            e.setCancelled(true);
+
             // Se o dano foi para um EnderCrystal, então verifique se o mesmo é um nexus.
             if(!(e.getDamager() instanceof Player)) return;
 
-            EnderCrystal crystal = (EnderCrystal) e.getEntity();
             Player player = (Player) e.getDamager();
 
-            if(!crystal.hasMetadata("Nexus")) return;
-
-            e.setCancelled(true);
             if(evento == null) return;
             if(!evento.isPvPEnabled()) return;
             if(!evento.getPlayers().contains(player)) return;
