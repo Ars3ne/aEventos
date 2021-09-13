@@ -34,16 +34,19 @@ e ``7`` no chat:
 ## Comandos:
 |Comando         |Descrição                      |Permissão                    |
 |----------------|-------------------------------|-----------------------------|
-|/evento        | Comando usado para entrar no evento. Caso não esteja aconteçendo um no momento, mostrará a lista de comandos.|A permissão depende do evento. `aeventos.admin` para mostrar os comandos de administrador.           |
+|/evento        | Comando usado para entrar no evento. Caso não esteja acontecendo um no momento, mostrará a lista de comandos.|A permissão depende do evento. `aeventos.admin` para mostrar os comandos de administrador.           |
 |/evento sair    |Sai do evento atual.|Nenhuma.       |
 |/evento (camarote/assistir) |Assista o evento atual, caso o mesmo permita.	     |Além da permissão necessária para participar do evento, `aeventos.spectator`			   |
-|/evento iniciar [evento]|Inicia o evento especificado, caso não esteja aconteçendo outro no momento.|`aeventos.admin`			   |
+|/evento iniciar [evento]|Inicia o evento especificado, caso não esteja acontecendo outro no momento.|`aeventos.admin`			   |
 |/evento (cancelar/parar)|Cancela o evento atual.|`aeventos.admin`	
 |/evento forcestart|Força a inicialização do evento atual, mesmo que as chamadas não tenham acabado.|`aeventos.admin`
+|/evento kick [jogador] |Expulsa o jogador do evento.|`aeventos.admin`
 |/evento setup [evento] |Inicia a configuração do evento especificado.|`aeventos.admin`			   |
 |/evento setup sair|Saia da configuração do evento especificado.|`aeventos.admin`			   |
 |/evento criarconfig [evento] |Cria um arquivo de configuração de exemplo do evento.|`aeventos.admin`			   |
 |/evento reload|Recarrega as configurações do plugin.	     |`aeventos.admin`			   |
+|/evento (ajuda/help) | Mostra a lista de comandos. |Nenhuma. `aeventos.admin` para mostrar os comandos de administrador.           |
+
 
 
 ## Configurações:
