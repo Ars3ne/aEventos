@@ -572,6 +572,7 @@ public class Guerra extends Evento {
     private int getEnemiesTotal(Player p) {
 
         if(hook.equalsIgnoreCase("simpleclans")) {
+            if(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) == null) return 0;
             return (int) simpleclans_clan_participants.keySet()
                     .stream()
                     .filter(map -> map.getClan() != aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).getClan())
@@ -579,6 +580,7 @@ public class Guerra extends Evento {
         }
 
         if(hook.equalsIgnoreCase("massivefactions")) {
+            if(MPlayer.get(p).getFaction() == null) return 0;
             return (int) massivefactions_factions_participants.keySet()
                     .stream()
                     .filter(map -> map.getFaction() != MPlayer.get(p).getFaction())
@@ -586,6 +588,7 @@ public class Guerra extends Evento {
         }
 
         if(hook.equalsIgnoreCase("yclans")) {
+            if(yclans_api.getPlayer(p) == null || !yclans_api.getPlayer(p).hasClan()) return 0;
             return (int) yclans_clan_participants.keySet()
                     .stream()
                     .filter(map -> map.getClan() != yclans_api.getPlayer(p).getClan())
@@ -617,6 +620,7 @@ public class Guerra extends Evento {
     private int getTotalGuildPlayers(Player p) {
 
         if(hook.equalsIgnoreCase("simpleclans")) {
+            if(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) == null) return 0;
             return (int) simpleclans_clan_participants.keySet()
                     .stream()
                     .filter(map -> map.getClan() == aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p).getClan())
@@ -624,6 +628,7 @@ public class Guerra extends Evento {
         }
 
         if(hook.equalsIgnoreCase("massivefactions")) {
+            if(MPlayer.get(p).getFaction() == null) return 0;
             return (int) massivefactions_factions_participants.keySet()
                     .stream()
                     .filter(map -> map.getFaction() == MPlayer.get(p).getFaction())
@@ -631,6 +636,7 @@ public class Guerra extends Evento {
         }
 
         if(hook.equalsIgnoreCase("yclans")) {
+            if(yclans_api.getPlayer(p) == null || !yclans_api.getPlayer(p).hasClan()) return 0;
             return (int) yclans_clan_participants.keySet()
                     .stream()
                     .filter(map -> map.getClan() == yclans_api.getPlayer(p).getClan())

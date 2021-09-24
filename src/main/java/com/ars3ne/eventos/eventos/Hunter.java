@@ -51,10 +51,7 @@ import org.bukkit.scoreboard.Team;
 import yclans.api.yClansAPI;
 import yclans.model.Clan;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class Hunter extends Evento {
@@ -85,9 +82,10 @@ public class Hunter extends Evento {
     private boolean pvp_enabled, team_selected = false;
 
     final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    final Team scoreboard_team_blue = board.registerNewTeam("blue_hunter");
-    final Team scoreboard_team_red = board.registerNewTeam("red_hunter");
-    final Team scoreboard_team_captured = board.registerNewTeam("captured_hunter");
+    String team_uuid = UUID.randomUUID().toString().substring(0, 5);
+    final Team scoreboard_team_blue = board.registerNewTeam("blue_" + team_uuid);
+    final Team scoreboard_team_red = board.registerNewTeam("red_" + team_uuid);
+    final Team scoreboard_team_captured = board.registerNewTeam("captured_" + team_uuid);
 
     private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
     private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();

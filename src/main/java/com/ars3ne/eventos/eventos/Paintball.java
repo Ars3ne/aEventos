@@ -49,10 +49,7 @@ import org.bukkit.scoreboard.Team;
 import yclans.api.yClansAPI;
 import yclans.model.Clan;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class Paintball extends Evento {
@@ -72,8 +69,10 @@ public class Paintball extends Evento {
     private yClansAPI yclans_api;
 
     final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    final Team scoreboard_team_blue = board.registerNewTeam("blue_paintball");
-    final Team scoreboard_team_red = board.registerNewTeam("red_paintball");
+
+    String team_uuid = UUID.randomUUID().toString().substring(0, 5);
+    final Team scoreboard_team_blue = board.registerNewTeam("blue_" + team_uuid);
+    final Team scoreboard_team_red = board.registerNewTeam("red_" + team_uuid);
 
     private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
     private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
