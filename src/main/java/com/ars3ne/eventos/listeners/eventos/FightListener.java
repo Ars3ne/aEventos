@@ -29,6 +29,8 @@ package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.eventos.Fight;
+import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,6 +38,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class FightListener implements Listener {
@@ -85,6 +88,20 @@ public class FightListener implements Listener {
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+
+        if(evento == null) return;
+        if(!evento.getPlayers().contains(e.getPlayer())) return;
+        if(evento.getFighter1() != e.getPlayer() && evento.getFighter2() != e.getPlayer()) return;
+
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.isNewVersion() && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
+            // Se o jogador entrou na água, então o elimine.
+            evento.setFightLoser(e.getPlayer());
+        }
+
     }
 
     public void setEvento() {
