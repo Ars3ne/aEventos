@@ -28,8 +28,10 @@
 package com.ars3ne.eventos.listeners.eventos;
 
 import com.ars3ne.eventos.aEventos;
+import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.eventos.Sign;
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -41,9 +43,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -139,17 +140,16 @@ public class SignListener implements Listener {
     }
 
     @EventHandler
-    public void onDrop(PlayerDropItemEvent e) {
+    public void onDeath(PlayerDeathEvent e) {
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getPlayer())) return;
-        e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onPickup(PlayerPickupItemEvent e) {
-        if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getPlayer())) return;
-        e.setCancelled(true);
+        if(!evento.getPlayers().contains(e.getEntity())) return;
+        if(!evento.notReturnOnDamage()) return;
+        // Remova o jogador do evento.
+        e.getEntity().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
+        evento.remove(e.getEntity());
+        evento.leaveBungeecord(e.getEntity());
+        PlayerLoseEvent lose = new PlayerLoseEvent(e.getEntity(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
+        Bukkit.getPluginManager().callEvent(lose);
     }
 
     public void setEvento() {
