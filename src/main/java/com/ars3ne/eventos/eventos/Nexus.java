@@ -51,14 +51,14 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 import yclans.api.yClansAPI;
 import yclans.model.Clan;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class Nexus extends Evento {
 
     private final YamlConfiguration config;
@@ -75,19 +75,16 @@ public class Nexus extends Evento {
 
     private yClansAPI yclans_api;
 
-    private final int enable_pvp, health, respawn_interval, damage, invincibility_time;
+    private final int enable_pvp;
+    private final int respawn_interval;
+    private final int damage;
+    private final int invincibility_time;
     private final String nexus_name;
     private int blue_nexus_health, red_nexus_health;
 
     private final String blue_name;
     private final String red_name;
     private boolean pvp_enabled, team_selected = false;
-
-    String team_uuid = UUID.randomUUID().toString().substring(0, 5);
-    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    final Team scoreboard_team_blue = board.registerNewTeam("blue_" + team_uuid);
-    final Team scoreboard_team_red = board.registerNewTeam("red_" + team_uuid);
-    final Team scoreboard_team_dead = board.registerNewTeam("dead_" + team_uuid);
 
     private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
     private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
@@ -100,7 +97,7 @@ public class Nexus extends Evento {
         this.blue_name = config.getString("Evento.Blue");
         this.red_name = config.getString("Evento.Red");
         this.enable_pvp = config.getInt("Evento.Enable PvP");
-        this.health = config.getInt("Evento.Health");
+        int health = config.getInt("Evento.Health");
         this.respawn_interval = config.getInt("Evento.Respawn time");
         this.damage = config.getInt("Evento.Damage");
         this.nexus_name = config.getString("Evento.Nexus name");
@@ -109,11 +106,6 @@ public class Nexus extends Evento {
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue_spawn = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
         this.red_spawn = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
-
-        // Configure a cor dos times no tab.
-        scoreboard_team_blue.setPrefix(ChatColor.BLUE.toString());
-        scoreboard_team_red.setPrefix(ChatColor.RED.toString());
-        scoreboard_team_dead.setPrefix(ChatColor.BLACK.toString());
 
         Location blue_nexus_loc = new Location(world, config.getDouble("Locations.Pos3.x"), config.getDouble("Locations.Pos3.y"), config.getDouble("Locations.Pos3.z"));
         Location red_nexus_loc = new Location(world, config.getDouble("Locations.Pos4.x"), config.getDouble("Locations.Pos4.y"), config.getDouble("Locations.Pos4.z"));
@@ -125,8 +117,8 @@ public class Nexus extends Evento {
         }
 
         // Invoque os nexus.
-        blue_nexus_health = this.health;
-        red_nexus_health = this.health;
+        blue_nexus_health = health;
+        red_nexus_health = health;
 
         blue_nexus = (EnderCrystal) world.spawnEntity(blue_nexus_loc, EntityType.ENDER_CRYSTAL);
         blue_nexus.setCustomName(IridiumColorAPI.process(nexus_name.replace("&", "§").replace("@team_color", "§9").replace("@team_uppercase", blue_name.toUpperCase()).replace("@team", blue_name).replace("@health", String.valueOf(blue_nexus_health))));
@@ -204,7 +196,6 @@ public class Nexus extends Evento {
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
 
-                scoreboard_team_blue.addPlayer(p);
                 p.teleport(blue_spawn);
 
             }
@@ -233,8 +224,6 @@ public class Nexus extends Evento {
                 p.getInventory().setChestplate(chestplate);
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
-
-                scoreboard_team_red.addPlayer(p);
 
                 p.teleport(red_spawn);
             }
@@ -325,10 +314,6 @@ public class Nexus extends Evento {
         captured.getInventory().setLeggings(leggings);
         captured.getInventory().setBoots(boots);
 
-        scoreboard_team_blue.removePlayer(captured);
-        scoreboard_team_red.removePlayer(captured);
-        scoreboard_team_dead.addPlayer(captured);
-
         // Mande a mensagem para o jogador.
         List<String> died_st = config.getStringList("Messages.Died");
         for(String s: died_st) {
@@ -341,7 +326,6 @@ public class Nexus extends Evento {
             if(!isHappening()) return;
 
             dead_players.remove(captured);
-            scoreboard_team_dead.removePlayer(captured);
 
             if(blue_team.containsKey(captured)) {
                 ItemStack helmet2 = new ItemStack(Material.LEATHER_HELMET, 1);
@@ -368,7 +352,6 @@ public class Nexus extends Evento {
                 captured.removePotionEffect(PotionEffectType.BLINDNESS);
                 captured.removePotionEffect(PotionEffectType.SLOW);
 
-                scoreboard_team_blue.addPlayer(captured);
                 captured.teleport(blue_spawn);
 
             }
@@ -398,7 +381,6 @@ public class Nexus extends Evento {
                 captured.removePotionEffect(PotionEffectType.BLINDNESS);
                 captured.removePotionEffect(PotionEffectType.SLOW);
 
-                scoreboard_team_red.addPlayer(captured);
                 captured.teleport(red_spawn);
             }
 
@@ -531,10 +513,6 @@ public class Nexus extends Evento {
         p.getInventory().setLeggings(null);
         p.getInventory().setBoots(null);
 
-        scoreboard_team_blue.removePlayer(p);
-        scoreboard_team_red.removePlayer(p);
-        scoreboard_team_dead.removePlayer(p);
-
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
         Bukkit.getPluginManager().callEvent(lose);
         this.remove(p);
@@ -555,15 +533,7 @@ public class Nexus extends Evento {
             p.getInventory().setBoots(null);
             p.removePotionEffect(PotionEffectType.BLINDNESS);
             p.removePotionEffect(PotionEffectType.SLOW);
-            scoreboard_team_blue.removePlayer(p);
-            scoreboard_team_red.removePlayer(p);
-            scoreboard_team_dead.removePlayer(p);
         }
-
-        // Remova os times.
-        scoreboard_team_blue.unregister();
-        scoreboard_team_red.unregister();
-        scoreboard_team_dead.unregister();
 
         // Desative o friendly-fire dos jogadores.
         for (ClanPlayer p : simpleclans_clans) {

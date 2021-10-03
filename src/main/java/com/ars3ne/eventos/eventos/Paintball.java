@@ -44,14 +44,14 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 import yclans.api.yClansAPI;
 import yclans.model.Clan;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class Paintball extends Evento {
 
     private final YamlConfiguration config;
@@ -68,12 +68,6 @@ public class Paintball extends Evento {
 
     private yClansAPI yclans_api;
 
-    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-
-    String team_uuid = UUID.randomUUID().toString().substring(0, 5);
-    final Team scoreboard_team_blue = board.registerNewTeam("blue_" + team_uuid);
-    final Team scoreboard_team_red = board.registerNewTeam("red_" + team_uuid);
-
     private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
     private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
     private final HashMap<yclans.model.ClanPlayer, Clan> yclans_clans = new HashMap<>();
@@ -88,9 +82,6 @@ public class Paintball extends Evento {
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
         this.red = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
-
-        scoreboard_team_blue.setPrefix(ChatColor.BLUE.toString());
-        scoreboard_team_red.setPrefix(ChatColor.RED.toString());
 
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
             yclans_api = yClansAPI.yclansapi;
@@ -151,7 +142,6 @@ public class Paintball extends Evento {
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
 
-                scoreboard_team_blue.addPlayer(p);
                 p.teleport(blue);
             }
 
@@ -180,7 +170,6 @@ public class Paintball extends Evento {
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
 
-                scoreboard_team_red.addPlayer(p);
                 p.teleport(red);
             }
 
@@ -315,13 +304,7 @@ public class Paintball extends Evento {
             p.getInventory().setChestplate(null);
             p.getInventory().setLeggings(null);
             p.getInventory().setBoots(null);
-            scoreboard_team_blue.removePlayer(p);
-            scoreboard_team_red.removePlayer(p);
         }
-
-        // Remova os times.
-        scoreboard_team_blue.unregister();
-        scoreboard_team_red.unregister();
 
         // Desative o friendly-fire dos jogadores.
         for (ClanPlayer p : simpleclans_clans) {
@@ -353,7 +336,6 @@ public class Paintball extends Evento {
         if(blue_team.contains(p)) {
 
             blue_team.remove(p);
-            scoreboard_team_blue.removePlayer(p);
 
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {
@@ -370,7 +352,6 @@ public class Paintball extends Evento {
         if(red_team.contains(p)) {
 
             red_team.remove(p);
-            scoreboard_team_red.removePlayer(p);
 
             for (Player player : getPlayers()) {
                 for(String s: eliminated_st) {

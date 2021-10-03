@@ -46,14 +46,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 import yclans.api.yClansAPI;
 import yclans.model.Clan;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class Hunter extends Evento {
 
     private final YamlConfiguration config;
@@ -81,12 +81,6 @@ public class Hunter extends Evento {
     private final String red_name;
     private boolean pvp_enabled, team_selected = false;
 
-    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    String team_uuid = UUID.randomUUID().toString().substring(0, 5);
-    final Team scoreboard_team_blue = board.registerNewTeam("blue_" + team_uuid);
-    final Team scoreboard_team_red = board.registerNewTeam("red_" + team_uuid);
-    final Team scoreboard_team_captured = board.registerNewTeam("captured_" + team_uuid);
-
     private final ArrayList<ClanPlayer> simpleclans_clans = new ArrayList<>();
     private final HashMap<MPlayer, Faction> massivefactions_factions = new HashMap<>();
     private final HashMap<yclans.model.ClanPlayer, Clan> yclans_clans = new HashMap<>();
@@ -106,10 +100,6 @@ public class Hunter extends Evento {
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
         this.red = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
-
-        scoreboard_team_blue.setPrefix(ChatColor.BLUE.toString());
-        scoreboard_team_red.setPrefix(ChatColor.RED.toString());
-        scoreboard_team_captured.setPrefix(ChatColor.BLACK.toString());
 
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
             yclans_api = yClansAPI.yclansapi;
@@ -170,7 +160,6 @@ public class Hunter extends Evento {
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
 
-                scoreboard_team_blue.addPlayer(p);
                 p.teleport(blue);
 
             }
@@ -199,8 +188,6 @@ public class Hunter extends Evento {
                 p.getInventory().setChestplate(chestplate);
                 p.getInventory().setLeggings(leggings);
                 p.getInventory().setBoots(boots);
-
-                scoreboard_team_red.addPlayer(p);
 
                 p.teleport(red);
             }
@@ -368,10 +355,6 @@ public class Hunter extends Evento {
         p.getInventory().setLeggings(null);
         p.getInventory().setBoots(null);
 
-        if(scoreboard_team_blue.getScoreboard() != null) scoreboard_team_blue.removePlayer(p);
-        if(scoreboard_team_red.getScoreboard() != null) scoreboard_team_red.removePlayer(p);
-        if(scoreboard_team_captured.getScoreboard() != null) scoreboard_team_captured.removePlayer(p);
-
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
         Bukkit.getPluginManager().callEvent(lose);
         this.remove(p);
@@ -388,15 +371,7 @@ public class Hunter extends Evento {
             p.getInventory().setBoots(null);
             p.removePotionEffect(PotionEffectType.BLINDNESS);
             p.removePotionEffect(PotionEffectType.SLOW);
-            scoreboard_team_blue.removePlayer(p);
-            scoreboard_team_red.removePlayer(p);
-            scoreboard_team_captured.removePlayer(p);
         }
-
-        // Remova os times.
-        scoreboard_team_blue.unregister();
-        scoreboard_team_red.unregister();
-        scoreboard_team_captured.unregister();
 
         // Desative o friendly-fire dos jogadores.
         for (ClanPlayer p : simpleclans_clans) {
@@ -445,10 +420,6 @@ public class Hunter extends Evento {
         captured.getInventory().setChestplate(chestplate);
         captured.getInventory().setLeggings(leggings);
         captured.getInventory().setBoots(boots);
-
-        scoreboard_team_blue.removePlayer(captured);
-        scoreboard_team_red.removePlayer(captured);
-        scoreboard_team_captured.addPlayer(captured);
 
         // Adicione um ponto para o shooter.
         if(blue_team.containsKey(shooter)) {
@@ -513,7 +484,6 @@ public class Hunter extends Evento {
             if(!isHappening()) return;
 
             captured_players.remove(captured);
-            scoreboard_team_captured.removePlayer(captured);
 
             if(blue_team.containsKey(captured)) {
                 ItemStack helmet2 = new ItemStack(Material.LEATHER_HELMET, 1);
@@ -540,7 +510,6 @@ public class Hunter extends Evento {
                 captured.removePotionEffect(PotionEffectType.BLINDNESS);
                 captured.removePotionEffect(PotionEffectType.SLOW);
 
-                scoreboard_team_blue.addPlayer(captured);
                 captured.teleport(blue);
 
             }
@@ -570,7 +539,6 @@ public class Hunter extends Evento {
                 captured.removePotionEffect(PotionEffectType.BLINDNESS);
                 captured.removePotionEffect(PotionEffectType.SLOW);
 
-                scoreboard_team_red.addPlayer(captured);
                 captured.teleport(red);
             }
 

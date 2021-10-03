@@ -40,13 +40,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
 public class BatataQuente extends Evento {
 
     private final YamlConfiguration config;
@@ -57,15 +54,10 @@ public class BatataQuente extends Evento {
 
     private Player potato_holder;
 
-    final Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    final Team potato_holder_team = board.registerNewTeam("potato_holder");
-
     public BatataQuente(YamlConfiguration config) {
         super(config);
         this.config = config;
-
         this.max_time = config.getInt("Evento.Time");
-        potato_holder_team.setPrefix(ChatColor.RED.toString());
     }
 
     @Override
@@ -109,9 +101,6 @@ public class BatataQuente extends Evento {
             p.getInventory().clear();
         }
 
-        // Remova o team.
-        potato_holder_team.unregister();
-
         // Remova o listener do evento e chame a função cancel.
         HandlerList.unregisterAll(listener);
         this.removePlayers();
@@ -132,7 +121,6 @@ public class BatataQuente extends Evento {
 
         // Se o jogador que saiu for o holder da batata, então pegue outro.
         if(potato_holder == p) {
-            potato_holder_team.removePlayer(p);
             potato_holder.getInventory().clear();
             potato_holder.getInventory().setHelmet(null);
             potato_holder = null;
@@ -154,7 +142,6 @@ public class BatataQuente extends Evento {
     public void setHolder(Player p, int current_potato_holder_changes) {
 
         if(!isHappening()) return;
-        if(potato_holder != null) potato_holder_team.removePlayer(potato_holder);
 
         potato_holder = p;
         Bukkit.getScheduler().cancelTask(task);
@@ -168,7 +155,6 @@ public class BatataQuente extends Evento {
         // O adicione para o time do batata holder.
         current_potato_holder_changes++;
         potato_holder_changes++;
-        potato_holder_team.addPlayer(p);
 
         // Spawne um foguete na localização do holder.
         Location loc = potato_holder.getLocation();
