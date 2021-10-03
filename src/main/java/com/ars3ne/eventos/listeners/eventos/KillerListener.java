@@ -48,7 +48,7 @@ public class KillerListener implements Listener {
         if(evento == null) return;
 
         // Se a entidade não for um player, retorne.
-        if(!(e.getEntity() instanceof Player) || !(e.getDamager() instanceof Player)) return;
+        if(!(e.getEntity() instanceof Player)) return;
 
         Player damaged = (Player) e.getEntity();
         //Player damager = (Player) e.getDamager();

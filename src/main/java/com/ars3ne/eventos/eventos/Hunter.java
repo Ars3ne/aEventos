@@ -368,9 +368,9 @@ public class Hunter extends Evento {
         p.getInventory().setLeggings(null);
         p.getInventory().setBoots(null);
 
-        scoreboard_team_blue.removePlayer(p);
-        scoreboard_team_red.removePlayer(p);
-        scoreboard_team_captured.removePlayer(p);
+        if(scoreboard_team_blue.getScoreboard() != null) scoreboard_team_blue.removePlayer(p);
+        if(scoreboard_team_red.getScoreboard() != null) scoreboard_team_red.removePlayer(p);
+        if(scoreboard_team_captured.getScoreboard() != null) scoreboard_team_captured.removePlayer(p);
 
         PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
         Bukkit.getPluginManager().callEvent(lose);
