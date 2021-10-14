@@ -182,9 +182,13 @@ public class NexusListener implements Listener {
     public void onDeath(PlayerDeathEvent e) {
 
         if(evento == null) return;
-        if (!evento.getPlayers().contains(e.getEntity()) || !evento.getPlayers().contains(e.getEntity().getKiller())) return;
-        if (evento.getDeadPlayers().contains(e.getEntity()) || evento.getDeadPlayers().contains(e.getEntity().getKiller())) return;
-        if (evento.getInvinciblePlayers().contains(e.getEntity()) || evento.getInvinciblePlayers().contains(e.getEntity().getKiller())) return;
+        if(!evento.getPlayers().contains(e.getEntity()) || evento.getDeadPlayers().contains(e.getEntity()) || evento.getInvinciblePlayers().contains(e.getEntity())) return;
+
+        if(e.getEntity().getKiller() != null) {
+            if (!evento.getPlayers().contains(e.getEntity().getKiller())) return;
+            if (evento.getDeadPlayers().contains(e.getEntity().getKiller())) return;
+            if (evento.getInvinciblePlayers().contains(e.getEntity().getKiller())) return;
+        }
 
         evento.eliminate(e.getEntity());
 

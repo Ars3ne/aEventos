@@ -36,6 +36,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -75,6 +76,18 @@ public class SumoListener implements Listener {
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        if(evento == null) return;
+        if(!evento.getPlayers().contains(e.getEntity())) return;
+        // Remova o jogador do evento.
+        e.getEntity().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
+        evento.remove(e.getEntity());
+        evento.notifyLeave(e.getEntity());
+        PlayerLoseEvent lose = new PlayerLoseEvent(e.getEntity(), evento.getConfig().getString("filename").substring(0, evento.getConfig().getString("filename").length() - 4), evento.getType());
+        Bukkit.getPluginManager().callEvent(lose);
     }
 
     public void setEvento() {

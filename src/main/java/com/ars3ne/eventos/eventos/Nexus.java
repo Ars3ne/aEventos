@@ -497,6 +497,7 @@ public class Nexus extends Evento {
             if(yclans_api == null || yclans_api.getPlayer(p) == null || isOpen()) return;
             yclans.model.ClanPlayer clan_player = yclans_api.getPlayer(p);
             if(getClanMembers(p) < 1) {
+                if(yclans_clans.get(clan_player) == null) return;
                 yclans_clans.get(clan_player).setFriendlyFireMember(false);
                 yclans_clans.get(clan_player).setFriendlyFireAlly(false);
                 yclans_clans.remove(clan_player);
