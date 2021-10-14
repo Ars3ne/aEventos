@@ -289,6 +289,12 @@ public class Guerra extends Evento {
             BungeecordHook.joinEvento(p.getName());
         }
 
+        // Se o clã do jogador já bateu o limite de jogadores máximo, retorne.
+        if(getTotalGuildPlayers(p) > this.max_players) {
+            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Maximum").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
+            return;
+        }
+
         // Se o jogador não está em um clan ou facção, retorne.
         if(hook.equalsIgnoreCase("simpleclans") && aEventos.getInstance().getSimpleClans() != null) {
             if(aEventos.getInstance().getSimpleClans().getClanManager().getClanPlayer(p) == null) {
@@ -309,12 +315,6 @@ public class Guerra extends Evento {
                 p.sendMessage(IridiumColorAPI.process(config.getString("Messages.No guild").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
                 return;
             }
-        }
-
-        // Se o clã do jogador já bateu o limite de jogadores máximo, retorne.
-        if(getTotalGuildPlayers(p) > this.max_players) {
-            p.sendMessage(IridiumColorAPI.process(config.getString("Messages.Maximum").replace("&", "§").replace("@name", config.getString("Evento.Title"))));
-            return;
         }
 
         p.setFoodLevel(20);
