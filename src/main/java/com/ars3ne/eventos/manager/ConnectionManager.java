@@ -388,7 +388,8 @@ public class ConnectionManager {
                     conn = pool.getConnection();
                 }
 
-                JSONObject json = (JSONObject) parser.parse(getParticipations(uuid));
+                String participations = getParticipations(uuid);
+                JSONObject json = (JSONObject) parser.parse( participations == null ? "{}" : participations );
 
                 if(!json.containsKey(name)) json.put(name, 0);
 
