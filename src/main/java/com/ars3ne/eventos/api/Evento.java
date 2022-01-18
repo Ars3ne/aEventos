@@ -59,7 +59,7 @@ public class Evento implements EventoInterface{
     private final boolean count_participation;
     private final boolean count_win;
     private final boolean bungeecord_enabled;
-    private double money;
+    private final double money;
     private final String permission;
     private final String identifier;
 
@@ -366,6 +366,7 @@ public class Evento implements EventoInterface{
             if(this.empty_inventory) {
                 player.getInventory().clear();
                 if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                    if(player.isDead()) player.spigot().respawn();
                     InventorySerializer.deserialize(player, this.identifier, false);
                 }
             }
@@ -485,6 +486,7 @@ public class Evento implements EventoInterface{
         if(this.empty_inventory) {
             p.getInventory().clear();
             if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                if(p.isDead()) p.spigot().respawn();
                 InventorySerializer.deserialize(p, this.identifier, false);
             }
         }
@@ -525,6 +527,7 @@ public class Evento implements EventoInterface{
         if(this.empty_inventory) {
             p.getInventory().clear();
             if(aEventos.getInstance().getConfig().getBoolean("Save inventory")) {
+                if(p.isDead()) p.spigot().respawn();
                 InventorySerializer.deserialize(p, this.identifier, leaved);
             }
         }

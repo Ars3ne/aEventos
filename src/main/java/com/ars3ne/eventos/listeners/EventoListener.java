@@ -60,7 +60,7 @@ public class EventoListener implements Listener {
         if(e.getPlayer().hasPermission("aeventos.admin")) return;
 
         if(!aEventos.getEventoManager().getEvento().getPlayers().contains(e.getPlayer())
-                || aEventos.getEventoManager().getEvento().getSpectators().contains(e.getPlayer())) return;
+                && !aEventos.getEventoManager().getEvento().getSpectators().contains(e.getPlayer())) return;
 
         // Carregue a lista de comandos permitidos. Se não estiver na lista, cancele o evento e envie uma mensagem.
         List<String> allowed_commands = aEventos.getInstance().getConfig().getStringList("Allowed commands");
