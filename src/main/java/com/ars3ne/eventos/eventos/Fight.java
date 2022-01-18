@@ -83,8 +83,8 @@ public class Fight extends Evento {
         // Defina as localizações.
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
         entrance = new Location(world, config.getDouble("Locations.Entrance.x"), config.getDouble("Locations.Entrance.y"), config.getDouble("Locations.Entrance.z"), config.getLong("Locations.Entrance.Yaw"), config.getLong("Locations.Entrance.Pitch"));
-        fight1 = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
-        fight2 = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
+        fight1 = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"), config.getLong("Locations.Pos1.Yaw"), config.getLong("Locations.Pos1.Pitch"));
+        fight2 = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"), config.getLong("Locations.Pos2.Yaw"), config.getLong("Locations.Pos2.Pitch"));
 
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
             yclans_api = yClansAPI.yclansapi;

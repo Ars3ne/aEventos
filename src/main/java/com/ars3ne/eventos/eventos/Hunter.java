@@ -98,8 +98,8 @@ public class Hunter extends Evento {
         this.invincibility_time = config.getInt("Evento.Invincibility");
 
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
-        this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
-        this.red = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
+        this.blue = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"), config.getLong("Locations.Pos1.Yaw"), config.getLong("Locations.Pos1.Pitch"));
+        this.red = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"), config.getLong("Locations.Pos2.Yaw"), config.getLong("Locations.Pos2.Pitch"));
 
         if(aEventos.getInstance().getConfig().getString("Hook").equalsIgnoreCase("yclans")) {
             yclans_api = yClansAPI.yclansapi;

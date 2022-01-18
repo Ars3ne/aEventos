@@ -104,8 +104,8 @@ public class Nexus extends Evento {
         this.invincibility_time = config.getInt("Evento.Invincibility");
 
         World world = aEventos.getInstance().getServer().getWorld(config.getString("Locations.Pos1.world"));
-        this.blue_spawn = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"));
-        this.red_spawn = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"));
+        this.blue_spawn = new Location(world, config.getDouble("Locations.Pos1.x"), config.getDouble("Locations.Pos1.y"), config.getDouble("Locations.Pos1.z"), config.getLong("Locations.Pos1.Yaw"), config.getLong("Locations.Pos1.Pitch"));
+        this.red_spawn = new Location(world, config.getDouble("Locations.Pos2.x"), config.getDouble("Locations.Pos2.y"), config.getDouble("Locations.Pos2.z"), config.getLong("Locations.Pos2.Yaw"), config.getLong("Locations.Pos2.Pitch"));
 
         Location blue_nexus_loc = new Location(world, config.getDouble("Locations.Pos3.x"), config.getDouble("Locations.Pos3.y"), config.getDouble("Locations.Pos3.z"));
         Location red_nexus_loc = new Location(world, config.getDouble("Locations.Pos4.x"), config.getDouble("Locations.Pos4.y"), config.getDouble("Locations.Pos4.z"));

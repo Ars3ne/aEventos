@@ -521,8 +521,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Entrance.x", p.getLocation().getX());
                             settings.set("Locations.Entrance.y", p.getLocation().getY());
                             settings.set("Locations.Entrance.z", p.getLocation().getZ());
-                            settings.set("Locations.Entrance.yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Entrance.pitch", p.getLocation().getPitch());
+                            settings.set("Locations.Entrance.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Entrance.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -542,8 +542,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Exit.x", p.getLocation().getX());
                             settings.set("Locations.Exit.y", p.getLocation().getY());
                             settings.set("Locations.Exit.z", p.getLocation().getZ());
-                            settings.set("Locations.Exit.yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Exit.pitch", p.getLocation().getPitch());
+                            settings.set("Locations.Exit.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Exit.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -563,8 +563,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Lobby.x", p.getLocation().getX());
                             settings.set("Locations.Lobby.y", p.getLocation().getY());
                             settings.set("Locations.Lobby.z", p.getLocation().getZ());
-                            settings.set("Locations.Lobby.yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Lobby.pitch", p.getLocation().getPitch());
+                            settings.set("Locations.Lobby.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Lobby.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -584,8 +584,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Spectator.x", p.getLocation().getX());
                             settings.set("Locations.Spectator.y", p.getLocation().getY());
                             settings.set("Locations.Spectator.z", p.getLocation().getZ());
-                            settings.set("Locations.Spectator.yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Spectator.pitch", p.getLocation().getPitch());
+                            settings.set("Locations.Spectator.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Spectator.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -652,6 +652,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos1.x", p.getLocation().getX());
                             settings.set("Locations.Pos1.y", p.getLocation().getY());
                             settings.set("Locations.Pos1.z", p.getLocation().getZ());
+                            settings.set("Locations.Pos1.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Pos1.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -678,6 +680,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos2.x", p.getLocation().getX());
                             settings.set("Locations.Pos2.y", p.getLocation().getY());
                             settings.set("Locations.Pos2.z", p.getLocation().getZ());
+                            settings.set("Locations.Pos2.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Pos2.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -704,6 +708,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos3.x", p.getLocation().getX());
                             settings.set("Locations.Pos3.y", p.getLocation().getY());
                             settings.set("Locations.Pos3.z", p.getLocation().getZ());
+                            settings.set("Locations.Pos3.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Pos3.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -730,6 +736,8 @@ public class EventoCommand implements CommandExecutor {
                             settings.set("Locations.Pos4.x", p.getLocation().getX());
                             settings.set("Locations.Pos4.y", p.getLocation().getY());
                             settings.set("Locations.Pos4.z", p.getLocation().getZ());
+                            settings.set("Locations.Pos4.Yaw", p.getLocation().getYaw());
+                            settings.set("Locations.Pos4.Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
