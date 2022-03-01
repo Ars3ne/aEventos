@@ -84,7 +84,7 @@ public class SimpleItemParser {
 
 
         if(section.getBoolean("Glow")) {
-            meta.addEnchant(XEnchantment.DURABILITY.parseEnchantment(), 1, false);
+            meta.addEnchant(XEnchantment.DURABILITY.getEnchant(), 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 

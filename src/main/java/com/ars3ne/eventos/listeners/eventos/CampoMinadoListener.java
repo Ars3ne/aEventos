@@ -50,7 +50,7 @@ public class CampoMinadoListener implements Listener {
         if(evento == null) return;
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
-        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.isNewVersion() && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.supports(13) && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
 
             // Se o jogador entrou na água, então o elimine.
             e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));

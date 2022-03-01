@@ -87,6 +87,7 @@ public final class EventoTopInventory extends PagedInventory {
             for(OfflinePlayer p: aEventos.getCacheManager().getTopWinsMenuItems().keySet()) {
 
                 if(p == null) continue;
+                if(p.getName() == null) continue;
 
                 ItemStack item = XMaterial.PLAYER_HEAD.parseItem();
                 assert item != null;
@@ -107,6 +108,9 @@ public final class EventoTopInventory extends PagedInventory {
         if(current_filter.get() == 0) {
 
             for (OfflinePlayer p : aEventos.getCacheManager().getTopParticipations().keySet()) {
+
+                if(p == null) continue;
+                if(p.getName() == null) continue;
 
                 ItemStack item = XMaterial.PLAYER_HEAD.parseItem();
                 assert item != null;

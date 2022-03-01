@@ -97,7 +97,7 @@ public class FightListener implements Listener {
         if(!evento.getPlayers().contains(e.getPlayer())) return;
         if(evento.getFighter1() != e.getPlayer() && evento.getFighter2() != e.getPlayer()) return;
 
-        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.isNewVersion() && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.supports(13) && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
             // Se o jogador entrou na água, então o elimine.
             evento.setFightLoser(e.getPlayer());
         }

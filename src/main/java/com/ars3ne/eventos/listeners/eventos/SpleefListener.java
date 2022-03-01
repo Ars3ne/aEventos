@@ -39,6 +39,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -54,9 +55,8 @@ public class SpleefListener implements Listener {
     public void onBreak(BlockBreakEvent e) {
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
-        if(e.getBlock().getType() != Material.SNOW_BLOCK) e.setCancelled(true);
+        if(e.getBlock().getType() != XMaterial.SNOW_BLOCK.parseMaterial()) e.setCancelled(true);
         if(evento.canNotBreakBlocks()) e.setCancelled(true);
-
     }
 
     @EventHandler
@@ -65,7 +65,7 @@ public class SpleefListener implements Listener {
         if(evento == null) return;
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
-        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.isNewVersion() && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.supports(13) && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
 
             // Se o jogador entrou na água, então o elimine.
             e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
@@ -87,6 +87,23 @@ public class SpleefListener implements Listener {
         if(evento == null) return;
         if (!evento.getPlayers().contains(e.getPlayer())) return;
         e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDamage(EntityDamageByEntityEvent e) {
+
+        if(evento == null) return;
+
+        // Se a entidade não for um player, retorne.
+        if(!(e.getEntity() instanceof Player && e.getDamager() instanceof Player)) return;
+
+        Player damaged = (Player) e.getEntity();
+        Player damager = (Player) e.getDamager();
+
+        if(evento.getSpectators().contains(damaged) || evento.getSpectators().contains(damager)) e.setCancelled(true);
+        if(!evento.getPlayers().contains(damaged) || !evento.getPlayers().contains(damager)) return;
+
+        e.setDamage(0);
     }
 
     public Map<Player, Long> getLastMove() {

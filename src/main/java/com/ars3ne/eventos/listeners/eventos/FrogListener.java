@@ -54,7 +54,7 @@ public class FrogListener implements Listener {
         if(!evento.getPlayers().contains(e.getPlayer())) return;
 
         // Se o jogador entrou na água, então o elimine.
-        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.isNewVersion() && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.supports(13) && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
             e.getPlayer().sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
             evento.remove(e.getPlayer());
             evento.notifyLeave(e.getPlayer());
