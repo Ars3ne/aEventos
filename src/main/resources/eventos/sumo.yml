@@ -11,6 +11,22 @@ Evento:
   Count participation: true # Esse evento contará participação?
   Count victory: true # Esse evento contará vitória?
 
+# Os itens que serão dados para os jogadores no início do evento.
+# Você pode configurar essa seção usando o comando /evento setup kit
+Itens:
+  Enabled: true
+  Armor:
+    Helmet: {}
+    Chestplate: {}
+    Leggings: {}
+    Boots: {}
+  Inventory:
+    '0': # Slot do item no inventário.
+      material: STICK
+      damage: 0
+      enchants:
+        KNOCKBACK: 2
+
 # Mensagens
 Messages:
   Broadcast:
