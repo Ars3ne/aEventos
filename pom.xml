@@ -147,10 +147,6 @@
                             <shadedPattern>com.ars3ne.eventos.shaded.iridiumcolorapi</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.iridium.iridiumcolorapi</pattern>
-                            <shadedPattern>com.ars3ne.eventos.shaded.iridiumcolorapi</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
                             <shadedPattern>com.ars3ne.eventos.shaded.hikari</shadedPattern>
                         </relocation>
