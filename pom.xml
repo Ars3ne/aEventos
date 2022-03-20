@@ -25,10 +25,6 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>oss-sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
             <id>roinujnosde-repo</id>
             <url>https://repo.roinujnosde.me/releases/</url>
         </repository>
@@ -81,26 +77,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
-            <type>javadoc</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>2.14.0</version>
@@ -133,7 +109,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>8.6.0.0.1</version>
+            <version>8.6.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -170,6 +146,14 @@
                             <pattern>com.iridium.iridiumcolorapi</pattern>
                             <shadedPattern>com.ars3ne.eventos.shaded.iridiumcolorapi</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.iridium.iridiumcolorapi</pattern>
+                            <shadedPattern>com.ars3ne.eventos.shaded.iridiumcolorapi</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>com.ars3ne.eventos.shaded.hikari</shadedPattern>
+                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
@@ -183,6 +167,7 @@
                                 <exclude>com/cryptomorin/xseries/NoteBlockMusic*</exclude>
                                 <exclude>com/cryptomorin/xseries/particles/*</exclude>
                                 <exclude>com/cryptomorin/xseries/messages/Title.*</exclude>
+                                <exclude>org/slf4j/**</exclude>
                                 <exclude>META-INF/**</exclude>
                             </excludes>
                         </filter>
