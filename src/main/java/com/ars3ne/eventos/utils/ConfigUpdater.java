@@ -514,6 +514,23 @@ public class ConfigUpdater {
 
                     }
                     continue;
+                case CAMPO_MINADO:
+
+                    if(config.isSet("Evento.Last player win")) break;
+
+                    Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aConvertendo o arquivo de configuração §f" + config.getString("filename") + " §apara a nova versão...");
+
+                    config.set("Evento.Last player win", false);
+
+                    try {
+                        EventoConfigFile.save(config);
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §aArquivo §f" + config.getString("filename") + " §aconvertido com sucesso!");
+                    } catch (IOException e) {
+                        Bukkit.getConsoleSender().sendMessage("§e[aEventos] §cNão foi possível converter o arquivo de configuração.");
+                        e.printStackTrace();
+                    }
+
+                    break;
                 default:
                     break;
 

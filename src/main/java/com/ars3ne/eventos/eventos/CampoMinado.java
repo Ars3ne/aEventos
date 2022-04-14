@@ -312,10 +312,7 @@ public class CampoMinado extends Evento {
                         }
 
                         for(Player p: eliminate) {
-                            p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
-                            remove(p);
-                            PlayerLoseEvent lose = new PlayerLoseEvent(p, config.getString("filename").substring(0, config.getString("filename").length() - 4), getType());
-                            Bukkit.getPluginManager().callEvent(lose);
+                           eliminate(p);
                         }
                         eliminate.clear();
 
@@ -376,6 +373,18 @@ public class CampoMinado extends Evento {
             }
         }
 
+    }
+
+    public void eliminate(Player p) {
+        p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
+        remove(p);
+        notifyLeave(p);
+        PlayerLoseEvent lose = new PlayerLoseEvent(p, getConfig().getString("filename").substring(0, getConfig().getString("filename").length() - 4), getType());
+        Bukkit.getPluginManager().callEvent(lose);
+
+        if(isHappening() && getPlayers().size() == 1) {
+            win();
+        }
     }
 
 }

@@ -25,6 +25,10 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+        <repository>
             <id>roinujnosde-repo</id>
             <url>https://repo.roinujnosde.me/releases/</url>
         </repository>
@@ -56,6 +60,12 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.16-R0.5-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -109,7 +119,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>8.6.2</version>
+            <version>8.7.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -150,6 +160,10 @@
                             <pattern>com.zaxxer.hikari</pattern>
                             <shadedPattern>com.ars3ne.eventos.shaded.hikari</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>com.ars3ne.eventos.shaded.slf4j</shadedPattern>
+                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
@@ -163,7 +177,6 @@
                                 <exclude>com/cryptomorin/xseries/NoteBlockMusic*</exclude>
                                 <exclude>com/cryptomorin/xseries/particles/*</exclude>
                                 <exclude>com/cryptomorin/xseries/messages/Title.*</exclude>
-                                <exclude>org/slf4j/**</exclude>
                                 <exclude>META-INF/**</exclude>
                             </excludes>
                         </filter>

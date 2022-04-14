@@ -10,9 +10,10 @@ Evento:
   Permission: "aeventos.evento" # A permissão necessária para participar do evento.
   Count participation: true # Esse evento contará participação?
   Count victory: true # Esse evento contará vitória?
+  Last player win: false # O evento deve ser encerrado caso reste apenas um jogador? Se estiver como false, o evento apenas acabará quando todos os níveis terminarem.
   Levels: 20 # A quantidade de níveis que o Campo Minado terá.
   Difficulty: 4.5 # A porcentagem de blocos que serão removidos a cada nível. No nível 20, será de 90%.
-  Time: 20 # Tempo em segundos que o jogadores tem para passar o campo minado.
+  Time: 20 # Tempo em segundos que os jogadores tem para passar o campo minado.
   Delay: 5 # Tempo em segundos para o intervalo entre os níveis.
 
 # Mensagens
