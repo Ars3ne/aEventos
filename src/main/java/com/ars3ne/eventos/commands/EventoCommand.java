@@ -48,10 +48,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventoCommand implements CommandExecutor {
 
@@ -602,7 +599,7 @@ public class EventoCommand implements CommandExecutor {
                         else if(args[1].equalsIgnoreCase("pos")) {
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
-                            if(!setup.get(p).isSet("Locations.Pos1")) {
+                            if(!setup.get(p).isSet("Locations.Pos1") && EventoType.getEventoType(settings.getString("Evento.Type")) != EventoType.BATTLE_ROYALE) {
                                 sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
@@ -620,7 +617,7 @@ public class EventoCommand implements CommandExecutor {
                             axe.setItemMeta(meta);
                             p.getInventory().addItem(axe);
 
-                            if(setup.get(p).isSet("Locations.Pos3")) {
+                            if(setup.get(p).isSet("Locations.Pos3") && EventoType.getEventoType(settings.getString("Evento.Type")) != EventoType.BATTLE_ROYALE) {
                                 // De uma enxada para o jogador definir as posições.
                                 ItemStack hoe = new ItemStack(Material.STONE_HOE, 1);
                                 ItemMeta meta2 = hoe.getItemMeta();
@@ -640,20 +637,23 @@ public class EventoCommand implements CommandExecutor {
 
                         }
 
-                        else if(args[1].equalsIgnoreCase("pos1")) {
+                        else if(args[1].toLowerCase(Locale.ROOT).startsWith("pos")) {
+
+                            String position = "Pos" + args[1].toLowerCase(Locale.ROOT).replace("pos", "");
 
                             // Se o evento não possui as configurações de pos, retorne um erro.
-                            if(!setup.get(p).isSet("Locations.Pos1")) {
+                            if(!setup.get(p).isSet("Locations." + position) && EventoType.getEventoType(settings.getString("Evento.Type")) != EventoType.BATTLE_ROYALE) {
                                 sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
                                 return true;
                             }
 
-                            settings.set("Locations.Pos1.world", p.getLocation().getWorld().getName());
-                            settings.set("Locations.Pos1.x", p.getLocation().getX());
-                            settings.set("Locations.Pos1.y", p.getLocation().getY());
-                            settings.set("Locations.Pos1.z", p.getLocation().getZ());
-                            settings.set("Locations.Pos1.Yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Pos1.Pitch", p.getLocation().getPitch());
+                            settings.set("Locations." + position, "");
+                            settings.set("Locations." + position + ".world", p.getLocation().getWorld().getName());
+                            settings.set("Locations." + position + ".x", p.getLocation().getX());
+                            settings.set("Locations." + position + ".y", p.getLocation().getY());
+                            settings.set("Locations." + position + ".z", p.getLocation().getZ());
+                            settings.set("Locations." + position + ".Yaw", p.getLocation().getYaw());
+                            settings.set("Locations." + position + ".Pitch", p.getLocation().getPitch());
 
                             try {
                                 EventoConfigFile.save(settings);
@@ -663,91 +663,7 @@ public class EventoCommand implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos1 ")));
-                            return true;
-
-                        }
-
-                        else if(args[1].equalsIgnoreCase("pos2")) {
-
-                            // Se o evento não possui as configurações de pos, retorne um erro.
-                            if(!setup.get(p).isSet("Locations.Pos1")) {
-                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
-                                return true;
-                            }
-
-                            settings.set("Locations.Pos2.world", p.getLocation().getWorld().getName());
-                            settings.set("Locations.Pos2.x", p.getLocation().getX());
-                            settings.set("Locations.Pos2.y", p.getLocation().getY());
-                            settings.set("Locations.Pos2.z", p.getLocation().getZ());
-                            settings.set("Locations.Pos2.Yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Pos2.Pitch", p.getLocation().getPitch());
-
-                            try {
-                                EventoConfigFile.save(settings);
-                                setup.replace(p, settings);
-                            } catch (IOException e) {
-                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
-                                e.printStackTrace();
-                            }
-
-                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos2 ")));
-                            return true;
-
-                        }
-
-                        else if(args[1].equalsIgnoreCase("pos3")) {
-
-                            // Se o evento não possui as configurações de pos, retorne um erro.
-                            if(!setup.get(p).isSet("Locations.Pos3")) {
-                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
-                                return true;
-                            }
-
-                            settings.set("Locations.Pos3.world", p.getLocation().getWorld().getName());
-                            settings.set("Locations.Pos3.x", p.getLocation().getX());
-                            settings.set("Locations.Pos3.y", p.getLocation().getY());
-                            settings.set("Locations.Pos3.z", p.getLocation().getZ());
-                            settings.set("Locations.Pos3.Yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Pos3.Pitch", p.getLocation().getPitch());
-
-                            try {
-                                EventoConfigFile.save(settings);
-                                setup.replace(p, settings);
-                            } catch (IOException e) {
-                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
-                                e.printStackTrace();
-                            }
-
-                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos3 ")));
-                            return true;
-
-                        }
-
-                        else if(args[1].equalsIgnoreCase("pos4")) {
-
-                            // Se o evento não possui as configurações de pos, retorne um erro.
-                            if(!setup.get(p).isSet("Locations.Pos3")) {
-                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Not needed").replace("&", "§").replace("@name", settings.getString("Evento.Title"))));
-                                return true;
-                            }
-
-                            settings.set("Locations.Pos4.world", p.getLocation().getWorld().getName());
-                            settings.set("Locations.Pos4.x", p.getLocation().getX());
-                            settings.set("Locations.Pos4.y", p.getLocation().getY());
-                            settings.set("Locations.Pos4.z", p.getLocation().getZ());
-                            settings.set("Locations.Pos4.Yaw", p.getLocation().getYaw());
-                            settings.set("Locations.Pos4.Pitch", p.getLocation().getPitch());
-
-                            try {
-                                EventoConfigFile.save(settings);
-                                setup.replace(p, settings);
-                            } catch (IOException e) {
-                                sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Error").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "")));
-                                e.printStackTrace();
-                            }
-
-                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", "pos4 ")));
+                            sender.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Saved").replace("&", "§").replace("@name", settings.getString("Evento.Title")).replace("@pos", position + " ")));
                             return true;
 
                         }

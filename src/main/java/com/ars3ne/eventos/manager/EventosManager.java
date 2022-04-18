@@ -102,6 +102,9 @@ public class EventosManager {
             case THOR:
                 this.evento = new Thor(config);
                 break;
+            case BATTLE_ROYALE:
+                this.evento = new BattleRoyale(config);
+                break;
         }
 
         assert this.evento != null;
@@ -122,6 +125,9 @@ public class EventosManager {
         switch(EventoType.getEventoType(config.getString("Evento.Type"))) {
             case CAMPO_MINADO: case SPLEEF: case FROG: case FIGHT: case PAINTBALL: case HUNTER: case QUIZ: case ANVIL: case NEXUS:
                 require_pos = true;
+                break;
+            case BATTLE_ROYALE:
+                if(config.getBoolean("Evento.Refill chests")) require_pos = true;
                 break;
         }
 

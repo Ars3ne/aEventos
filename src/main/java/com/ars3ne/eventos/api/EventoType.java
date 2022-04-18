@@ -52,6 +52,7 @@ public enum EventoType {
     NEXUS,
     SORTEIO,
     THOR,
+    BATTLE_ROYALE,
     NONE;
 
     public static EventoType getEventoType(String type) {
@@ -104,6 +105,8 @@ public enum EventoType {
                 return EventoType.SORTEIO;
             case "thor":
                 return EventoType.THOR;
+            case "battleroyale":
+                return EventoType.BATTLE_ROYALE;
             default:
                 return EventoType.NONE;
         }
@@ -159,6 +162,8 @@ public enum EventoType {
                 return "sorteio";
             case THOR:
                 return "thor";
+            case BATTLE_ROYALE:
+                return "battleroyale";
             default:
                 return "none";
         }
@@ -174,12 +179,7 @@ public enum EventoType {
     }
 
     public static boolean isEventoGuild(EventoType type) {
-        switch(type) {
-            case GUERRA:
-                return true;
-            default:
-                return false;
-        }
+        return type == EventoType.GUERRA;
     }
 
 }

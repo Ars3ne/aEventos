@@ -84,7 +84,7 @@ public class Evento implements EventoInterface{
         this.identifier = type.toString() + " " + strDate;
 
         switch(type) {
-            case SPLEEF: case BATATA_QUENTE: case FIGHT: case KILLER: case SUMO: case QUIZ: case ANVIL: case THOR:
+            case SPLEEF: case BATATA_QUENTE: case FIGHT: case KILLER: case SUMO: case QUIZ: case ANVIL: case THOR: case BATTLE_ROYALE:
                 this.elimination = true;
                 break;
         }

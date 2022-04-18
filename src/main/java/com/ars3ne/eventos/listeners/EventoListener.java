@@ -28,6 +28,7 @@
 package com.ars3ne.eventos.listeners;
 
 import com.ars3ne.eventos.aEventos;
+import com.ars3ne.eventos.api.EventoType;
 import com.ars3ne.eventos.commands.EventoCommand;
 import com.ars3ne.eventos.hooks.BungeecordHook;
 import com.ars3ne.eventos.utils.EventoConfigFile;
@@ -152,7 +153,7 @@ public class EventoListener implements Listener {
         Map<Player, YamlConfiguration> setup = EventoCommand.getSetupList();
 
         if(!setup.containsKey(e.getPlayer())) return;
-        if(!setup.get(e.getPlayer()).isSet("Locations.Pos1")) return;
+        if(!setup.get(e.getPlayer()).isSet("Locations.Pos1") && EventoType.getEventoType(setup.get(e.getPlayer()).getString("Evento.Type")) != EventoType.BATTLE_ROYALE) return;
 
         if(e.getItem() == null || (e.getItem().getType() != Material.STONE_AXE && e.getItem().getType() != Material.STONE_HOE)) return;
         if(e.getItem().getItemMeta().getDisplayName() == null) return;
@@ -166,6 +167,7 @@ public class EventoListener implements Listener {
 
             if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
 
+                settings.set("Locations.Pos1", "");
                 settings.set("Locations.Pos1.world", e.getPlayer().getWorld().getName());
                 settings.set("Locations.Pos1.x", e.getClickedBlock().getX());
                 settings.set("Locations.Pos1.y", e.getClickedBlock().getY());
@@ -187,6 +189,7 @@ public class EventoListener implements Listener {
 
             if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
+                settings.set("Locations.Pos2", "");
                 settings.set("Locations.Pos2.world", e.getPlayer().getWorld().getName());
                 settings.set("Locations.Pos2.x", e.getClickedBlock().getX());
                 settings.set("Locations.Pos2.y", e.getClickedBlock().getY());
@@ -216,6 +219,7 @@ public class EventoListener implements Listener {
 
             if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
 
+                settings.set("Locations.Pos3", "");
                 settings.set("Locations.Pos3.world", e.getPlayer().getWorld().getName());
                 settings.set("Locations.Pos3.x", e.getClickedBlock().getX());
                 settings.set("Locations.Pos3.y", e.getClickedBlock().getY());
@@ -237,6 +241,7 @@ public class EventoListener implements Listener {
 
             if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
+                settings.set("Locations.Pos4", "");
                 settings.set("Locations.Pos4.world", e.getPlayer().getWorld().getName());
                 settings.set("Locations.Pos4.x", e.getClickedBlock().getX());
                 settings.set("Locations.Pos4.y", e.getClickedBlock().getY());

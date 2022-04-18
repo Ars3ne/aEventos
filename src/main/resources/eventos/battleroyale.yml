@@ -1,0 +1,128 @@
+Evento:
+  # Configurações do evento.
+  Title: "Battle Royale" # O nome do evento. Será usado na placeholder @name.
+  Type: "battleroyale" # O tipo do evento. Não modifique!
+  Calls: 5 # Quantas chamadas o evento terá.
+  Calls interval: 15 # O intervalo (em segundos) entre as chamadas.
+  Mininum players: 2 # O mínimo de jogadores para iniciar o evento.
+  Spectator mode: true # Este evento possui camarote?
+  Empty inventory: true # Esse evento requer que você esteja com o inventário vazio?
+  Permission: "aeventos.evento" # A permissão necessária para participar do evento.
+  Count participation: true # Esse evento contará participação?
+  Count victory: true # Esse evento contará vitória?
+  Time: 30 # Tempo em segundos antes do PvP ser ativado. Defina como 0 para desativar.
+  Remove blocks: false # Os blocos que os jogadores colocarem durante o evento devem ser removidos? Deixe desativado caso os jogadoes não possam colocar blocos no evento.
+  Multiple spawns: true # Se estiver ativado, o evento possuirá multiplos spawns para apenas um jogador, que serão definidos usando pos. Por exemplo: o primeiro jogador a entrar no evento será telepotado para a pos1 ao iniciar, o segundo será para a pos2, etc. Caso a opção "Refill Chests" esteja ativada, a Pos1 e Pos2 se referirá á área que contem os baús á serem restaurados. A quantidade de pos será o limite de jogadores para o evento.
+  Refill chests: true # Se estiver ativado, os itens dos baús dentro da área da pos1 e pos2 serão restaurados ao encerrar o evento. Caso a opção "Multiple spawns" esteja ativa, os spawns para os jogadores começarão á partir da pos3 em diante.
+
+# Configurações da Borda
+Border:
+  Enabled: false # Caso esteja ativado, a borda do mundo diminuirá com o passar do tempo.
+  Size: 20000 # O tamanho em blocos da borda. Para calcular isso, basta somar as coordenadas positivas e negativas. Por exemplo, se a sua borda é de +10000 x -10000, então o tamanho de blocos vai ser 20000.
+  Time: 200 # Em quanto tempo a borda deve diminuir?
+  Damage: 2 # Quanto dano a borda deve dar?
+  Delay: 10 # A borda deve começar a diminuir depois de quantos segundos do início do evento?
+
+
+Itens: # Itens definidos do evento. Você pode definir-los automaticamente com o comando /evento setup kit
+  Enabled: false # Caso esteja ativado, o evento será com os itens setados abaixo. Lembre-se de ativar a opção "Empty inventory"!
+  Helmet:
+    material: "DIAMOND_HELMET"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Chestplate:
+    material: "DIAMOND_CHESTPLATE"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Leggings:
+    material: "DIAMOND_LEGGINGS"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Boots:
+    material: "DIAMOND_BOOTS"
+    damage: 0
+    enchants:
+      PROTECTION_ENVIRONMENTAL: 4
+      DURABILITY: 4
+  Inventory:
+    0: # Posição do item no inventário.
+      material: "DIAMOND_SWORD"
+      damage: 0
+      enchants:
+        DAMAGE_ALL: 5
+    1: # Posição do item no inventário.
+      material: "GOLDEN_APPLE"
+      amount: 64
+      damage: 1 # Data do item.
+    2:
+      material: "POTION"
+      damage: 41 #  Data do item.
+      name: "&5Poção de Força"
+      level: 2
+      base-effect: "STRENGTH, false, false" # Efeito da poção, A poção é jogável?, Poção estendida?
+
+# Mensagens
+Messages:
+  Broadcast:
+    - ""
+    - "&3[@name] &bIniciando evento &f@name"
+    - "&3[@name] &bPara participar, digite &f/evento"
+    - "&3[@name] &bPrêmio: &2$&f@money &b+ &6[BattleRoyale]"
+    - "&3[@name] &bJogadores no evento: &f@players"
+    - "&3[@name] &bChamadas restantes: &f@broadcasts"
+    - ""
+  Start:
+    - ""
+    - "&3[@name] &bIniciando evento..."
+    - ""
+  Winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bO vencedor foi &f@winner&b!"
+    - ""
+  No winner:
+    - ""
+    - "&3[@name] &bO evento &f@name &bfoi finalizado!"
+    - "&3[@name] &bNão houveram vencedores."
+    - ""
+  No players:
+    - ""
+    - "&3[@name] &bEvento cancelado."
+    - "&3[@name] &bA quantidade mínima de jogadores não foi atingida."
+    - ""
+  Cancelled:
+    - ""
+    - "&3[@name] &bO evento foi cancelado manualmente."
+    - ""
+  Enabling:
+    - "&3[@name] &bO PvP será ativado em &f@time &bsegundos!"
+  Enabled:
+    - ""
+    - "&3[@name] &bO PvP foi ativado. Boa sorte á todos!"
+    - ""
+  Max players: "&3[@name] &bA quantidade máxima de jogadores para esse evento foi atingida."
+
+
+# Recompensas. Elas serão dadas ao vencedor.
+Rewards:
+  Tag: # Tag do LegendChat.
+    Enabled: true # Ativar a tag do evento?
+    Name: "aeventos_battleroyale" # O nome da tag. Você a colocará na configuração do LegendChat. Nesse caso, {aeventos_battleroyale}
+    Style: "&6[BattleRoyale] " # A aparência da tag.
+  Money: 1000 # A quantidade de dinheiro que o jogador ganhará ao vencer o evento. (Requer Vault)
+  Commands: # Lista de comandos que serão executados no vencedor.
+    - "give @winner diamond 1"
+
+# Localizações. Você configurará essa seção usando o comando /evento setup battleroyale
+Locations:
+  Lobby: []
+  Entrance: []
+  Spectator: []
+  Exit: []
+  Server: null # Coloque aqui o nome do servidor do Bungecoord que o evento deve ocorrer.

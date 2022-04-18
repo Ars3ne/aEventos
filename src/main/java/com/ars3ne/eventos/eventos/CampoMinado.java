@@ -67,6 +67,7 @@ public class CampoMinado extends Evento {
     private final int delay;
     private final int max_time;
     private boolean level_happening = false;
+    private final boolean last_player_win;
 
     public CampoMinado(YamlConfiguration config) {
 
@@ -75,6 +76,8 @@ public class CampoMinado extends Evento {
 
         delay = this.config.getInt("Evento.Delay");
         max_time = this.config.getInt("Evento.Time");
+        last_player_win = this.config.getBoolean("Evento.Last player win");
+
 
         // Obtenha o cuboid
         world = aEventos.getInstance().getServer().getWorld(this.config.getString("Locations.Pos1.world"));
@@ -382,7 +385,7 @@ public class CampoMinado extends Evento {
         PlayerLoseEvent lose = new PlayerLoseEvent(p, getConfig().getString("filename").substring(0, getConfig().getString("filename").length() - 4), getType());
         Bukkit.getPluginManager().callEvent(lose);
 
-        if(isHappening() && getPlayers().size() == 1) {
+        if(isHappening() && getPlayers().size() == 1 && last_player_win) {
             win();
         }
     }

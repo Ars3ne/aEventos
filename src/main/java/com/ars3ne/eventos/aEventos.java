@@ -174,6 +174,7 @@ public class aEventos extends JavaPlugin {
             EventoConfigFile.create("nexus");
             EventoConfigFile.create("sorteio");
             EventoConfigFile.create("thor");
+            EventoConfigFile.create("battleroyale");
 
         }
 

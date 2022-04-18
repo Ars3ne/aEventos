@@ -254,3 +254,13 @@ Menu:
           - ""
           - "&7Horário: &fTodos os dias!"
           - ""
+      battleroyale: # Nome do arquivo de configuração do evento.
+        Allow filter: true # Permite que os jogadores vejam o TOP desse evento.
+        Name: "&eBattle Royale"
+        Material: EMERALD
+        Lore:
+          - "&7Aqui você pode escrever uma"
+          - "&7descrição para o evento."
+          - ""
+          - "&7Horário: &fTodos os dias!"
+          - ""
