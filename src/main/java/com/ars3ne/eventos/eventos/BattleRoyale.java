@@ -406,6 +406,14 @@ public class BattleRoyale extends Evento {
         this.removePlayers();
     }
 
+    public void eliminate(Player p) {
+        p.sendMessage(IridiumColorAPI.process(aEventos.getInstance().getConfig().getString("Messages.Eliminated").replace("&", "§")));
+        remove(p);
+        notifyLeave(p);
+        PlayerLoseEvent lose = new PlayerLoseEvent(p, getConfig().getString("filename").substring(0, getConfig().getString("filename").length() - 4), getType());
+        Bukkit.getPluginManager().callEvent(lose);
+    }
+
     public boolean isPvPEnabled() { return this.pvp_enabled; }
     public boolean removePlayerPlacedBlocks() { return this.remove_blocks; }
     public List<Block> getBlocksToRemove() { return this.blocks_to_remove; }

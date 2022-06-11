@@ -41,6 +41,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -112,6 +114,22 @@ public class EventoListener implements Listener {
 
     }
 
+    @EventHandler
+    public void onInventoryInteract(InventoryClickEvent e) {
+
+        // Se não está ocorrendo um evento, ou o jogador não está nele, retorne.
+        if(e.getWhoClicked() == null) return;
+        if(aEventos.getEventoManager().getEvento() == null) return;
+
+        Player player = (Player) e.getWhoClicked();
+        if(!aEventos.getEventoManager().getEvento().getPlayers().contains(player)
+                && !aEventos.getEventoManager().getEvento().getSpectators().contains(player)) return;
+
+        if(e.getSlotType() == InventoryType.SlotType.CRAFTING) {
+            e.setCancelled(true);
+        }
+
+    }
     // Listeners do modo setup
 
     // Ao escrever uma placa

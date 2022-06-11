@@ -41,8 +41,8 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>iridiumdevelopment</id>
-            <url>https://nexus.iridiumdevelopment.net/repository/maven-releases/</url>
+            <id>2lstudios</id>
+            <url>https://ci.2lstudios.dev/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>savagelabs</id>

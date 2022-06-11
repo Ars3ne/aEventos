@@ -30,8 +30,10 @@ package com.ars3ne.eventos.listeners.eventos;
 import com.ars3ne.eventos.aEventos;
 import com.ars3ne.eventos.api.events.PlayerLoseEvent;
 import com.ars3ne.eventos.eventos.BattleRoyale;
+import com.cryptomorin.xseries.XMaterial;
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -45,6 +47,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class BattleRoyaleListener implements Listener {
 
@@ -101,6 +104,21 @@ public class BattleRoyaleListener implements Listener {
         if(!evento.removePlayerPlacedBlocks()) return;
 
         if(!evento.getBlocksToRemove().contains(e.getBlock())) e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+
+        if(evento == null) return;
+        if(!evento.getPlayers().contains(e.getPlayer())) return;
+
+        if(e.getTo().getBlock().getType() == Material.WATER || (!XMaterial.supports(13) && e.getTo().getBlock().getType() == Material.STATIONARY_WATER)) {
+
+            // Se o jogador entrou na água, então o elimine.
+            evento.eliminate(e.getPlayer());
+
+        }
+
     }
 
     @EventHandler
